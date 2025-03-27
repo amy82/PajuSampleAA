@@ -25,7 +25,9 @@ const int M2_FF_MODULE = 200200;		//240726 박동찬, 김세영 선임, 사각도포 얇은 제
 
 static int LGIT_MODEL_INDEX = M2_FF_MODULE;
 //----------------------------------------------------------------------------------------------------------------------------------- 
-#define					VER_STR		"250212_2"			//VC.db 이거때문??
+#define					VER_STR		"250327_1"			//git 이동
+
+//#define					VER_STR		"250212_2"			//VC.db 이거때문??
 //#define					VER_STR		"250212_1"			//git 연결 되긴 됨 근데 vs 에서 push, pull 은 아직 안됨?? 왜?
 //#define					VER_STR		"250207_2"			//완제품 레이져 값
 //#define					VER_STR		"250207_1"			//김세영 선임 요청
