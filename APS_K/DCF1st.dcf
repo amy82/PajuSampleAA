@@ -1,0 +1,17 @@
+/
+/
+/
+[CAMERA_NAME]
+Generic GigE Vision Device
+[CONFIG_FILE]
+50CF
+MTXGIGE
+Friday, July 19, 2024 14:40:03
+[INFO_FILE_REV]
+9.00.1950.1
+GIGEVISION
+[STANDARD_FEATURES]
+INT_Width                                                             "Default"
+INT_Height                                                            "Default"
+ENUM_PixelFormat                                                      "Default"
+[EOF]

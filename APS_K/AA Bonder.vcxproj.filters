@@ -1,0 +1,968 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Vision Class">
+      <UniqueIdentifier>{b7668c8a-873d-4331-9089-384bfd846289}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Label Class">
+      <UniqueIdentifier>{43634e48-6598-4050-bdc8-2bcfe258acfa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ExButton">
+      <UniqueIdentifier>{cef74803-25bf-4454-b121-187758f70180}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data">
+      <UniqueIdentifier>{bdb77a96-3b5b-4428-bca4-a25ca5b8a498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{85e93eda-73d3-4d3c-8420-dba795f51f98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MIU">
+      <UniqueIdentifier>{11fd5389-435e-44f3-8c77-12cde881f315}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImageInsp">
+      <UniqueIdentifier>{ffa09175-7dd4-442e-81aa-1f4ad8f46c05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graph2D">
+      <UniqueIdentifier>{58fc97aa-2d1a-4d1c-9139-6fa69ff6f7f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graph2D\DibBitmap">
+      <UniqueIdentifier>{ba6c83b3-2476-4917-a792-b1c42a83941c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graph2D\Graph2DWnd">
+      <UniqueIdentifier>{7faf97ef-da21-4414-84c5-2742947578b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AxlMotion">
+      <UniqueIdentifier>{a9bf9273-ce4c-42e8-9698-9a4592a70edd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RS232C">
+      <UniqueIdentifier>{8a6b186e-a3f6-40a1-b722-18bd64696eff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UV">
+      <UniqueIdentifier>{ffc106f3-39cd-4d90-94b5-a1b53cc25519}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Light">
+      <UniqueIdentifier>{9a25bb9e-2160-4967-a7ac-59f55bcd2b92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Keyence">
+      <UniqueIdentifier>{5e6529c8-4fca-4f30-8ff4-7cbe1c181393}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_MEMO">
+      <UniqueIdentifier>{46200c0b-c649-4c3f-9c2c-f69b936d9256}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Inspection">
+      <UniqueIdentifier>{b3f24120-6e96-4c8e-bb00-94654247b2b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IRVLed">
+      <UniqueIdentifier>{803b2f9c-1c40-4075-b4e6-0ece2181296a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\GridCtrl">
+      <UniqueIdentifier>{e315bfa5-0c89-4056-95bf-5b439f9cc7eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ADO">
+      <UniqueIdentifier>{0ab4a1e4-5be5-4a6a-b9e1-2279744b892a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Aligorithm">
+      <UniqueIdentifier>{1c05e374-a5d7-4a9e-8422-285fcb1fce86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Aligorithm\LGIT">
+      <UniqueIdentifier>{cff59905-c056-4f10-b049-035fd8ef91e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Aligorithm\LGIT\LibACMISCommon">
+      <UniqueIdentifier>{48f346e0-37af-496e-b8dd-93438f1ba9b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Aligorithm\LGIT\LibACMISImage">
+      <UniqueIdentifier>{0ee2b3a2-44de-4590-bf0b-b0a3cfb055f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Aligorithm\LGIT\LibACMISResolution">
+      <UniqueIdentifier>{2c6a6857-b281-4bc1-ae3c-a66506845bd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Aligorithm\LGIT\LibACMISShading">
+      <UniqueIdentifier>{3227387d-ffbf-4a4f-9625-4f05b97b6e3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Aligorithm\LGIT\LibACMISSoftISP">
+      <UniqueIdentifier>{94da7035-a119-4580-a2fe-dc33d0c2ed7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Aligorithm\INSP">
+      <UniqueIdentifier>{79d4c6d4-8aaa-4e50-95d9-f4892e02f3ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dlg">
+      <UniqueIdentifier>{35de6c40-0ab4-47bb-b4bf-78daceb51d8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dlg\Spec">
+      <UniqueIdentifier>{abd07f75-9aee-4351-bd1c-dbf203f75625}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Process">
+      <UniqueIdentifier>{c4fec855-422f-439f-99af-3d00453528e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Aligorithm\LGIT\LibACMISBlemish">
+      <UniqueIdentifier>{436fc58e-bb92-4050-894f-32a0319de565}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Aligorithm\LGIT\LibACMISCertification">
+      <UniqueIdentifier>{fbc966ec-60c3-4363-906c-952c9f545cef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Aligorithm\LGIT\LibACMISCodec">
+      <UniqueIdentifier>{f00b5a88-3caa-45bc-aa02-f89e3c91c2cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Aligorithm\LGIT\LibACMISDefect">
+      <UniqueIdentifier>{637d62da-2dff-4633-b86b-4561ceef99a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Aligorithm\LGIT\LibACMISEtc">
+      <UniqueIdentifier>{8d6c4fb8-2e5f-4bab-8f3c-213cefa9a4c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Aligorithm\LGIT\LibACMISNoise">
+      <UniqueIdentifier>{2e78d02b-a1e3-4910-ad1a-e81c1b4239dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Aligorithm\LGIT\LibACMISOpticalCenter">
+      <UniqueIdentifier>{3cbfa9cb-bfa8-4754-a438-1aff2fdff969}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Aligorithm\LGIT\LibACMISParallelInspection">
+      <UniqueIdentifier>{eaf0a4ca-f70b-461e-af73-c66a25c306a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Aligorithm\LGIT\LibACMISSoftISPBasic">
+      <UniqueIdentifier>{c8e6ad12-8eaa-4464-b1f2-2aa0af030e36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MesConnSocket">
+      <UniqueIdentifier>{280af9b5-98b4-4f64-bf71-4cf63f61d65f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+    <None Include="res\AA Bonder.ico">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="res\AABonder.rc2">
+      <Filter>리소스 파일</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AA Bonder.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Vision.h">
+      <Filter>Vision Class</Filter>
+    </ClInclude>
+    <ClInclude Include="Label\Label.h">
+      <Filter>Label Class</Filter>
+    </ClInclude>
+    <ClInclude Include="LensDlg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PcbDlg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CcdDlg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="IoDlg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ExButton\exbutton.h">
+      <Filter>ExButton</Filter>
+    </ClInclude>
+    <ClInclude Include="Driver.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OS.H">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MarkSetDlg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GetNumDlg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DataHandler.h">
+      <Filter>Data</Filter>
+    </ClInclude>
+    <ClInclude Include="EditDlg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelDlg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DelayMsgDlg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\AutoRepeat\AutoRepeatButton.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\AutoRepeat\BtnST.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="CCDSFRDlg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MIU\EECvtColorEx.h">
+      <Filter>MIU</Filter>
+    </ClInclude>
+    <ClInclude Include="MIU\PixelFormat.h">
+      <Filter>MIU</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph2D\Graph2DWnd\Graph2D_Data.h">
+      <Filter>Graph2D\Graph2DWnd</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph2D\Graph2DWnd\Graph2D_Resource.h">
+      <Filter>Graph2D\Graph2DWnd</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph2D\Graph2DWnd\Graph2D_Struct.h">
+      <Filter>Graph2D\Graph2DWnd</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph2D\Graph2DWnd\Graph2DExtendWnd.h">
+      <Filter>Graph2D\Graph2DWnd</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph2D\Graph2DWnd\Graph2DWnd.h">
+      <Filter>Graph2D\Graph2DWnd</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph2D\Graph2DWnd\DibBitmap\dib256.h">
+      <Filter>Graph2D\DibBitmap</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph2D\Graph2DWnd\DibBitmap\dibpal.h">
+      <Filter>Graph2D\DibBitmap</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoPouseDlg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="InfoDlg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="LightDlg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Utility\TimeChecker.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoDispDlg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Utility\UtilityFunc.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="AxlMotion\AxlMotorSet.h">
+      <Filter>AxlMotion</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageInsp\Inspection_Alg.h">
+      <Filter>ImageInsp</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageInsp\BlobLabeling.h">
+      <Filter>ImageInsp</Filter>
+    </ClInclude>
+    <ClInclude Include="Device\UV\UVCommand.h">
+      <Filter>UV</Filter>
+    </ClInclude>
+    <ClInclude Include="Device\Light\LightControl.h">
+      <Filter>Light</Filter>
+    </ClInclude>
+    <ClInclude Include="DataSet.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PassWordDlg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MIU\MIU.h">
+      <Filter>MIU</Filter>
+    </ClInclude>
+    <ClInclude Include="SfrSpec.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="InformDlg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="AskMsgDlg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ContinuousButton.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ForceAlignDlg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyPadDlg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="AlarmDialog.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="AskMsgDlg2.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="LensEdgeDlg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\RS232C\Handler_RS232C.h">
+      <Filter>RS232C</Filter>
+    </ClInclude>
+    <ClInclude Include="keyence\Comm_RS232C.h">
+      <Filter>Keyence</Filter>
+    </ClInclude>
+    <ClInclude Include="keyence\KeyenceSensor.h">
+      <Filter>Keyence</Filter>
+    </ClInclude>
+    <ClInclude Include="DisplacementDlg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PRI_INSP\MandoFinalSFR.h">
+      <Filter>Inspection</Filter>
+    </ClInclude>
+    <ClInclude Include="CCDInspModeDlg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="pri_insp\pcsutil.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="FinalViewDlg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TiltingManualDlg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\ConnectSocket.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="BarcodeDlg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="barcode\BarcodeRead.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\ClientSocket.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\ListenSocket.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="RawToBmp.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="AxlMotion\AXTDefine.h">
+      <Filter>AxlMotion</Filter>
+    </ClInclude>
+    <ClInclude Include="EpoxyDlg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Insp_Spec_Set.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="_MEMO.h">
+      <Filter>_MEMO</Filter>
+    </ClInclude>
+    <ClInclude Include="IrvLed\IrvLedControl.h">
+      <Filter>IRVLed</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\GridCtrl\CellRange.h">
+      <Filter>Utility\GridCtrl</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\GridCtrl\GridCell.h">
+      <Filter>Utility\GridCtrl</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\GridCtrl\GridCellBase.h">
+      <Filter>Utility\GridCtrl</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\GridCtrl\GridCellCheck.h">
+      <Filter>Utility\GridCtrl</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\GridCtrl\GridCellCombo.h">
+      <Filter>Utility\GridCtrl</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\GridCtrl\GridCtrl.h">
+      <Filter>Utility\GridCtrl</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\GridCtrl\GridDropTarget.h">
+      <Filter>Utility\GridCtrl</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\GridCtrl\InPlaceEdit.h">
+      <Filter>Utility\GridCtrl</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\GridCtrl\MemDC.h">
+      <Filter>Utility\GridCtrl</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\GridCtrl\TitleTip.h">
+      <Filter>Utility\GridCtrl</Filter>
+    </ClInclude>
+    <ClInclude Include="MIU\CDemosaic.h">
+      <Filter>MIU</Filter>
+    </ClInclude>
+    <ClInclude Include="ADOAccess\ADOClass.h">
+      <Filter>ADO</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISCommon\ACMISCommon.h">
+      <Filter>Aligorithm\LGIT\LibACMISCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="Algorithm\INSP\algo_base.h">
+      <Filter>Aligorithm\INSP</Filter>
+    </ClInclude>
+    <ClInclude Include="CcdBlemishSpecDlg.h">
+      <Filter>Dlg\Spec</Filter>
+    </ClInclude>
+    <ClInclude Include="CcdChartSpecDlg.h">
+      <Filter>Dlg\Spec</Filter>
+    </ClInclude>
+    <ClInclude Include="CcdDefectSpecDlg.h">
+      <Filter>Dlg\Spec</Filter>
+    </ClInclude>
+    <ClInclude Include="CcdRiOcSpecDlg.h">
+      <Filter>Dlg\Spec</Filter>
+    </ClInclude>
+    <ClInclude Include="CcdRISpecDlg.h">
+      <Filter>Dlg\Spec</Filter>
+    </ClInclude>
+    <ClInclude Include="CcdSfrSpecDlg.h">
+      <Filter>Dlg\Spec</Filter>
+    </ClInclude>
+    <ClInclude Include="CcdSnrColorSensSpecDlg.h">
+      <Filter>Dlg\Spec</Filter>
+    </ClInclude>
+    <ClInclude Include="MIU\BoardControl.h">
+      <Filter>MIU</Filter>
+    </ClInclude>
+    <ClInclude Include="LensTeaching.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PcbTeaching.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PcbTeachingDis.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="GlobalDefine.h" />
+    <ClInclude Include="GlobalDeclare.h" />
+    <ClInclude Include="visa.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ChartSetDlg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Device\UV\UVControl.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PcbProcess2.h">
+      <Filter>Process</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Serial\Serial.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Device\Light\OCControl.h">
+      <Filter>Light</Filter>
+    </ClInclude>
+    <ClInclude Include="DioControl.h">
+      <Filter>AxlMotion</Filter>
+    </ClInclude>
+    <ClInclude Include="Path.h" />
+    <ClInclude Include="AA BonderDlg.h" />
+    <ClInclude Include="Utility\BaseThread\BaseThread.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="LogThread.h">
+      <Filter>Process</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISCommon\CSVParser.h">
+      <Filter>Aligorithm\LGIT\LibACMISCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISCommon\DataTypes.h">
+      <Filter>Aligorithm\LGIT\LibACMISCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISCommon\InspectionErrorCode.h">
+      <Filter>Aligorithm\LGIT\LibACMISCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISImage\ACMISImageDef.h">
+      <Filter>Aligorithm\LGIT\LibACMISImage</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISImage\ACMISMechanicalOpticalCenter.h">
+      <Filter>Aligorithm\LGIT\LibACMISImage</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISImage\ACMISRotateUsingFiducialMark.h">
+      <Filter>Aligorithm\LGIT\LibACMISImage</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISImage\export.h">
+      <Filter>Aligorithm\LGIT\LibACMISImage</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISResolution\ACMISFiducialMark.h">
+      <Filter>Aligorithm\LGIT\LibACMISResolution</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISResolution\ACMISResolutionDef.h">
+      <Filter>Aligorithm\LGIT\LibACMISResolution</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISResolution\ACMISResolutionEIAJ.h">
+      <Filter>Aligorithm\LGIT\LibACMISResolution</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISResolution\ACMISResolutionSFR.h">
+      <Filter>Aligorithm\LGIT\LibACMISResolution</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISResolution\export.h">
+      <Filter>Aligorithm\LGIT\LibACMISResolution</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISShading\ACMISShadingAlgorithm.h">
+      <Filter>Aligorithm\LGIT\LibACMISShading</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISShading\ACMISShadingDef.h">
+      <Filter>Aligorithm\LGIT\LibACMISShading</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISShading\export.h">
+      <Filter>Aligorithm\LGIT\LibACMISShading</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISSoftISP\CDemosaic_BLLC.h">
+      <Filter>Aligorithm\LGIT\LibACMISSoftISP</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISSoftISP\CDemosaic_GBTF.h">
+      <Filter>Aligorithm\LGIT\LibACMISSoftISP</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISSoftISP\CDemosaic_Residual.h">
+      <Filter>Aligorithm\LGIT\LibACMISSoftISP</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISSoftISP\CDemosaic_RGBIR_P2.h">
+      <Filter>Aligorithm\LGIT\LibACMISSoftISP</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISSoftISP\DemosaicAdvanced.h">
+      <Filter>Aligorithm\LGIT\LibACMISSoftISP</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISSoftISP\DetectObject.h">
+      <Filter>Aligorithm\LGIT\LibACMISSoftISP</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISSoftISP\export.h">
+      <Filter>Aligorithm\LGIT\LibACMISSoftISP</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISSoftISP\ImageFileProcessing.h">
+      <Filter>Aligorithm\LGIT\LibACMISSoftISP</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISSoftISP\SoftISP.h">
+      <Filter>Aligorithm\LGIT\LibACMISSoftISP</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISBlemish\ACMISBlemishDef.h">
+      <Filter>Aligorithm\LGIT\LibACMISBlemish</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISBlemish\ACMISImageBlemish.h">
+      <Filter>Aligorithm\LGIT\LibACMISBlemish</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISBlemish\ACMISImageStain.h">
+      <Filter>Aligorithm\LGIT\LibACMISBlemish</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISBlemish\export.h">
+      <Filter>Aligorithm\LGIT\LibACMISBlemish</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISCertification\ACMISCertification.h">
+      <Filter>Aligorithm\LGIT\LibACMISCertification</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISCertification\ACMISCertificationDef.h">
+      <Filter>Aligorithm\LGIT\LibACMISCertification</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISCertification\export.h">
+      <Filter>Aligorithm\LGIT\LibACMISCertification</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISCodec\LibACMISCodecCommon.h">
+      <Filter>Aligorithm\LGIT\LibACMISCodec</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISDefect\ACMISDefectDef.h">
+      <Filter>Aligorithm\LGIT\LibACMISDefect</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISDefect\ACMISImageDarkTest.h">
+      <Filter>Aligorithm\LGIT\LibACMISDefect</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISDefect\export.h">
+      <Filter>Aligorithm\LGIT\LibACMISDefect</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISEtc\ACMISEtcAlgorithm.h">
+      <Filter>Aligorithm\LGIT\LibACMISEtc</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISEtc\ACMISEtcDef.h">
+      <Filter>Aligorithm\LGIT\LibACMISEtc</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISEtc\export.h">
+      <Filter>Aligorithm\LGIT\LibACMISEtc</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISNoise\ACMISSignalNoiseRatio.h">
+      <Filter>Aligorithm\LGIT\LibACMISNoise</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISNoise\ACMISSignalNoiseRatioDef.h">
+      <Filter>Aligorithm\LGIT\LibACMISNoise</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISNoise\export.h">
+      <Filter>Aligorithm\LGIT\LibACMISNoise</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISOpticalCenter\ACMISImageOpticalCenter.h">
+      <Filter>Aligorithm\LGIT\LibACMISOpticalCenter</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISOpticalCenter\ACMISOpticalCenterDef.h">
+      <Filter>Aligorithm\LGIT\LibACMISOpticalCenter</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISOpticalCenter\export.h">
+      <Filter>Aligorithm\LGIT\LibACMISOpticalCenter</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISParallelInspection\ACMISParallelInspection.h">
+      <Filter>Aligorithm\LGIT\LibACMISParallelInspection</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISParallelInspection\ACMISParallelInspectionDef.h">
+      <Filter>Aligorithm\LGIT\LibACMISParallelInspection</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISParallelInspection\export.h">
+      <Filter>Aligorithm\LGIT\LibACMISParallelInspection</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISSoftISPBasic\CDemosaic.h">
+      <Filter>Aligorithm\LGIT\LibACMISSoftISPBasic</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISSoftISPBasic\CDemosaic_AHD.h">
+      <Filter>Aligorithm\LGIT\LibACMISSoftISPBasic</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISSoftISPBasic\CDemosaic_BL33.h">
+      <Filter>Aligorithm\LGIT\LibACMISSoftISPBasic</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISSoftISPBasic\CDemosaic_RCCB.h">
+      <Filter>Aligorithm\LGIT\LibACMISSoftISPBasic</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISSoftISPBasic\CDemosaic_RGGB.h">
+      <Filter>Aligorithm\LGIT\LibACMISSoftISPBasic</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISSoftISPBasic\CDemosaic_VNG.h">
+      <Filter>Aligorithm\LGIT\LibACMISSoftISPBasic</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISSoftISPBasic\DataLog.h">
+      <Filter>Aligorithm\LGIT\LibACMISSoftISPBasic</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISSoftISPBasic\DemosaicBasic.h">
+      <Filter>Aligorithm\LGIT\LibACMISSoftISPBasic</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISSoftISPBasic\export.h">
+      <Filter>Aligorithm\LGIT\LibACMISSoftISPBasic</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISSoftISPBasic\ImageProcessing.h">
+      <Filter>Aligorithm\LGIT\LibACMISSoftISPBasic</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISSoftISPBasic\RawImageProcessing.h">
+      <Filter>Aligorithm\LGIT\LibACMISSoftISPBasic</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Inspection\Include\LibACMISSoftISPBasic\SoftISPBasic.h">
+      <Filter>Aligorithm\LGIT\LibACMISSoftISPBasic</Filter>
+    </ClInclude>
+    <ClInclude Include="Algorithm\INSP\Aps_Insp.h">
+      <Filter>Aligorithm\INSP</Filter>
+    </ClInclude>
+    <ClInclude Include="Device\UV\UvAltisControl.h">
+      <Filter>UV</Filter>
+    </ClInclude>
+    <ClInclude Include="MesConnSocket.h">
+      <Filter>MesConnSocket</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AA Bonder.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Vision.cpp">
+      <Filter>Vision Class</Filter>
+    </ClCompile>
+    <ClCompile Include="Label\Label.cpp">
+      <Filter>Label Class</Filter>
+    </ClCompile>
+    <ClCompile Include="LensDlg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PcbDlg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CcdDlg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="IoDlg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ExButton\ExButton.cpp">
+      <Filter>ExButton</Filter>
+    </ClCompile>
+    <ClCompile Include="MarkSetDlg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GetNumDlg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DataHandler.cpp">
+      <Filter>Data</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelDlg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="EditDlg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="DelayMsgDlg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\AutoRepeat\AutoRepeatButton.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\AutoRepeat\BtnST.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="CCDSFRDlg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Graph2D\Graph2DWnd\Graph2D_Data.cpp">
+      <Filter>Graph2D\Graph2DWnd</Filter>
+    </ClCompile>
+    <ClCompile Include="Graph2D\Graph2DWnd\Graph2D_Resource.cpp">
+      <Filter>Graph2D\Graph2DWnd</Filter>
+    </ClCompile>
+    <ClCompile Include="Graph2D\Graph2DWnd\Graph2DExtendWnd.cpp">
+      <Filter>Graph2D\Graph2DWnd</Filter>
+    </ClCompile>
+    <ClCompile Include="Graph2D\Graph2DWnd\Graph2DWnd.cpp">
+      <Filter>Graph2D\Graph2DWnd</Filter>
+    </ClCompile>
+    <ClCompile Include="Graph2D\Graph2DWnd\DibBitmap\dib256.cpp">
+      <Filter>Graph2D\DibBitmap</Filter>
+    </ClCompile>
+    <ClCompile Include="Graph2D\Graph2DWnd\DibBitmap\dibpal.cpp">
+      <Filter>Graph2D\DibBitmap</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoPouseDlg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="InfoDlg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="LightDlg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\Utility\TimeChecker.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoDispDlg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\Utility\UtilityFunc.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="AxlMotion\AxlMotorSet.cpp">
+      <Filter>AxlMotion</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageInsp\BlobLabeling.cpp">
+      <Filter>ImageInsp</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageInsp\Inspection_Alg.cpp">
+      <Filter>ImageInsp</Filter>
+    </ClCompile>
+    <ClCompile Include="Device\UV\UVCommand.cpp">
+      <Filter>UV</Filter>
+    </ClCompile>
+    <ClCompile Include="Device\Light\LightControl.cpp">
+      <Filter>Light</Filter>
+    </ClCompile>
+    <ClCompile Include="DataSet.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PassWordDlg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MIU\MIU.cpp">
+      <Filter>MIU</Filter>
+    </ClCompile>
+    <ClCompile Include="SfrSpec.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="InformDlg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="AskMsgDlg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ContinuousButton.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ForceAlignDlg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyPadDlg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="AlarmDialog.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="AskMsgDlg2.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="LensEdgeDlg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\RS232C\Handler_RS232C.cpp">
+      <Filter>RS232C</Filter>
+    </ClCompile>
+    <ClCompile Include="keyence\Comm_RS232C.cpp">
+      <Filter>Keyence</Filter>
+    </ClCompile>
+    <ClCompile Include="keyence\KeyenceSensor.cpp">
+      <Filter>Keyence</Filter>
+    </ClCompile>
+    <ClCompile Include="DisplacementDlg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PRI_INSP\MandoFinalSFR.cpp">
+      <Filter>Inspection</Filter>
+    </ClCompile>
+    <ClCompile Include="CCDInspModeDlg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PRI_INSP\PcsUtil.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TiltingManualDlg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\ConnectSocket.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="BarcodeDlg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="barcode\BarcodeRead.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\ClientSocket.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\ListenSocket.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="csv_parser.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="EpoxyDlg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Insp_Spec_Set.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="IrvLed\IrvLedControl.cpp">
+      <Filter>IRVLed</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\GridCtrl\GridCell.cpp">
+      <Filter>Utility\GridCtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\GridCtrl\GridCellBase.cpp">
+      <Filter>Utility\GridCtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\GridCtrl\GridCellCheck.cpp">
+      <Filter>Utility\GridCtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\GridCtrl\GridCellCombo.cpp">
+      <Filter>Utility\GridCtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\GridCtrl\GridCtrl.cpp">
+      <Filter>Utility\GridCtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\GridCtrl\GridDropTarget.cpp">
+      <Filter>Utility\GridCtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\GridCtrl\InPlaceEdit.cpp">
+      <Filter>Utility\GridCtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\GridCtrl\TitleTip.cpp">
+      <Filter>Utility\GridCtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="MIU\CDemosaic.cpp">
+      <Filter>MIU</Filter>
+    </ClCompile>
+    <ClCompile Include="ADOAccess\ADOClass.cpp">
+      <Filter>ADO</Filter>
+    </ClCompile>
+    <ClCompile Include="Algorithm\INSP\algo_base.cpp">
+      <Filter>Aligorithm\INSP</Filter>
+    </ClCompile>
+    <ClCompile Include="CcdBlemishSpecDlg.cpp">
+      <Filter>Dlg\Spec</Filter>
+    </ClCompile>
+    <ClCompile Include="CcdChartSpecDlg.cpp">
+      <Filter>Dlg\Spec</Filter>
+    </ClCompile>
+    <ClCompile Include="CcdDefectSpecDlg.cpp">
+      <Filter>Dlg\Spec</Filter>
+    </ClCompile>
+    <ClCompile Include="CcdRiOcSpecDlg.cpp">
+      <Filter>Dlg\Spec</Filter>
+    </ClCompile>
+    <ClCompile Include="CcdRISpecDlg.cpp">
+      <Filter>Dlg\Spec</Filter>
+    </ClCompile>
+    <ClCompile Include="CcdSfrSpecDlg.cpp">
+      <Filter>Dlg\Spec</Filter>
+    </ClCompile>
+    <ClCompile Include="CcdSnrColorSensSpecDlg.cpp">
+      <Filter>Dlg\Spec</Filter>
+    </ClCompile>
+    <ClCompile Include="LensTeaching.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PcbTeaching.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PcbTeachingDis.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalDeclare.cpp" />
+    <ClCompile Include="ChartSetDlg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Device\UV\UVControl.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PcbProcess2.cpp">
+      <Filter>Process</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\Serial\Serial.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Device\Light\OCControl.cpp">
+      <Filter>Light</Filter>
+    </ClCompile>
+    <ClCompile Include="DioControl.cpp">
+      <Filter>AxlMotion</Filter>
+    </ClCompile>
+    <ClCompile Include="AA BonderDlg.cpp" />
+    <ClCompile Include="Utility\BaseThread\BaseThread.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="LogThread.cpp">
+      <Filter>Process</Filter>
+    </ClCompile>
+    <ClCompile Include="Algorithm\INSP\Aps_Insp.cpp">
+      <Filter>Aligorithm\INSP</Filter>
+    </ClCompile>
+    <ClCompile Include="Device\UV\UvAltisControl.cpp">
+      <Filter>UV</Filter>
+    </ClCompile>
+    <ClCompile Include="MesConnSocket.cpp">
+      <Filter>MesConnSocket</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="AA Bonder.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\one.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\two.png">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
