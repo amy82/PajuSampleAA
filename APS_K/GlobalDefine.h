@@ -3,7 +3,7 @@
 #define __GLOBAL_DEFINE
 
 
-//#define		NORINDA_MODE
+#define		NORINDA_MODE
 
 //=======================================================================
 #define	PCB_TILT_AA				0
@@ -20,12 +20,15 @@
 #define HEAD_MODEL
 
 #define	__RUN_MODE			AA_RUN_MODE//AA_RUN_MODE
+const int M_THUNDER_CHEETAH = 200501;		//유스테크 4채널 이물광원 사용 RPS-50V5-4_DM
+
 
 const int M2_FF_MODULE = 200200;		//240726 박동찬, 김세영 선임, 사각도포 얇은 제품 사격형 도포 차트 9개 LGIT_GRABBER_20240715_01_v2.2.3  epoxy무게 = 0.035
 
-static int LGIT_MODEL_INDEX = M2_FF_MODULE;
+static int LGIT_MODEL_INDEX = M_THUNDER_CHEETAH;
 //----------------------------------------------------------------------------------------------------------------------------------- 
-#define					VER_STR		"250327_1"			//git 이동
+#define					VER_STR		"250327_2"				//4채널 이물광원 프로토콜 추가 RPS-50V5-4
+//#define					VER_STR		"250327_1"			//git 이동
 
 //#define					VER_STR		"250212_2"			//VC.db 이거때문??
 //#define					VER_STR		"250212_1"			//git 연결 되긴 됨 근데 vs 에서 push, pull 은 아직 안됨?? 왜?
@@ -229,11 +232,16 @@ enum LED_LIGHT_CONTROL {
 	MAX_LIGHT_CONTROL
 };
 
+enum RPS50V5_LIGHT_CONTROL
+{
+	LIGHT_RMS_OC2 = 1 , LIGHT_RMS_OC3 , LIGHT_RMS_OC4
+};
 
 enum LED_LIGHT_DATA {
 	LEDDATA_SENSOR, LEDDATA_HOLDER, LEDDATA_CHART_L, LEDDATA_CHART_R, 
 	LEDDATA_TOP1_CHART, LEDDATA_TOP2_CHART, LEDDATA_TOP3_CHART, LEDDATA_TOP4_CHART, LEDDATA_TOP5_CHART, LEDDATA_TOP6_CHART,
-	LEDDATA_OC, LEDDATA_EPOXY_INSP, LEDDATA_RESIN_CALC, LEDDATA_LENS, LEDDATA_STAIN, LEDDATA_DEFECT, MAX_LIGHT_DATA
+	LEDDATA_OC, LEDDATA_EPOXY_INSP, LEDDATA_RESIN_CALC, LEDDATA_LENS, LEDDATA_STAIN, LEDDATA_DEFECT, LEDDATA_STAIN2, LEDDATA_STAIN3, LEDDATA_STAIN4,
+	MAX_LIGHT_DATA
 };
 //LEDDATA_6500K, LEDDATA_2800K
 enum	RS_232_COMM { COMM_LASER, COMM_BARCODE, COMM_UV, COMM_LIGHT1, COMM_LIGHT2, COMM_LIGHT3, COMM_UV2, COMM_LIGHT4, COMM_LIGHT5, COMM_LIGHTOC_1ST, COMM_X100_BCR, MAX_RS232_NO };

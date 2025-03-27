@@ -29,13 +29,7 @@ private:
 	//! [주의 사항] 'iNoChannel' 값은 조명 컨트롤러의 실제 채널 입력값이다. 
 	int SetChannel_Value(int iNoChannel, int iValue);
 
-	//int DPS_SetChannel_Value(int iNoChannel, int iValue);
-
-	//bool DPS_Light_OnOffLevel(int channel, int onoff, int data);
-
-	//int DPS_SetChannel_Value2(int iNoChannel, int iValue);
-
-	//bool DPS_Light_OnOffLevel2(int channel, int onoff, int data);
+	
 
 protected:
 	//! 부모 클래스의 가상 함수들을 구체적인 기능을 구현한다. 
@@ -50,7 +44,7 @@ protected:
 public:
 	//! 조명 컨트롤러에 연결
 	//! [주의 사항] 수신 데이터가 있을 경우에는, 반드시, SetReceiveProcPtr 함수로 수신 처리를 할 Dialog나 GUI 클래스를 설정하고, 이 함수를 호출한다. 
-	bool Connect_Device(CString sPort, int iNoMachine = 0);
+	bool Connect_Device(CString sPort, int iNoMachine = 0, int BaudRate = 19200);
 	//! 연결 해제
 	void Close_Device();
 
@@ -69,5 +63,16 @@ public:
 
 	bool ChartAllControl(bool onOff);
 public:
+
+
+	//RPS-50V5-4 4채널 이물광원 - YOUTH TECH
+	int DPS_SetChannel_Value(int iNoChannel, int iValue);
+	bool DPS_Light_OnOffLevel(int channel, int onoff, int data);
+
+	//int DPS_SetChannel_Value2(int iNoChannel, int iValue);
+
+	//bool DPS_Light_OnOffLevel2(int channel, int onoff, int data);
+
+
 };
 

@@ -2256,6 +2256,26 @@ void CAABonderDlg::Rs232Init()
 	sCommPort.Format("COM%d", sysData.iCommPort[COMM_LIGHT1]);
 	LightControl.SetReceiveProcPtr(this);
 	bRet_Con_RS232C = LightControl.Connect_Device(sCommPort, 0);
+
+
+	//Cheetah 모델 유스테크 이물 광원 4channel 추가 250327
+	//
+	sCommPort.Format("COM%d", sysData.iCommPort[COMM_LIGHTOC_1ST]);
+	OcLight_Dms50v52.SetReceiveProcPtr(this);
+	bRet_Con_RS232C = OcLight_Dms50v52.Connect_Device(sCommPort, 10, 19200);		//19200 ok
+	if (bRet_Con_RS232C == true)
+	{
+		logStr.Format("	[Serial]DMS-50V5-2 연결 완료 COM%d", sysData.iCommPort[COMM_LIGHTOC_1ST]);
+
+		Sleep(100);
+
+		OcLight_Dms50v52.DPS_Light_OnOffLevel(LIGHT_OC, true, model.m_iLedValue[LEDDATA_STAIN]);
+	}
+	else
+	{
+		logStr.Format("	[Serial]DMS-50V5-2 연결 실패 COM%d", sysData.iCommPort[COMM_LIGHTOC_1ST]);
+	}
+	putListLog(logStr);
 	//-----------------------------------------------------------------------------------------------------------------------------------
 	//
 	//
@@ -2274,6 +2294,7 @@ void CAABonderDlg::Rs232Init()
 		Task.bConnectBarcode = true;
 		putListLog(logStr);
 	}
+
 	//LIM
 	if (!barcode2.func_Comm_Open(sysData.iCommPort[COMM_X100_BCR], sysData.iBaudRate[COMM_X100_BCR]))
 	{

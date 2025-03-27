@@ -9,6 +9,24 @@ typedef struct __TStainSpec
     TRU_YmeanSpecN stSpecYmean;
 } TStainSpec;
 
+//250327 Thunder Cheetah 모델검사 항목
+
+//==.AA
+//1.sfr
+//2.oc
+//3.Stain
+//4.Defect
+
+//==.Eol
+//1.sfr
+//2.Lens Shading Cal
+//3. Shading_RG,BG,RG/BG Balance
+//4.Stain
+//5.Defect(Highlight)
+//6.Edge shading
+//7.iLLumination OC
+//8.Dark
+
 
 class CAPS_Insp
 {
@@ -18,28 +36,14 @@ public:
 	
 	void SetUnit(int nUnit){ m_nUnit = nUnit;}
 
-	bool func_Insp_OpenStain(IplImage* img, bool bAutoMode = false);
 
 	bool func_insp_CDP800_Current();
 	bool func_insp_Voltage();
 	bool func_Insp_CurrentMeasure(bool bLogDraw=true, bool bAutoMode = false);			//전류 측정 검사
-	int  func_Insp_TestPattern(bool bAutoMode = false);				//Test Pattern 검사
 	CString SetDir_Check(CString sPath);
 
-	bool func_Insp_OpenStainLGIT(unsigned char* pImgBuff, bool bAutoMode = false);
-	int InspectStain(TDATASPEC &tDataSpec, TStainSpec &tStainSpec, unsigned char *pBuffer, int nWidth, int nHeight, bool bEnableBlackSpot = true, bool bEnableLCB = true, bool bEnableRYUmean = true, bool bAutoMode = false);
-	int InspectBlackSpotContrast(const BYTE* pBuffer, int nWidth, int nHeight, TBlackSpotContrast& _Spec, EDATAFORMAT dataFormat, EOUTMODE outMode, ESENSORTYPE sensorType, int nBlackLevel, IplImage *cvImgBlackSpot);
-    //
-    //190730 추가
-	//
     //color uniformity
     bool func_Insp_Stain(BYTE* img);
-
-	//Blemish
-    int InspectStain(BYTE* stainImg, bool bAutoMode);
-
-	int BlackSpotInsp(BYTE* img, int nWidth, int nHeight, TDATASPEC& tDataSpec);// , IplImage* bmpImg);
-
 
 
     int LCBInsp(BYTE* img, int nWidth, int nHeight, TDATASPEC& tDataSpec);//, IplImage* bmpImg);
@@ -65,23 +69,12 @@ public:
 	int Inspect_RelativeUniformity(const BYTE* pBuffer, int nImageWidth, int nImageHeight, TRelativeUniformitySpec& _Spec, TDATASPEC& tDataSpec, IplImage *cvImgRU, bool bUse8BitOnly = false);
 	int Inspect_ColorSensitivity(const BYTE* pBuffer, bool bUse8BitOnly = false);
 	
-	//SNR
-	bool func_Insp_Snr_Vne(BYTE* ChartRaw, BYTE* ChartSecondRaw, bool bAutoMode);
-
-	bool func_Insp_Snr(BYTE* img,bool bAutoMode = false);
-	//void DisplaySNRGraphics(IplImage* _cvImgBuf, const TSNRResult* _SNRResult, int _nImageWidth, CvScalar color);
-
 	//dark , white , hot
 	bool func_Insp_Defect(BYTE* midImage, BYTE* lowImage, bool bAutoMode = false);
 
 	bool func_Insp_Saturation(BYTE* ChartRawImage, bool bAutoMode = false);
 
-	//color uniformity
-	bool func_Insp_Uniformity(BYTE* img,  bool bAutoMode = false, bool bUse8BitOnly = false);
 public:
-	IplImage* imagePattern;			// Display // test by PRI
-
-
 	int  m_iPatternTest_ErrCnt;
 
 #ifndef _M_X64

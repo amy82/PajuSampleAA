@@ -100,6 +100,9 @@ public:
 	CExButton m_bLensCam1;
 	//
 	CExButton m_bStainOc;
+	CExButton m_bStainOc2;
+	CExButton m_bStainOc3;
+	CExButton m_bStainOc4;
 	CExButton m_bDefectOc;
 	afx_msg void OnStnClickedEditBchartLed();
 	afx_msg void OnBnClickedBtnChartChange();

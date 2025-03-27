@@ -100,7 +100,7 @@ void CLightControl::PostProcRecvData()
 
 //! 조명 컨트롤러에 연결
 //! [주의 사항] 수신 데이터가 있을 경우에는, 반드시, SetReceiveProcPtr 함수로 수신 처리를 할 Dialog나 GUI 클래스를 설정하고, 이 함수를 호출한다. 
-bool CLightControl::Connect_Device(CString sPort, int iNoMachine)
+bool CLightControl::Connect_Device(CString sPort, int iNoMachine, int BaudRate)
 {
 	if ( iNoMachine < 0 )
 	{
@@ -259,81 +259,6 @@ int CLightControl::SetChannel_Value(int iNoChannel, int iValue)
 	return 1;
 }
 #if 0
-int CLightControl::DPS_SetChannel_Value(int iNoChannel, int iValue)
-{
-	if (iValue < 0)
-	{
-		iValue = 0;
-	}
-	if (iValue > 999)	//255)
-	{
-		iValue = 999;// 255;
-	}
-	int nSendSize;
-	int nRetVal;
-	int nIndex;
-#if 1
-	BYTE sSendBuff[100];
-	memset(sSendBuff, 0x00, sizeof(sSendBuff));
-	sSendBuff[0] = 0x59;		//ASCII 'Y'  Hex Code 0x59 로 고정
-	sSendBuff[1] = 0x07;		//Header ~ Checksum까지의 byte수 , 7로 고정
-	sSendBuff[2] = iNoChannel;			//채널 0x01 ~ 0x08 , 1채널모델의 경우 0x01로 고정
-	sSendBuff[3] = 0x31;			//On = 0x31 , Off = 0x30 , Ready Check = 0x3F
-	sSendBuff[4] = (char)((iValue >> 8) & 0x00FF);		//Value-0 , MSB, OFF인경우 값의미없음, 1024 Level의 경우 0ㅌ0000 ~ 0x03ff까지 사용가능
-	sSendBuff[5] = (char)(iValue & 0x00FF);;		//Value-1 , LSB, OFF인경우 값의미없음
-	sSendBuff[6] = 0x00;
-	for (int i = 0; i < 6; i++)
-	{
-		sSendBuff[6] += sSendBuff[i];		//Checksum = Header ~ Value-1까지의 합
-	}
-
-	nSendSize = 7;
-
-
-
-#else
-	CString sSend = _T("");
-	sSend.Empty();
-	sSend.Format(_T("[%02d%03d"), iNoChannel, iValue);
-#endif
-	int iRet = SendData_Light_Controller(sSendBuff, nSendSize);
-	if (iRet < 0)
-	{
-		return (-10 + iRet);
-	}
-
-	return 1;
-}
-
-bool CLightControl::DPS_Light_OnOffLevel(int channel, int onoff, int data)
-{
-	//Level은 0 ~ 1023
-	unsigned char sSendBuff[100];
-	int nSendSize = 0;
-	char mch = 0x1 + channel;
-	memset(sSendBuff, 0x00, sizeof(sSendBuff));
-	sSendBuff[0] = 0x59;								//Header
-	sSendBuff[1] = 0x07;								//Length
-	sSendBuff[2] = (char)(mch & 0x00FF);	//Channel (0x1 ~ 0x4)
-	sSendBuff[3] = (onoff == 0) ? 0x30 : 0x31;			//Command
-	sSendBuff[4] = (char)((data >> 8) & 0x00FF);	//Data-0 [MSB]
-	sSendBuff[5] = (char)(data & 0x00FF);		//Data-1 [LSB]
-	sSendBuff[6] = 0x00;								//BCC
-
-	for (int i = 0; i < 6; i++)
-	{
-		sSendBuff[6] += sSendBuff[i];
-	}
-	nSendSize = 7;
-
-	Sleep(100);
-	int nRetVal = SendData_Light_Controller(sSendBuff, nSendSize);
-	if (nRetVal != nSendSize)
-	{
-		return false;
-	}
-	return true;
-}
 
 int CLightControl::DPS_SetChannel_Value2(int iNoChannel, int iValue)
 {
@@ -524,4 +449,79 @@ bool CLightControl::ChartAllControl(bool onOff)
 	return true;
 }
 
+int CLightControl::DPS_SetChannel_Value(int iNoChannel, int iValue)
+{
+	if (iValue < 0)
+	{
+		iValue = 0;
+	}
+	if (iValue > 999)	//255)
+	{
+		iValue = 999;// 255;
+	}
+	int nSendSize;
+	int nRetVal;
+	int nIndex;
+#if 1
+	BYTE sSendBuff[100];
+	memset(sSendBuff, 0x00, sizeof(sSendBuff));
+	sSendBuff[0] = 0x59;		//ASCII 'Y'  Hex Code 0x59 로 고정
+	sSendBuff[1] = 0x07;		//Header ~ Checksum까지의 byte수 , 7로 고정
+	sSendBuff[2] = iNoChannel + 1;			//채널 0x01 ~ 0x08 , 1채널모델의 경우 0x01로 고정
+	sSendBuff[3] = 0x31;			//On = 0x31 , Off = 0x30 , Ready Check = 0x3F
+	sSendBuff[4] = (char)((iValue >> 8) & 0x00FF);		//Value-0 , MSB, OFF인경우 값의미없음, 1024 Level의 경우 0ㅌ0000 ~ 0x03ff까지 사용가능
+	sSendBuff[5] = (char)(iValue & 0x00FF);;		//Value-1 , LSB, OFF인경우 값의미없음
+	sSendBuff[6] = 0x00;
+	for (int i = 0; i < 6; i++)
+	{
+		sSendBuff[6] += sSendBuff[i];		//Checksum = Header ~ Value-1까지의 합
+	}
 
+	nSendSize = 7;
+
+
+
+#else
+	CString sSend = _T("");
+	sSend.Empty();
+	sSend.Format(_T("[%02d%03d"), iNoChannel, iValue);
+#endif
+	int iRet = SendData_Light_Controller(sSendBuff, nSendSize);
+	if (iRet < 0)
+	{
+		return (-10 + iRet);
+	}
+
+	return 1;
+}
+
+bool CLightControl::DPS_Light_OnOffLevel(int channel, int onoff, int data)
+{
+	//Level은 0 ~ 1023
+	unsigned char sSendBuff[100];
+	int nSendSize = 0;
+	char mch = 0x1 + channel;
+
+	memset(sSendBuff, 0x00, sizeof(sSendBuff));
+	sSendBuff[0] = 0x59;								//Header
+	sSendBuff[1] = 0x07;								//Length
+	sSendBuff[2] = (char)(mch & 0x00FF);	//Channel (0x1 ~ 0x4)
+	sSendBuff[3] = (onoff == 0) ? 0x30 : 0x31;			//Command
+	sSendBuff[4] = (char)((data >> 8) & 0x00FF);	//Data-0 [MSB]
+	sSendBuff[5] = (char)(data & 0x00FF);		//Data-1 [LSB]
+	sSendBuff[6] = 0x00;								//BCC
+
+	for (int i = 0; i < 6; i++)
+	{
+		sSendBuff[6] += sSendBuff[i];
+	}
+	nSendSize = 7;
+
+	Sleep(100);
+	int nRetVal = SendData_Light_Controller(sSendBuff, nSendSize);
+	if (nRetVal != nSendSize)
+	{
+		return false;
+	}
+	return true;
+}

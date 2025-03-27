@@ -6358,7 +6358,7 @@ void CModelData::Save()
 		fprintf_s(out, "MARK_MATCHING		%d %d %d %d\n"
 			, m_MarkMatchingRate[0], m_MarkMatchingRate[1], m_MarkMatchingRate[2], m_MarkMatchingRate[3]);
 
-		fprintf_s(out, "LED		%d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d\n", m_iLedValue[0], m_iLedValue[1], m_iLedValue[2], m_iLedValue[3], m_iLedValue[4], m_iLedValue[5], m_iLedValue[6], m_iLedValue[7], m_iLedValue[8], m_iLedValue[9], m_iLedValue[10], m_iLedValue[11], m_iLedValue[12], m_iLedValue[13], m_iLedValue[14], m_iLedValue[15]);
+		fprintf_s(out, "LED		%d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d\n", m_iLedValue[0], m_iLedValue[1], m_iLedValue[2], m_iLedValue[3], m_iLedValue[4], m_iLedValue[5], m_iLedValue[6], m_iLedValue[7], m_iLedValue[8], m_iLedValue[9], m_iLedValue[10], m_iLedValue[11], m_iLedValue[12], m_iLedValue[13], m_iLedValue[14], m_iLedValue[15], m_iLedValue[16], m_iLedValue[17], m_iLedValue[18]);
 		fprintf_s(out, "OIS_AF		%d %d %lf\n", code1, code2, dFov);
 		fprintf_s(out, "UV_Time		 %d\n",  UV_Time);
 		fprintf_s(out, "UV_Weight    %lf\n", UV_Weight);
@@ -6960,7 +6960,7 @@ void CModelData::Load()
 			}
 			else if (strcmp(Title, "LED")==0)
 			{
-				sscanf_s(Line, "%s %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d",	Title, 499, &m_iLedValue[0], &m_iLedValue[1], &m_iLedValue[2], &m_iLedValue[3], &m_iLedValue[4], &m_iLedValue[5], &m_iLedValue[6], &m_iLedValue[7], &m_iLedValue[8], &m_iLedValue[9], &m_iLedValue[10], &m_iLedValue[11], &m_iLedValue[12], &m_iLedValue[13], &m_iLedValue[14], &m_iLedValue[15]);
+				sscanf_s(Line, "%s %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d",	Title, 499, &m_iLedValue[0], &m_iLedValue[1], &m_iLedValue[2], &m_iLedValue[3], &m_iLedValue[4], &m_iLedValue[5], &m_iLedValue[6], &m_iLedValue[7], &m_iLedValue[8], &m_iLedValue[9], &m_iLedValue[10], &m_iLedValue[11], &m_iLedValue[12], &m_iLedValue[13], &m_iLedValue[14], &m_iLedValue[15], &m_iLedValue[16], &m_iLedValue[17], &m_iLedValue[18]);
 			}
 			else if (strcmp(Title, "OIS_AF")==0)
 			{

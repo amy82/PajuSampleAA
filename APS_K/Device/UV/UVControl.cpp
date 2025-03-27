@@ -419,10 +419,10 @@ void CUVControl::ctrlLedVolume(int iChannel, int iValue)
 	Sleep(10);
 	chNo = iChannel + 1;
 	
-	if (myNum == 0)
+	/*if (myNum == 0)
 	{
 		DPS_SetChannel_Value(chNo, iValue);
-	}
+	}*/
 
 	chNo = iChannel + 1;
 	SetChannel_OnOff(chNo, true);

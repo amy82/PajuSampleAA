@@ -17,6 +17,9 @@ CMandoSfrSpec		MandoSfrSpec;
 CADOClass		g_ADOData;
 CList_RS232C		SerialPortList;
 CLightControl LightControl;				//2호기 top chart
+
+CLightControl OcLight_Dms50v52;		//RPS-50V5-4 CHEETAH 모델 이물 광원 4채널 
+
 //CLightControl LightControlSecond;		//2호기 ir
 //CLightControl LightControlthird;
 //CLightControl LightControlFourth;

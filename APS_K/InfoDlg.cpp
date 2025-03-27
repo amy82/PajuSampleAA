@@ -662,6 +662,7 @@ void CInfoDlg::getData()
 	sysData.iCommPort[COMM_LIGHT3] = m_ComboLightPort3.GetCurSel() + 1;
 	sysData.iCommPort[COMM_LIGHT4] = m_ComboLightPort4.GetCurSel() + 1;
 	sysData.iCommPort[COMM_LIGHT5] = m_ComboLightPort5.GetCurSel() + 1;
+
 	sysData.iCommPort[COMM_LIGHTOC_1ST] = m_ComboLightPort6.GetCurSel() + 1;
 	
 	sEditData.Format("%s" , m_clGrid_Mark_Matching.GetItemText(1, 1));

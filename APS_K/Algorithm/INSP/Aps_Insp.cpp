@@ -22,13 +22,11 @@ typedef struct __TShadingSpec
 //gMIUDevice.nWidth
 CAPS_Insp::CAPS_Insp(void)
 {
-	imagePattern = cvCreateImage(cvSize(gMIUDevice.nWidth, gMIUDevice.nHeight), IPL_DEPTH_8U, 3);
 }
 
 
 CAPS_Insp::~CAPS_Insp(void)
 {
-	cvReleaseImage(&imagePattern);
 }
 
 

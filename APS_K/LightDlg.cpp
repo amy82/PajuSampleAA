@@ -71,7 +71,10 @@ void CLightDlg::DoDataExchange(CDataExchange* pDX)
 
 	
 	DDX_Control(pDX, IDC_BTN_OC_6500K_LED, m_bStainOc);
-	DDX_Control(pDX, IDC_BTN_OC_2800K_LED, m_bDefectOc);
+	DDX_Control(pDX, IDC_BTN_OC_6500K_LED2, m_bStainOc2);
+	DDX_Control(pDX, IDC_BTN_OC_6500K_LED3, m_bStainOc3);
+	DDX_Control(pDX, IDC_BTN_OC_6500K_LED4, m_bStainOc4);
+
 }
 
 BEGIN_MESSAGE_MAP(CLightDlg, CDialogEx)
@@ -90,7 +93,7 @@ BEGIN_MESSAGE_MAP(CLightDlg, CDialogEx)
 	ON_COMMAND_RANGE( IDC_BTN_TOP1_CHARTLED, IDC_BTN_RIGHT_CHARTLED, &CLightDlg::OnClickedTopChart)
 	//ON_COMMAND_RANGE(IDC_BTN_TOP1_CHARTLED, IDC_BTN_TOP6_CHARTLED, &CLightDlg::OnClickedTopChart)
 	ON_COMMAND_RANGE( IDC_BTN_SENSOR_CAM1_LED, IDC_BTN_LENS_CAM1_LED, &CLightDlg::OnClickedCam1)
-	ON_COMMAND_RANGE(IDC_BTN_OC_6500K_LED, IDC_BTN_OC_2800K_LED, &CLightDlg::OnClickedOc)
+	ON_COMMAND_RANGE(IDC_BTN_OC_6500K_LED, IDC_BTN_OC_6500K_LED4, &CLightDlg::OnClickedOc)
 
 	ON_STN_CLICKED(IDC_EDIT_CAM3_LED, &CLightDlg::OnStnClickedEditBchartLed)
 
@@ -181,7 +184,10 @@ void CLightDlg::setInterface()
 	 m_bLensCam1.m_iStateBtn = 0;
 
 	 m_bStainOc.m_iStateBtn = 1;
-	 m_bDefectOc.m_iStateBtn = 0;
+	 m_bStainOc2.m_iStateBtn = 0;
+	 m_bStainOc3.m_iStateBtn = 0;
+	 m_bStainOc4.m_iStateBtn = 0;
+	 //m_bDefectOc.m_iStateBtn = 0;
 	 //
 
 
@@ -190,25 +196,53 @@ void CLightDlg::setInterface()
 
 void CLightDlg::OnClickedOc(UINT nID)
 {
-	 m_bStainOc.m_iStateBtn = 0;
-	 m_bDefectOc.m_iStateBtn = 0;
+	m_bStainOc.m_iStateBtn = 0;
+	m_bStainOc2.m_iStateBtn = 0;
+	m_bStainOc3.m_iStateBtn = 0;
+	m_bStainOc4.m_iStateBtn = 0;
+	 //m_bDefectOc.m_iStateBtn = 0;
 	 switch(nID)
 	 {
 		case IDC_BTN_OC_6500K_LED:
 			 m_bStainOc.m_iStateBtn = 1;
-			 m_Oc_Sel_Index = LIGHT_OC;/// LIGHT_OC_6500K;
-			 m_OcData_Sel_Index = LEDDATA_STAIN;// LEDDATA_STAIN;
+			 m_Oc_Sel_Index = LIGHT_OC;
+			 m_OcData_Sel_Index = LEDDATA_STAIN;
 			break;
-		case IDC_BTN_OC_2800K_LED:
-			m_bDefectOc.m_iStateBtn = 1;
-			m_Oc_Sel_Index = LIGHT_OC;/// LIGHT_OC_2800K;
-			m_OcData_Sel_Index = LEDDATA_DEFECT;//LEDDATA_DEFECT
+		case IDC_BTN_OC_6500K_LED2:
+			m_bStainOc2.m_iStateBtn = 1;
+			m_Oc_Sel_Index = LIGHT_RMS_OC2;
+			//m_OcData_Sel_Index = LEDDATA_DEFECT;
+			m_OcData_Sel_Index = LEDDATA_STAIN2;
 			break;
+		case IDC_BTN_OC_6500K_LED3:
+			m_bStainOc3.m_iStateBtn = 1;
+			m_Oc_Sel_Index = LIGHT_RMS_OC3;
+			m_OcData_Sel_Index = LEDDATA_STAIN3;
+			break;
+		case IDC_BTN_OC_6500K_LED4:
+			m_bStainOc4.m_iStateBtn = 1;
+			m_Oc_Sel_Index = LIGHT_RMS_OC4;
+			m_OcData_Sel_Index = LEDDATA_STAIN4;
+			break;
+
+
 	 } 
 	 m_bStainOc.Invalidate();
-	 m_bDefectOc.Invalidate();
+	 m_bStainOc2.Invalidate();
+	 m_bStainOc3.Invalidate();
+	 m_bStainOc4.Invalidate();
+	 //m_bDefectOc.Invalidate();
 
-	 LightControl.ctrlLedVolume(LIGHT_OC, model.m_iLedValue[(m_OcData_Sel_Index)]);
+	 if (LGIT_MODEL_INDEX == M_THUNDER_CHEETAH)
+	 {
+		 OcLight_Dms50v52.DPS_SetChannel_Value(m_Oc_Sel_Index, model.m_iLedValue[(m_OcData_Sel_Index)]);
+	 }
+	 else
+	 {
+		 LightControl.ctrlLedVolume(m_Oc_Sel_Index, model.m_iLedValue[(m_OcData_Sel_Index)]);
+	 }
+
+	 
 	 
 
 	
@@ -404,6 +438,7 @@ void CLightDlg::dispData_CH2(int channel)
 		{
 			tmpStr.Format("%d", model.m_iLedValue[m_OcData_Sel_Index]);
 			GetDlgItem(IDC_EDIT_CAM2_LED)->SetWindowText(tmpStr);
+
 			m_sliderCam2Led.SetPos(model.m_iLedValue[m_OcData_Sel_Index]);
 		}
 
@@ -539,7 +574,16 @@ void CLightDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 	{
 		strTemp.Format("%d", m_sliderCam2Led.GetPos());
 		GetDlgItem(IDC_EDIT_CAM2_LED)->SetWindowText(strTemp);
-		LightControl.ctrlLedVolume(m_Oc_Sel_Index, m_sliderCam2Led.GetPos());
+
+		if (LGIT_MODEL_INDEX == M_THUNDER_CHEETAH)
+		{
+			OcLight_Dms50v52.DPS_SetChannel_Value(m_Oc_Sel_Index, m_sliderCam2Led.GetPos());
+		}
+		else
+		{
+			LightControl.ctrlLedVolume(m_Oc_Sel_Index, m_sliderCam2Led.GetPos());
+		}
+		
 	}
 	if (pScrollBar->m_hWnd == GetDlgItem(IDC_SLIDER_CAM3_LED)->m_hWnd)	//Align
 	{
@@ -633,7 +677,15 @@ void CLightDlg::OnStnClickedEditOcLed()
 		tmpStr.Format("%d", m_sliderCam2Led.GetPos());
 		GetDlgItem(IDC_EDIT_CAM2_LED)->SetWindowText(tmpStr);
 
-		LightControl.ctrlLedVolume(m_Oc_Sel_Index, m_sliderCam2Led.GetPos());
+		if (LGIT_MODEL_INDEX == M_THUNDER_CHEETAH)
+		{
+			OcLight_Dms50v52.DPS_SetChannel_Value(m_Oc_Sel_Index, m_sliderCam2Led.GetPos());
+		}
+		else
+		{
+			LightControl.ctrlLedVolume(m_Oc_Sel_Index, m_sliderCam2Led.GetPos());
+		}
+		
 		
 	}
 }

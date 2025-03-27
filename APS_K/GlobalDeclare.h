@@ -87,6 +87,7 @@ extern CMandoInspLog		MandoInspLog;
 extern CModelList		modelList;
 extern CList_RS232C		SerialPortList;
 extern CLightControl LightControl;
+extern CLightControl OcLight_Dms50v52;
 //extern CLightControl LightControlSecond;
 //extern CLightControl LightControlthird;
 //extern CLightControl LightControlFourth;
