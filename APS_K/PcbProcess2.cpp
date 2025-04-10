@@ -3464,12 +3464,9 @@ int	CPcbProcess2::Complete_FinalInsp(int iStep)
 		theApp.MainDlg->setCamDisplay(3, 1);
 		Sleep(dFinalDelay);
 
-		//g_clApsInsp.func_insp_Voltage();
-
 		iRtnFunction = 121000;
 		break;
 	case 121000:
-		//g_clApsInsp.func_Insp_CurrentMeasure();
 		iRtnFunction = 122000;
 		break;
 
@@ -3578,66 +3575,106 @@ int	CPcbProcess2::Complete_FinalInsp(int iStep)
 		iRtnFunction = 122560;
 		break;
 	case 122560:
+		if (!motor.PCB_Z_Motor_Move(Wait_Pos))
+		{
+			sLog.Format("PCB Z축 대기위치 이동 실패[%d]", iStep);
+			putListLog(sLog);
+			iRtnFunction = -122560;
+			break;
+		}
+		if (!motor.LENS_Z_Motor_Move(Wait_Pos))
+		{
+			sLog.Format("Lens부 z축 모터 위치 이동 실패[%d]", iStep);
+			putListLog(sLog);
+			errMsg2(Task.AutoFlag, sLog);
+			iRtnFunction = -122560;
+			break;
+		}
 		iRtnFunction = 122565;
 		break;
 	case 122565:
-		//Sleep(500);
+		if (sysData.m_iStaintInspPass == 1 && sysData.m_iDefectInspPass == 1)
+		{
+			iRtnFunction = 127000;
+			break;
+		}
+		if (sysData.m_iStaintInspPass == 1)
+		{
+			//iRtnFunction = 127000;
+			break;
+		}
+		if (!motor.Pcb_Motor_Move(OC_6500K_Pos, Task.d_Align_offset_x[PCB_Chip_MARK], Task.d_Align_offset_y[PCB_Chip_MARK], Task.d_Align_offset_th[PCB_Chip_MARK]))
+		{
+			sLog.Format("PCB부 모터 이물 검사 위치 이동 실패[%d]", iStep);
+			putListLog(sLog);
+			iRtnFunction = -122565;
+			break;
+		}
+
+		Task.PCBTaskTime = myTimer(true);
 		iRtnFunction = 122570;
 		break;
 	case 122570:
-		iRtnFunction = 122575;
+		if (!motor.Pcb_Tilt_Motor_Move(OC_6500K_Pos))
+		{
+			sLog.Format("PCB Tx Ty 축 이물검사 위치 이동 실패[%d]", iStep);	//김세영 선임 요청 
+			putListLog(sLog);
+			errMsg2(Task.AutoFlag, sLog);
+			iRtnFunction = -122570;
+			break;
+		}
+		else
+		{
+			sLog.Format("PCB Tx Ty 축 이물검사 위치 이동 성공[%d]", iStep);	//김세영 선임 요청 
+			putListLog(sLog);
+			iRtnFunction = 122575;
+			break;
+		}
+		
 		break;
 	case 122575:
-		iRtnFunction = 122580;
+		if (motor.PCB_Z_Motor_Move(OC_6500K_Pos))
+		{
+			sLog.Format("PCB Z Axis 이물검사 Pos Move Complete[%d]", iStep);
+			putListLog(sLog);
+			Task.PCBTaskTime = myTimer(true);
+			iRtnFunction = 122580;
+			break;
+		}
+		else
+		{
+			sLog.Format("PCB Z Axis 이물검사 Pos Move Fail[%d]", iStep);
+			errMsg2(Task.AutoFlag, sLog);
+			iRtnFunction = -122575;
+			break;
+		}
+		
 		break;
 	case 122580:
-		//mtf 측정
-		Task.bInsCenter = true;
-
-		theApp.MainDlg->_calcImageAlignment();
-
-		Task.bInsCenter = false;
-
-		//Task.sfrResult = theApp.MainDlg->func_MTF(MIU.vChartBuffet);//EOL 화상 #1
-
-
-		//Task.m_iDrawBarStep = Task.m_iCnt_Step_AA_Total;
-		//theApp.MainDlg->autodispDlg->DrawBarGraph();		//122580   Complete_FinalInsp
-		//vision.FnShmEdgeFind(MIU.m_pFrameRawBuffer);
-		/////MandoInspLog.func_LogSave_UVAfter(1);	//eol _RAW.csv  이물검사후 같이 남김
-
-		//MandoInspLog.func_LogSave_Shm_vertex();
-
-
-		vision.clearOverlay(CCD);
-		vision.drawOverlay(CCD, true);
-		iRtnFunction = 122590;  // 122590; Chart YUV - RAW 6500 RAW			IMHS	JUMP
+		//Dome 이물 광원에서 검사하는 항목
+		//Lens Shading
+		//Blemish
+		//RI
+		//Black Mask Edge Test
+		//Illumination Center
+		//SNR
+		//R/G , B/G
+		//Defect
+		//Dark Noise
+		iRtnFunction = 122590; 
 		break;
 	case 122590:
 		iRtnFunction = 122600;
 		break;
 	case 122600:
-		if (!motor.PCB_Z_Motor_Move(Wait_Pos))
-		{
-			sLog.Format("PCB Z축 대기위치 이동 실패[%d]", iStep);
-			putListLog(sLog);
-			iRtnFunction = -122600;
-			break;
-		}
+		
 		iRtnFunction = 122650;
 		break;
 	case 122650:
 		iRtnFunction = 122700;
 		break;
 	case 122700:
-		if (!motor.LENS_Z_Motor_Move(Wait_Pos))
-		{
-			sLog.Format("Lens부 z축 모터 위치 이동 실패[%d]", iStep);
-			putListLog(sLog);
-			errMsg2(Task.AutoFlag, sLog);
-			iRtnFunction = -122700;
-			break;
-		}
+		
 
 		Task.LensTaskTime = myTimer(true);
 		//Task.m_iRetry_Opt = 0;
@@ -3713,11 +3750,7 @@ int	CPcbProcess2::Complete_FinalInsp(int iStep)
 		iRtnFunction = 123500;
 		break;
 	case 123500:
-		if (sysData.m_iStaintInspPass == 1 && sysData.m_iDefectInspPass == 1)
-		{
-			iRtnFunction = 127000;
-			break;
-		}
+		
 		LightControl.ctrlLedVolume(LIGHT_OC, model.m_iLedValue[LEDDATA_STAIN]);
 
 		iRtnFunction = 123600;
@@ -3880,11 +3913,14 @@ int	CPcbProcess2::Complete_FinalInsp(int iStep)
 		iRtnFunction = 127700;
 		break;
 	case 127700:
-		//Head Model
-		MIU.OtpRead_Head_Fn();
-		MIU.partNumberVerifyFn();
-		MIU.FwVersionRead_Head_Fn();
-		MIU.SensorIdRead_Head_Fn();
+		if (LGIT_MODEL_INDEX == M2_FF_MODULE)
+		{
+			//Head Model
+			MIU.OtpRead_Head_Fn();
+			MIU.partNumberVerifyFn();
+			MIU.FwVersionRead_Head_Fn();
+			MIU.SensorIdRead_Head_Fn();
+		}
 		iRtnFunction = 127710;
 		break;
 	case 127710:
