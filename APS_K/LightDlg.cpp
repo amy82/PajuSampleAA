@@ -201,6 +201,7 @@ void CLightDlg::OnClickedOc(UINT nID)
 	m_bStainOc3.m_iStateBtn = 0;
 	m_bStainOc4.m_iStateBtn = 0;
 	 //m_bDefectOc.m_iStateBtn = 0;
+	int oldOcChannel = m_Oc_Sel_Index;
 	 switch(nID)
 	 {
 		case IDC_BTN_OC_6500K_LED:
@@ -235,7 +236,22 @@ void CLightDlg::OnClickedOc(UINT nID)
 
 	 if (LGIT_MODEL_INDEX == M_THUNDER_CHEETAH)
 	 {
-		 //OcLight_Dms50v52.DPS_SetChannel_Value(m_Oc_Sel_Index, model.m_iLedValue[(m_OcData_Sel_Index)]);
+		 OcLight_Dms50v52.DPS_Light_OnOffLevel(oldOcChannel, false, 0);	//이전 조명 Off
+		 Sleep(50);
+
+		 
+		 OcLight_Dms50v52.DPS_Light_OnOffLevel(m_Oc_Sel_Index, true, model.m_iLedValue[m_OcData_Sel_Index]);	//선택된 조명 On
+		 //영상이 안떠서 rgb 값을 알수 없어 ,On, Off로 값 변경
+		 ////Sleep(100);
+		 ////OcLight_Dms50v52.targetColor.red = 0;
+		 ////OcLight_Dms50v52.targetColor.green = model.m_iLedValue[(m_OcData_Sel_Index)];
+		 ////OcLight_Dms50v52.targetColor.blue = 0;
+
+		 ////OcLight_Dms50v52.currentColor.red = 0;
+		 ////OcLight_Dms50v52.currentColor.green = model.m_iLedValue[(m_OcData_Sel_Index)];
+		 ////OcLight_Dms50v52.currentColor.blue = 0;
+
+		 ////OcLight_Dms50v52.DPS_SetChannel_Value(m_Oc_Sel_Index);		//선택된 조명 
 	 }
 	 else
 	 {
@@ -434,14 +450,10 @@ void CLightDlg::dispData_CH2(int channel)
 	CString tmpStr = "";
 	if (Task.AutoFlag != 1)
 	{
-		if (channel == LIGHT_OC || channel == LIGHT_OC)
-		{
-			tmpStr.Format("%d", model.m_iLedValue[m_OcData_Sel_Index]);
-			GetDlgItem(IDC_EDIT_CAM2_LED)->SetWindowText(tmpStr);
+		tmpStr.Format("%d", model.m_iLedValue[m_OcData_Sel_Index]);
+		GetDlgItem(IDC_EDIT_CAM2_LED)->SetWindowText(tmpStr);
 
-			m_sliderCam2Led.SetPos(model.m_iLedValue[m_OcData_Sel_Index]);
-		}
-
+		m_sliderCam2Led.SetPos(model.m_iLedValue[m_OcData_Sel_Index]);
 	}
 	else
 	{
@@ -577,7 +589,20 @@ void CLightDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 
 		if (LGIT_MODEL_INDEX == M_THUNDER_CHEETAH)
 		{
-			//OcLight_Dms50v52.DPS_SetChannel_Value(m_Oc_Sel_Index, m_sliderCam2Led.GetPos());
+
+			OcLight_Dms50v52.DPS_Light_OnOffLevel(m_Oc_Sel_Index, true, m_sliderCam2Led.GetPos()); //선택된 조명 On
+
+			/*OcLight_Dms50v52.targetColor.red = 0;
+			OcLight_Dms50v52.targetColor.green = m_sliderCam2Led.GetPos();
+			OcLight_Dms50v52.targetColor.blue = 0;
+
+			OcLight_Dms50v52.currentColor.red = 0;
+			OcLight_Dms50v52.currentColor.green = m_sliderCam2Led.GetPos();
+			OcLight_Dms50v52.currentColor.blue = 0;
+
+			OcLight_Dms50v52.DPS_SetChannel_Value(m_Oc_Sel_Index);*/
+
+
 		}
 		else
 		{
@@ -679,7 +704,18 @@ void CLightDlg::OnStnClickedEditOcLed()
 
 		if (LGIT_MODEL_INDEX == M_THUNDER_CHEETAH)
 		{
-//			OcLight_Dms50v52.DPS_SetChannel_Value(m_Oc_Sel_Index, m_sliderCam2Led.GetPos());
+			OcLight_Dms50v52.DPS_Light_OnOffLevel(m_Oc_Sel_Index, true, m_sliderCam2Led.GetPos());	//선택된 조명 On
+
+
+			/*OcLight_Dms50v52.targetColor.red = 0;
+			OcLight_Dms50v52.targetColor.green = m_sliderCam2Led.GetPos();
+			OcLight_Dms50v52.targetColor.blue = 0;
+
+			OcLight_Dms50v52.currentColor.red = 0;
+			OcLight_Dms50v52.currentColor.green = m_sliderCam2Led.GetPos();
+			OcLight_Dms50v52.currentColor.blue = 0;
+
+			OcLight_Dms50v52.DPS_SetChannel_Value(m_Oc_Sel_Index);*/
 		}
 		else
 		{

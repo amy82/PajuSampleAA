@@ -116,7 +116,19 @@ int CPcbProcess2::Ready_process(int iStep)
 		break;
 
 	case 10160:
-
+		if (LGIT_MODEL_INDEX == M_THUNDER_CHEETAH)
+		{
+			//자동운전중 하나씩만 켜져야돼서 모두 Off
+			Sleep(50);
+			OcLight_Dms50v52.DPS_Light_OnOffLevel(0, false, 0);
+			Sleep(50);
+			OcLight_Dms50v52.DPS_Light_OnOffLevel(1, false, 0);
+			Sleep(50);
+			OcLight_Dms50v52.DPS_Light_OnOffLevel(2, false, 0);
+			Sleep(50);
+			OcLight_Dms50v52.DPS_Light_OnOffLevel(3, false, 0);
+		}
+		
 		iRtnFunction = 10170;
 		break;
 

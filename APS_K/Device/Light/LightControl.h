@@ -74,10 +74,11 @@ public:
 
 	//RPS-50V5-4 4채널 이물광원 - YOUTH TECH
 
-	int DPS_SetChannel_Value(int iNoChannel, stColor target, stColor current);
+	int DPS_SetChannel_Value(int iNoChannel);// , stColor target, stColor current);
 	bool DPS_Light_OnOffLevel(int channel, int onoff, int data);
 
 	stColor targetColor;
+	stColor currentColor;
 
 };
 

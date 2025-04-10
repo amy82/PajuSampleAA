@@ -2271,9 +2271,14 @@ void CAABonderDlg::Rs232Init()
 	{
 		logStr.Format("	[Serial]DMS-50V5-2 연결 완료 COM%d", sysData.iCommPort[COMM_LIGHTOC_1ST]);
 
-		Sleep(100);
-
-		OcLight_Dms50v52.DPS_Light_OnOffLevel(LIGHT_OC, true, model.m_iLedValue[LEDDATA_STAIN]);
+		Sleep(50);
+		OcLight_Dms50v52.DPS_Light_OnOffLevel(0, false, 0);
+		Sleep(50);
+		OcLight_Dms50v52.DPS_Light_OnOffLevel(1, false, 0);
+		Sleep(50);
+		OcLight_Dms50v52.DPS_Light_OnOffLevel(2, false, 0);
+		Sleep(50);
+		OcLight_Dms50v52.DPS_Light_OnOffLevel(3, false, 0);
 	}
 	else
 	{
@@ -2879,7 +2884,13 @@ void CAABonderDlg::SetInterface_Label()
 	{
 		temp.Format(_T("M2_FF_MODULE"));
 		ModelSelect = true;
+	} 
+	else if (LGIT_MODEL_INDEX == M_THUNDER_CHEETAH)
+	{
+		temp.Format(_T("THUNDER_CHEETAH"));
+		ModelSelect = true;
 	}
+
 
 
 

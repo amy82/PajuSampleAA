@@ -101,8 +101,8 @@ void CChartSetDlg::FnTiltCal()
 				{
 					Task.SFR.nTiltCalIndex[mArrCount] = count;
 #ifdef _DEBUG
-					_stprintf_s(szLog, SIZE_OF_1K, _T("[ROI:%d]Tilt Cal Index[%d/%d]") , i, mArrCount, Task.SFR.nTiltCalIndex[mArrCount]);
-					theApp.MainDlg->putListLog(szLog);
+					//_stprintf_s(szLog, SIZE_OF_1K, _T("[ROI:%d]Tilt Cal Index[%d/%d]") , i, mArrCount, Task.SFR.nTiltCalIndex[mArrCount]);
+					//theApp.MainDlg->putListLog(szLog);
 #endif
 					mArrCount++;
 				}

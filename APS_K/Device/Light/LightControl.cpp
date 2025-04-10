@@ -8,6 +8,14 @@ CLightControl::CLightControl(void)
 	memset(m_acRecvStorage, 0, sizeof(m_acRecvStorage));
 		
 	m_iNo_Machine = -1;
+
+	targetColor.red = 0;
+	targetColor.green = 0;
+	targetColor.blue = 0;
+
+	currentColor.red = 0;
+	currentColor.green = 0;
+	currentColor.blue = 0;
 }
 
 
@@ -449,7 +457,7 @@ bool CLightControl::ChartAllControl(bool onOff)
 	return true;
 }
 
-int CLightControl::DPS_SetChannel_Value(int channel, stColor target , stColor current)
+int CLightControl::DPS_SetChannel_Value(int channel)//, stColor target , stColor current)
 {
 	int nSendSize = 0;
 	int nRetVal = 0;
@@ -459,22 +467,22 @@ int CLightControl::DPS_SetChannel_Value(int channel, stColor target , stColor cu
 	memset(sSendBuff, 0x00, sizeof(sSendBuff));
 	sSendBuff[0] = 0x59;				//STX
 	sSendBuff[1] = 0x10;				//Length
-	sSendBuff[2] = 0x10 + channel;			//채널 0x01 ~ 0x08 , 1채널모델의 경우 0x01로 고정
+	sSendBuff[2] = 0x10 + channel + 1;			//채널 0x01 ~ 0x08 , 1채널모델의 경우 0x01로 고정
 	//
 	//
-	sSendBuff[3] = (char)((target.red >> 8) & 0x00FF);		//Data[MSB]
-	sSendBuff[4] = (char)(target.red & 0x00FF);				//Data[LSB]
-	sSendBuff[5] = (char)((target.green >> 8) & 0x00FF);	//Data[MSB]
-	sSendBuff[6] = (char)(target.green & 0x00FF);			//Data[LSB]
-	sSendBuff[7] = (char)((target.blue >> 8) & 0x00FF);		//Data[MSB]
-	sSendBuff[8] = (char)(target.blue & 0x00FF);			//Data[LSB]
+	sSendBuff[3] = (char)((targetColor.red >> 8) & 0x00FF);		//Data[MSB]
+	sSendBuff[4] = (char)(targetColor.red & 0x00FF);				//Data[LSB]
+	sSendBuff[5] = (char)((targetColor.green >> 8) & 0x00FF);	//Data[MSB]
+	sSendBuff[6] = (char)(targetColor.green & 0x00FF);			//Data[LSB]
+	sSendBuff[7] = (char)((targetColor.blue >> 8) & 0x00FF);		//Data[MSB]
+	sSendBuff[8] = (char)(targetColor.blue & 0x00FF);			//Data[LSB]
 	//
-	sSendBuff[9] = (char)((current.red >> 8) & 0x00FF);		//Data[MSB]
-	sSendBuff[10] = (char)(current.red & 0x00FF);			//Data[LSB]
-	sSendBuff[11] = (char)((current.green >> 8) & 0x00FF);	//Data[MSB]
-	sSendBuff[12] = (char)(current.green & 0x00FF);			//Data[LSB]
-	sSendBuff[13] = (char)((current.blue >> 8) & 0x00FF);	//Data[MSB]
-	sSendBuff[14] = (char)(current.blue & 0x00FF);			//Data[LSB]
+	sSendBuff[9] = (char)((currentColor.red >> 8) & 0x00FF);		//Data[MSB]
+	sSendBuff[10] = (char)(currentColor.red & 0x00FF);			//Data[LSB]
+	sSendBuff[11] = (char)((currentColor.green >> 8) & 0x00FF);	//Data[MSB]
+	sSendBuff[12] = (char)(currentColor.green & 0x00FF);			//Data[LSB]
+	sSendBuff[13] = (char)((currentColor.blue >> 8) & 0x00FF);	//Data[MSB]
+	sSendBuff[14] = (char)(currentColor.blue & 0x00FF);			//Data[LSB]
 
 	//
 	sSendBuff[15] = 0x00;			//Checksum
@@ -507,7 +515,7 @@ bool CLightControl::DPS_Light_OnOffLevel(int channel, int onoff, int data)
 	sSendBuff[0] = 0x59;								//Header
 	sSendBuff[1] = 0x07;								//Length
 	sSendBuff[2] = (char)(mch & 0x00FF);	//Channel (0x1 ~ 0x4)
-	sSendBuff[3] = (onoff == 0) ? 0x30 : 0x31;			//Command
+	sSendBuff[3] = (onoff == 0) ? 0x30 : 0x31;			//Command 
 	sSendBuff[4] = (char)((data >> 8) & 0x00FF);	//Data-0 [MSB]
 	sSendBuff[5] = (char)(data & 0x00FF);		//Data-1 [LSB]
 	sSendBuff[6] = 0x00;								//BCC
