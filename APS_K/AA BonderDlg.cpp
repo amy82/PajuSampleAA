@@ -10882,6 +10882,7 @@ void CAABonderDlg::OnLButtonDown(UINT nFlags, CPoint point)
 		{
 			p.x = (int)(m_ClickP.x * CAM_EXPAND_FACTOR_X + 0.5);
 			p.y = (int)(m_ClickP.y * CAM_EXPAND_FACTOR_Y + 0.5);
+
 			vision.crosslist[m_iCurCamNo].addList(p, 30, M_COLOR_RED);
 			MbufCopy(vision.MilGrabImageChild[m_iCurCamNo], vision.MilProcImageChild[m_iCurCamNo]);
 			width = MbufInquire(vision.MilProcImageChild[m_iCurCamNo], M_PITCH, M_NULL);
