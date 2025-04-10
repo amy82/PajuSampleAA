@@ -3,12 +3,25 @@
 #include "export.h"
 #include <LibACMISCommon\ACMISCommon.h>
 
+enum EFixedCircle
+{
+	FIXED_CIRCLE_DISABLED,
+	FIXED_CIRCLE_HORIZONTAL_FIELD,
+	FIXED_CIRCLE_MTM,	// no more used
+	FIXED_CIRCLE_DIAGONAL_FIELD,
+};
 
 namespace ACMISSoftISP
 {
-	ACMISSOFTISP_API int xCalcImageRadius4Byte(int&ocx, int&ocy, int &radx, int &rady, const int* img, int w, int h, TCircleSpecN *Spec, double &angle); // using Y Image Only
-	ACMISSOFTISP_API int xCalcImageRadius2Byte(int&ocx, int&ocy, int &radx, int &rady, const unsigned short* img, int w, int h, TCircleSpecN *Spec, double &angle); // using Y Image Only
-	ACMISSOFTISP_API int xCalcImageRadius(int&ocx, int&ocy, int &radx, int &rady, const BYTE* img, int w, int h, TCircleSpecN *Spec, double &angle); // using Y Image Only
+	ACMISSOFTISP_API int xCalcImageRadius4Byte(
+		const int* pImage, int width, int height, const TCircleSpecN& tSpec, EDATAFORMAT eDataFormat,
+		int& ocx, int& ocy, int& radx, int& rady, double& angle); // using Y Image Only
+	ACMISSOFTISP_API int xCalcImageRadius2Byte(
+		const unsigned short* pImage, int width, int height, const TCircleSpecN& tSpec, EDATAFORMAT eDataFormat,
+		int& ocx, int& ocy, int& radx, int& rady, double& angle); // using Y Image Only
+	ACMISSOFTISP_API int xCalcImageRadius(
+		const BYTE* pImage, int width, int height, const TCircleSpecN& tSpec, EDATAFORMAT eDataFormat,
+		int& ocx, int& ocy, int& radx, int& rady, double& angle); // using Y Image Only
 
 	ACMISSOFTISP_API int xCalcCenterCircleObject4Byte(int&ocx, int&ocy, const int* img, int w, int h); // using Y Image Only
 	ACMISSOFTISP_API int xCalcCenterCircleObject2Byte(int&ocx, int&ocy, const unsigned short* img, int w, int h); // using Y Image Only
@@ -18,22 +31,31 @@ namespace ACMISSoftISP
 	ACMISSOFTISP_API void xCalcFixedCircleCenter2Byte(int&ocx, int&ocy, const unsigned short* img, int w, int h);
 	ACMISSOFTISP_API void xCalcFixedCircleCenter(int&ocx, int&ocy, const BYTE* img, int w, int h);
 
-	ACMISSOFTISP_API int xCalcCircleData4Byte(const int* img, int w, int h, TCircleSpecN *Spec, int &m_nOcx, int &m_nOcy, int &m_nRadx, int &m_nRady, double &m_dAngle);
-	ACMISSOFTISP_API int xCalcCircleData2Byte(const unsigned short* img, int w, int h, TCircleSpecN *Spec, int &m_nOcx, int &m_nOcy, int &m_nRadx, int &m_nRady, double &m_dAngle);
-	ACMISSOFTISP_API int xCalcCircleData(const BYTE* img, int w, int h, TCircleSpecN *Spec, int &m_nOcx, int &m_nOcy, int &m_nRadx, int &m_nRady, double &m_dAngle);
-	ACMISSOFTISP_API int xCalcCircleData4Byte(const int* img, int w, int h, TCircleSpecN *Spec, TCircleData& tCircleData);
-	ACMISSOFTISP_API int xCalcCircleData2Byte(const unsigned short* img, int w, int h, TCircleSpecN *Spec, TCircleData& tCircleData);
-	ACMISSOFTISP_API int xCalcCircleData(const BYTE* img, int w, int h, TCircleSpecN *Spec, TCircleData& tCircleData);
+	ACMISSOFTISP_API int xCalcCircleData4Byte(
+		const int* pImage, int width, int height, const TCircleSpecN& tSpec, EDATAFORMAT eDataFormat,
+		int &ocx, int &ocy, int &radx, int &rady, double &angle);
+	ACMISSOFTISP_API int xCalcCircleData2Byte(
+		const unsigned short* pImage, int width, int height, const TCircleSpecN& tSpec, EDATAFORMAT eDataFormat,
+		int& ocx, int& ocy, int& radx, int& rady, double& angle);
+	ACMISSOFTISP_API int xCalcCircleData(
+		const BYTE* pImage, int width, int height, const TCircleSpecN& tSpec, EDATAFORMAT eDataFormat,
+		int& ocx, int& ocy, int& radx, int& rady, double& angle);
+	ACMISSOFTISP_API int xCalcCircleData4Byte(
+		const int* pImage, int width, int height, const TCircleSpecN& tSpec, EDATAFORMAT eDataFormat, TCircleData& tCircleData);
+	ACMISSOFTISP_API int xCalcCircleData2Byte(
+		const unsigned short* pImage, int width, int height, const TCircleSpecN& tSpec, EDATAFORMAT eDataFormat, TCircleData& tCircleData);
+	ACMISSOFTISP_API int xCalcCircleData(
+		const BYTE* pImage, int width, int height, const TCircleSpecN& tSpec, EDATAFORMAT eDataFormat, TCircleData& tCircleData);
 	ACMISSOFTISP_API int xGetCircleMask(int w, int h, TCircleSpecN& Spec, TCircleData& tCircleData, BYTE* pMask);
 
 	ACMISSOFTISP_API bool DetectSqureVertexs(const BYTE *pBuffer, int nImageWidth, int nImageHeight, RECT* inputROI, int num, POINT* outputPos);
 	ACMISSOFTISP_API bool DetectPatchVertexs(const BYTE *pBuffer, int nImageWidth, int nImageHeight, TPatchInfo* tPatchInfo, int num, std::vector< std::vector<THarrisCornerPoint> >& outputPos);
-	ACMISSOFTISP_API bool DetectPatchVertexsOpenCV(const BYTE* pBuffer, int nImageWidth, int nImageHeight, int nDtataType, std::vector<TPatchInfo> vPatchInfo, std::vector<BYTE>& vMask, std::vector< std::vector<THarrisCornerPoint> >& outputPos, std::vector<TPatchSize>& vPatchSize);
+	ACMISSOFTISP_API bool DetectPatchVertexsOpenCV(const BYTE* pBuffer, int nImageWidth, int nImageHeight, int nDataType, std::vector<TPatchInfo> vPatchInfo, std::vector<BYTE>& vMask, std::vector< std::vector<THarrisCornerPoint> >& outputPos, std::vector<TPatchSize>& vPatchSize);
 #if 0
 	ACMISSOFTISP_API bool DetectPatchVertexsOpenCV(const BYTE *pBuffer, int nImageWidth, int nImageHeight, TPatchInfo tPatchInfo, int nPatchIndex, std::vector<BYTE>& vMask, std::vector<THarrisCornerPoint>& outputPos, TPatchSize& tPatchSize);
 #endif
 	ACMISSOFTISP_API bool DetectCrossCenter(const BYTE *pBuffer, int nImageWidth, int nImageHeight, int nDataType, RECT* inputROI, int num, double dQualityLevel, POINT* outputPos); // default dQualityLevel = 0.1
-	ACMISSOFTISP_API bool GetPatchSize(const BYTE *pBuffer, int nImageWidth, int nImageHeight, double dThreshold, TPatchInfo tPatchInfo, std::vector<BYTE>& vMask, TPatchSize& tMaxPatchSize);
+	ACMISSOFTISP_API bool GetPatchSize(const BYTE *pBuffer, int nImageWidth, int nImageHeight, int nDataType, double dThreshold, TPatchInfo tPatchInfo, std::vector<BYTE>& vMask, TPatchSize& tMaxPatchSize);
 
 	ACMISSOFTISP_API bool SearchEdgeCenter(const BYTE* pSrc, POINT tStartPoint, int nEdgeDir, int nScanDir, RECT crop_ROI, int nROIWidth, int nROIHeight, RECT& rtROI);
 	ACMISSOFTISP_API void MoveROI2EdgeCenter(BYTE* pYBuffer, int nImageWidth, int nImageHeight, int nDataType, int nEdgeDir, RECT& rtROI, RECT crop_ROI, int nIndex);

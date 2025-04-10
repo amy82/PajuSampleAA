@@ -63,6 +63,9 @@ BEGIN_MESSAGE_MAP(CCCDInspModeDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BTN_INSP_SENSOR_ID, &CCCDInspModeDlg::OnBnClickedBtnInspSensorId)
 	ON_BN_CLICKED(IDC_BTN_INSP_FW_VERSION, &CCCDInspModeDlg::OnBnClickedBtnInspFwVersion)
 	ON_BN_CLICKED(IDC_BTN_INSP_OTP_VERIFY, &CCCDInspModeDlg::OnBnClickedBtnInspOtpVerify)
+	ON_BN_CLICKED(IDC_BTN_INSP_LENS_SHADING, &CCCDInspModeDlg::OnBnClickedBtnInspLensShading)
+	ON_BN_CLICKED(IDC_BTN_INSP_ILLUMINATION_OC, &CCCDInspModeDlg::OnBnClickedBtnInspIlluminationOc)
+	ON_BN_CLICKED(IDC_BTN_INSP_BLACK_MASK_EDGE, &CCCDInspModeDlg::OnBnClickedBtnInspBlackMaskEdge)
 END_MESSAGE_MAP()
 
 
@@ -114,8 +117,26 @@ bool CCCDInspModeDlg::func_Check_MIU_Mode()
 void CCCDInspModeDlg::OnBnClickedBtnInspPixelDefect()
 {
 	CAABonderDlg* pFrame = (CAABonderDlg*)AfxGetApp()->m_pMainWnd;
-	if( !func_Check_MIU_Mode() )	return;
 
+	//if( !func_Check_MIU_Mode() )	return;
+
+	if (Task.AutoFlag == MODE_AUTO)
+	{
+		pFrame->putListLog(_T("[수동검사] 자동 운전 중 사용 불가"));
+		return;
+	}
+
+	if (Task.AutoFlag == MODE_PAUSE)
+	{
+		pFrame->putListLog(_T("[수동검사] 일시 정지 중 사용 불가"));
+		return;
+	}
+
+	pFrame->putListLog(_T("[수동검사] DARK 검사"));
+
+	g_clApsInsp.func_Insp_Dark(MIU.m_pFrameRawBuffer);
+
+	pFrame->putListLog(_T("[수동검사] DARK 검사 완료"));
 }
 //-----------------------------------------------------------------------------
 //
@@ -265,18 +286,6 @@ void CCCDInspModeDlg::OnBnClickedBtnInspMtf()
 	}
 
 	pFrame->func_MTF(MIU.m_pFrameRawBuffer ,false);//수동검사
-
-	
-	/*int count1 = model.mCurModelName.Find(_T("SHM"));
-	int count2 = model.mCurModelName.ReverseFind('SHM');
-	if (count2 - count1 > 0 && count1 >= 0)
-	{
-		vision.FnShmEdgeFind(MIU.m_pFrameRawBuffer, false);
-		MandoInspLog.func_LogSave_Shm_vertex();
-
-	}
-	pFrame->putListLog("[수동검사] MTF 측정 완료");*/
-	//MandoInspLog.func_LogSave_UVAfter(1);
 
 
 }
@@ -437,6 +446,7 @@ void CCCDInspModeDlg::OnBnClickedBtnInspRi()
 	vision.clearOverlay(CCD);
 	//g_clApsInsp.func_Insp_Shm_Illumination(MIU.vTempBuffer);
 	//if (g_clApsInsp.func_Insp_Illumination(MIU.m_pFrameRawBuffer, false) == false)
+
 	if (g_clApsInsp.func_Insp_Shm_Illumination(MIU.m_pFrameRawBuffer, false) == false)
 	{
 		pFrame->putListLog(_T("[수동검사] Relative Illumination 검사 실패"));
@@ -505,18 +515,15 @@ void CCCDInspModeDlg::OnBnClickedBtnInspColorSensitivity()
 	MandoInspLog.func_InitData();	//-- Log 초기화
 
 	vision.clearOverlay(CCD);
-    pFrame->putListLog(_T("[수동검사] Color Sensitivity MID_6500K_RAW TEST..."));
-    if (g_clApsInsp.func_Insp_ColorSensitivity(MIU.vDefectMidBuffer_6500K, MID_6500K_RAW, false) == false)
-    {
-        pFrame->putListLog(_T("[수동검사] Color Sensitivity MID_6500K_RAW 검사 실패"));
-    }
-    pFrame->putListLog(_T("[수동검사] Color Sensitivity MID_2800K_RAW TEST..."));
-    if (g_clApsInsp.func_Insp_ColorSensitivity(MIU.vDefectMidBuffer_2800K, MID_2800K_RAW, false) == false)
-    {
-        pFrame->putListLog(_T("[수동검사] Color Sensitivity MID_2800K_RAW 검사 실패"));
-    }
+
+
+
+    pFrame->putListLog(_T("[수동검사] Color Balance Test"));
+
+	g_clApsInsp.func_Insp_ColorSensitivity(MIU.vDefectMidBuffer_6500K, MID_6500K_RAW, false);
+
 	vision.drawOverlay(CCD);
-	pFrame->putListLog(_T("[수동검사] Color Sensitivity 검사 완료"));
+	pFrame->putListLog(_T("[수동검사] Color Balance 검사 완료"));
 }
 //-----------------------------------------------------------------------------
 //
@@ -762,4 +769,87 @@ void CCCDInspModeDlg::OnBnClickedBtnInspOtpVerify()
 	}
 
 	MIU.partNumberVerifyFn();
+}
+
+
+void CCCDInspModeDlg::OnBnClickedBtnInspLensShading()
+{
+	// TODO: Add your control notification handler code here
+	CAABonderDlg* pFrame = (CAABonderDlg*)AfxGetApp()->m_pMainWnd;
+
+	//if( !func_Check_MIU_Mode() )	return;
+
+	if (Task.AutoFlag == MODE_AUTO)
+	{
+		pFrame->putListLog(_T("[수동검사] 자동 운전 중 사용 불가"));
+		return;
+	}
+
+	if (Task.AutoFlag == MODE_PAUSE)
+	{
+		pFrame->putListLog(_T("[수동검사] 일시 정지 중 사용 불가"));
+		return;
+	}
+
+	pFrame->putListLog(_T("[수동검사] LensShading 검사"));
+
+	g_clApsInsp.func_Insp_LensShading(MIU.m_pFrameRawBuffer);
+
+	pFrame->putListLog(_T("[수동검사] LensShading 검사 완료"));
+}
+
+
+void CCCDInspModeDlg::OnBnClickedBtnInspIlluminationOc()
+{
+	// TODO: Add your control notification handler code here
+
+	CAABonderDlg* pFrame = (CAABonderDlg*)AfxGetApp()->m_pMainWnd;
+
+	//if( !func_Check_MIU_Mode() )	return;
+
+	if (Task.AutoFlag == MODE_AUTO)
+	{
+		pFrame->putListLog(_T("[수동검사] 자동 운전 중 사용 불가"));
+		return;
+	}
+
+	if (Task.AutoFlag == MODE_PAUSE)
+	{
+		pFrame->putListLog(_T("[수동검사] 일시 정지 중 사용 불가"));
+		return;
+	}
+
+	pFrame->putListLog(_T("[수동검사] IlluminationOc 검사"));
+
+	g_clApsInsp.func_Insp_IlluminationOc(MIU.m_pFrameRawBuffer);
+
+	pFrame->putListLog(_T("[수동검사] IlluminationOc 검사 완료"));
+}
+
+
+void CCCDInspModeDlg::OnBnClickedBtnInspBlackMaskEdge()
+{
+	// TODO: Add your control notification handler code here
+
+	CAABonderDlg* pFrame = (CAABonderDlg*)AfxGetApp()->m_pMainWnd;
+
+	//if( !func_Check_MIU_Mode() )	return;
+
+	if (Task.AutoFlag == MODE_AUTO)
+	{
+		pFrame->putListLog(_T("[수동검사] 자동 운전 중 사용 불가"));
+		return;
+	}
+
+	if (Task.AutoFlag == MODE_PAUSE)
+	{
+		pFrame->putListLog(_T("[수동검사] 일시 정지 중 사용 불가"));
+		return;
+	}
+
+	pFrame->putListLog(_T("[수동검사] Black Mask Edge 검사"));
+
+	g_clApsInsp.func_Insp_BlackMaskEdge(MIU.m_pFrameRawBuffer);
+
+	pFrame->putListLog(_T("[수동검사] Black Mask Edge 검사 완료"));
 }

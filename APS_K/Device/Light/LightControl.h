@@ -6,6 +6,13 @@
 //! 부모 클래스의 함수, public 멤버 변수를 바로 사용 가능
 #include "../../Library/RS232C/Handler_RS232C.h"
 
+typedef struct _stColor
+{
+	int red;
+	int green;
+	int blue;
+} stColor;
+
 class CLightControl : public CHandler_RS232C
 {
 public:
@@ -66,13 +73,11 @@ public:
 
 
 	//RPS-50V5-4 4채널 이물광원 - YOUTH TECH
-	int DPS_SetChannel_Value(int iNoChannel, int iValue);
+
+	int DPS_SetChannel_Value(int iNoChannel, stColor target, stColor current);
 	bool DPS_Light_OnOffLevel(int channel, int onoff, int data);
 
-	//int DPS_SetChannel_Value2(int iNoChannel, int iValue);
-
-	//bool DPS_Light_OnOffLevel2(int channel, int onoff, int data);
-
+	stColor targetColor;
 
 };
 

@@ -5,136 +5,66 @@
 
 namespace ACMISSoftISP
 {
-	typedef struct _POINTF
-	{
-		double x, y;
-	} POINTD;
+	ACMISSOFTISPBASIC_API void MeanImage(
+		const BYTE *image, BYTE *dest, int width, int height, int WindowSize, 
+		int startX = 0, int startY = 0, int endX = 0, int endY = 0);
+	ACMISSOFTISPBASIC_API void MeanImage2Byte(
+		const unsigned short *image, unsigned short *dest, int width, int height, int WindowSize, 
+		int startX = 0, int startY = 0, int endX = 0, int endY = 0);
+	ACMISSOFTISPBASIC_API void MeanImage4Byte(
+		const int *image, int *dest, int width, int height, int WindowSize, 
+		int startX = 0, int startY = 0, int endX = 0, int endY = 0);
+	ACMISSOFTISPBASIC_API void MeanImageFloat(
+		const BYTE *image, float *dest, int width, int height, int WindowSize, 
+		int startX = 0, int startY = 0, int endX = 0, int endY = 0);
+	ACMISSOFTISPBASIC_API void MeanImageFloat2Byte(
+		const unsigned short *image, float *dest, int width, int height, int WindowSize, 
+		int startX = 0, int startY = 0, int endX = 0, int endY = 0);
+	ACMISSOFTISPBASIC_API void MeanImageFloat4Byte(
+		const int *image, float *dest, int width, int height, int WindowSize, 
+		int startX = 0, int startY = 0, int endX = 0, int endY = 0);
+	ACMISSOFTISPBASIC_API void MeanImageDouble(
+		const BYTE *image, double *dest, int width, int height, int WindowSize, 
+		int startX = 0, int startY = 0, int endX = 0, int endY = 0);
+	ACMISSOFTISPBASIC_API void MeanImageDouble2Byte(
+		const unsigned short *image, double *dest, int width, int height, int WindowSize, 
+		int startX = 0, int startY = 0, int endX = 0, int endY = 0);
+	ACMISSOFTISPBASIC_API void MeanImageDouble4Byte(
+		const int *image, double *dest, int width, int height, int WindowSize, 
+		int startX = 0, int startY = 0, int endX = 0, int endY = 0);
 
-	class ACMISSOFTISPBASIC_API CStopWatch
-	{
-	private:
-		LARGE_INTEGER freq, start, end;
+	ACMISSOFTISPBASIC_API double CalculateBlockAverage(
+		const BYTE *pBuffer, int nImageWidth, int nImageHeight, RECT rtROI);
+	ACMISSOFTISPBASIC_API double CalculateBlockAverage(
+		const unsigned short* pBuffer, int nImageWidth, int nImageHeight, RECT rtROI);
+	ACMISSOFTISPBASIC_API double CalculateBlockAverage(
+		const int* pBuffer, int nImageWidth, int nImageHeight, RECT rtROI);
+	ACMISSOFTISPBASIC_API double CalculateBlockAverage(
+		const BYTE* pBuffer, int nWidth, int nHeight, int nBlockWidth, int nBlockHeight, 
+		int nStartX, int nStartY, const TInspectRegionOffset& tRegionOffset = { 0, 0, 0, 0 });
+	ACMISSOFTISPBASIC_API double CalculateBlockAverage(
+		const unsigned short* pBuffer, int nWidth, int nHeight, int nBlockWidth, int nBlockHeight, 
+		int nStartX, int nStartY, const TInspectRegionOffset& tRegionOffset = { 0, 0, 0, 0 });
+	ACMISSOFTISPBASIC_API double CalculateBlockAverage(
+		const int* pBuffer, int nWidth, int nHeight, int nBlockWidth, int nBlockHeight, 
+		int nStartX, int nStartY, const TInspectRegionOffset& tRegionOffset = { 0, 0, 0, 0 });
 
-	public:
-		CStopWatch()
-		{
-			QueryPerformanceFrequency(&freq);
-			start.QuadPart = 0;
-			end.QuadPart = 0;
-			StartTime();
-		};
+	ACMISSOFTISPBASIC_API void LensShadingCorrection(
+		const BYTE *pixel, BYTE *DestPixel, int MeanBlockSize, int width, int height, 
+		int nStartOffsetX = 0, int nStartOffsetY = 0, int nEndOffsetX = 0, int nEndOffsetY = 0);
+	ACMISSOFTISPBASIC_API void LensShadingCorrection(
+		const unsigned short *pixel, unsigned short *DestPixel, int MeanBlockSize, int width, int height, 
+		int nStartOffsetX = 0, int nStartOffsetY = 0, int nEndOffsetX = 0, int nEndOffsetY = 0);
+	ACMISSOFTISPBASIC_API void LensShadingCorrection(
+		const int *pixel, int *DestPixel, int MeanBlockSize, int width, int height, EDATAFORMAT eDataFormat, 
+		int nStartOffsetX = 0, int nStartOffsetY = 0, int nEndOffsetX = 0, int nEndOffsetY = 0);
 
-		inline void StartTime()
-		{
-			QueryPerformanceCounter(&start);
-		};
+	ACMISSOFTISPBASIC_API float FindMaxIntensity(float* image, int width, int height, RECT roi);
+	ACMISSOFTISPBASIC_API float FindMaxIntensity(float* image, int width, int height, RECT roi, int& posX, int& posY);
 
-		inline double CheckTime()
-		{
-			QueryPerformanceCounter(&end);
-
-			return (double)(end.QuadPart - start.QuadPart) / (freq.QuadPart * 1000); // ms
-			//TRACE("%.2f msec\n", elapsed);
-		};
-	};
-
-	// blob 을 표현하는 run length encoding data
-	class CBlobRunLengthData
-	{
-	public:
-		BOOL visited;
-		unsigned short blob_index;	// blob 번호
-		unsigned short row;
-		unsigned short col_start;		// run length encoding start
-		unsigned short col_length;		// run length encoding end
-		CBlobRunLengthData() {};
-		CBlobRunLengthData(unsigned short blob_index, unsigned short row, unsigned short start, unsigned short length)
-		{
-			this->blob_index = blob_index;
-			this->row = row;
-			this->col_start = start;
-			this->col_length = length;
-			this->visited = FALSE;
-		};
-	};
-
-	class CRawImageProccessor
-	{
-	private:
-		enum COLORCHANNEL
-		{
-			chR = 0,
-			chGr,
-			chGb,
-			chB
-		};
-
-		enum BAYERORDER
-		{
-			bayerOrderRGGB = 0,
-			bayerOrderBGGR
-		};
-
-		// raw image 크기 만큼의 bayer type array 를 저장 하는 table
-		// 0 : R, 1 : G, 2 : B, 3 : c
-		BYTE *BayerTypeTable;
-		int *IntegralImageSum[4];
-		int *IntegralImageCount[4];
-		int width, height;
-
-		void NormalizeLSCTable(int blockCountX, int blockCountY);
-		void SaveTextLSCRawTrainingModel(int blockCountX, int blockCountY);
-
-	public:
-		CRawImageProccessor();
-		virtual ~CRawImageProccessor();
-
-		BYTE *ColorPlane[4];
-
-		BYTE * GetBayerTypeTable() { return BayerTypeTable; }
-
-		// 0 : RGBC, 1 : BGGR
-		void GenerateBayerTypeTable(int width, int height, BAYERORDER bayerOrder);
-		void CalculateIntegralImage(BYTE *SrcImage, int width, int height);
-		void DestroyBayerTypeTable();
-		void CalculateMeanBlock(CRectEx rect, float mean[4]);
-
-		// Integral Sum 과 Count 로 해당 Block 의 평균을 리턴 (width, height 도 이미 CalculateIntegralImage 에서 이미 저장 해놓음)
-		void CalculateMeanBlock(int x0, int y0, int x1, int y1, float mean[4]);
-
-		void CalculateMeanBlockDirect(BYTE *raw, int width, int height, int x0, int y0, int x1, int y1, float mean[4]);
-		void SplitColorPlane(BYTE *pixel, int width, int height);
-	};
-
-	ACMISSOFTISPBASIC_API void Threshold(BYTE *srcpixel, int width, int height, CBlobList *bloblist, int min_thr, int max_thr, int MinArea, int BoundaryMarginX, int BoundaryMarginY);
-	ACMISSOFTISPBASIC_API float Intensity(BYTE *pixel, int width, int height, CRectEx roi);
-	ACMISSOFTISPBASIC_API void MeanImage(BYTE *image, BYTE *dest, int width, int height, int WindowSize, int startX = 0, int startY = 0, int endX = 0, int endY = 0);
-	ACMISSOFTISPBASIC_API void MeanImage2Byte(unsigned short *image, unsigned short *dest, int width, int height, int WindowSize, int startX = 0, int startY = 0, int endX = 0, int endY = 0);
-	ACMISSOFTISPBASIC_API void MeanImage4Byte(int *image, int *dest, int width, int height, int WindowSize, int startX = 0, int startY = 0, int endX = 0, int endY = 0);
-	ACMISSOFTISPBASIC_API void MeanImageFloat(BYTE *image, float *dest, int width, int height, int WindowSize, int startX = 0, int startY = 0, int endX = 0, int endY = 0);
-	ACMISSOFTISPBASIC_API void MeanImageFloat2Byte(unsigned short *image, float *dest, int width, int height, int WindowSize, int startX = 0, int startY = 0, int endX = 0, int endY = 0);
-	ACMISSOFTISPBASIC_API void MeanImageFloat4Byte(int *image, float *dest, int width, int height, int WindowSize, int startX = 0, int startY = 0, int endX = 0, int endY = 0);
-	ACMISSOFTISPBASIC_API void MeanImageDouble(BYTE *image, double *dest, int width, int height, int WindowSize, int startX = 0, int startY = 0, int endX = 0, int endY = 0);
-	ACMISSOFTISPBASIC_API void MeanImageDouble2Byte(unsigned short *image, double *dest, int width, int height, int WindowSize, int startX = 0, int startY = 0, int endX = 0, int endY = 0);
-	ACMISSOFTISPBASIC_API void MeanImageDouble4Byte(int *image, double *dest, int width, int height, int WindowSize, int startX = 0, int startY = 0, int endX = 0, int endY = 0);
-
-	ACMISSOFTISPBASIC_API double SumBlock(const BYTE *pBuffer, int nImageWidth, int nImageHeight, RECT rtROI);
-	ACMISSOFTISPBASIC_API double SumBlock(const unsigned short* pBuffer, int nImageWidth, int nImageHeight, RECT rtROI);
-	ACMISSOFTISPBASIC_API double SumBlock(const int* pBuffer, int nImageWidth, int nImageHeight, RECT rtROI);
-	ACMISSOFTISPBASIC_API double SumBlock(const BYTE* pBuffer, int nWidth, int nHeight, int nBlockWidth, int nBlockHeight, int nStartX, int nStartY, int nStartOffsetX = 0, int nStartOffsetY = 0, int nEndOffsetX = 0, int nEndOffsetY = 0);
-	ACMISSOFTISPBASIC_API double SumBlock(const unsigned short* pBuffer, int nWidth, int nHeight, int nBlockWidth, int nBlockHeight, int nStartX, int nStartY, int nStartOffsetX = 0, int nStartOffsetY = 0, int nEndOffsetX = 0, int nEndOffsetY = 0);
-	ACMISSOFTISPBASIC_API double SumBlock(const int* pBuffer, int nWidth, int nHeight, int nBlockWidth, int nBlockHeight, int nStartX, int nStartY, int nStartOffsetX = 0, int nStartOffsetY = 0, int nEndOffsetX = 0, int nEndOffsetY = 0);
-
-	ACMISSOFTISPBASIC_API void MergeAdjacentBlob(CBlobList &BlobList, CBlobList *BlobListMergedResult, int BlockCriteria, int distance, int MaxRecursiveCount = 1000);
-	ACMISSOFTISPBASIC_API float CalculateRegionIntensity(BYTE *pixel, int width, int height, CRectEx roi);
-
-	ACMISSOFTISPBASIC_API void LensShadingCorrection(BYTE *pixel, BYTE *DestPixel, int MeanBlockSize, int width, int height, int nStartOffsetX = 0, int nStartOffsetY = 0, int nEndOffsetX = 0, int nEndOffsetY = 0);
-	ACMISSOFTISPBASIC_API void LensShadingCorrection(unsigned short *pixel, unsigned short *DestPixel, int MeanBlockSize, int width, int height, int nStartOffsetX = 0, int nStartOffsetY = 0, int nEndOffsetX = 0, int nEndOffsetY = 0);
-	ACMISSOFTISPBASIC_API void LensShadingCorrection(int *pixel, int *DestPixel, int MeanBlockSize, int width, int height, EDATAFORMAT eDataFormat, int nStartOffsetX = 0, int nStartOffsetY = 0, int nEndOffsetX = 0, int nEndOffsetY = 0);
-	ACMISSOFTISPBASIC_API float IntensityFiltered(BYTE *pixel, int width, int height, CRectEx roi, float filter);
-	ACMISSOFTISPBASIC_API float IntensityMax(float *pixel, int width, int height, RECT roi);
-	ACMISSOFTISPBASIC_API bool IntensityMax(float *pixel, int width, int height, RECT roi, float &maxValue, int &maxX, int &maxY);
-	ACMISSOFTISPBASIC_API void IntensityRGB(BYTE *pixel, int width, int height, CRectEx roi, float *R, float *G, float *B);
+	ACMISSOFTISPBASIC_API CBlobList MakeBlobList(
+		BYTE* image, int width, int height, int minTh, int maxTh, int minArea, 
+		const TInspectRegionOffset& tRegionOffset = { 0, 0, 0, 0 });
 
 	ACMISSOFTISPBASIC_API int CalcAvgSdv(BYTE *pBuffer, int nImageWidth, int nImageHeight, RECT &rtROI, long double *dAvg, long double *dVar, long double *dSdv, EMEANTYPE eMeanType);
 	ACMISSOFTISPBASIC_API int CalcAvgSdv(short *pBuffer, int nImageWidth, int nImageHeight, RECT &rtROI, long double *dAvg, long double *dVar, long double *dSdv, EMEANTYPE eMeanType);

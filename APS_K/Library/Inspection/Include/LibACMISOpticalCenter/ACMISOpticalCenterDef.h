@@ -70,19 +70,6 @@ typedef struct _TOpticalCenterCombi
 	int nStep;
 } TOpticalCenterCombi;
 
-typedef struct _TOpticalCenterDistortionDev
-{
-	double dOpticalCenterSpecX;
-	double dOpticalCenterSpecY;
-	int nMinCircleWidth;
-	int nMinCircleHeight;
-	double dMinCircularity;
-	double dBinThreshold;
-	double dMaxROIDelta;
-	int nROICnt;
-	POINT *ptROICenter;
-}TOpticalCenterDistortionDev;
-
 typedef enum _ESmoothMethod
 {
 	ESmoothMethod_1DConvolution,

@@ -131,7 +131,8 @@ typedef enum _EFOVAlgorithmMethod
 	FOV_METHOD_MOBIS_MOTIONAL,
 	FOV_METHOD_SHM_CORNER,
 	FOV_METHOD_SHM_CIRCLE_H150,
-	FOV_METHOD_FORD_L3
+	FOV_METHOD_FORD_L3,
+	FOV_METHOD_FIGURE_AI,
 } EFOVAlgorithmMethod;
 #define FOV_METHOD_PIXEL_COUNT FOV_METHOD_MOBIS_MOTIONAL
 
@@ -327,6 +328,10 @@ typedef struct _TFiducialMarkSpecM
 	std::vector<TFiducialMarkUse> vRefFiducialMark;
 
 	// Spec
+	double dXOCSpecMin;
+	double dXOCSpecMax;
+	double dYOCSpecMin;
+	double dYOCSpecMax;
 	double dXTiltSpecMin;
 	double dXTiltSpecMax;
 	double dYTiltSpecMin;
@@ -343,6 +348,8 @@ typedef struct _TFiducialMarkSpecM
 	double dDistortionSpecMax;
 
 	// Offset
+	double dOCXOffset;
+	double dOCYOffset;
 	double dTiltXOffset;
 	double dTiltYOffset;
 	double dHFOVOffset;
@@ -350,6 +357,10 @@ typedef struct _TFiducialMarkSpecM
 	double dDFOVOffset;
 	double dRotateOffset;
 	double dDistortionOffset;
+
+	_TFiducialMarkSpecM() : dOCXOffset(0.0), dOCYOffset(0.0), dTiltXOffset(0.0), dTiltYOffset(0.0), dHFOVOffset(1.0), dVFOVOffset(1.0), dDFOVOffset(1.0), dRotateOffset(0.0), dDistortionOffset(0.0)
+	{
+	}
 } TFiducialMarkSpecM;
 
 typedef struct _TFiducialMarkSpecN
@@ -362,6 +373,10 @@ typedef struct _TFiducialMarkSpecN
 	std::vector<TFiducialMarkType> vRefFiducialMark;
 
 	// Spec
+	double dXOCSpecMin;
+	double dXOCSpecMax;
+	double dYOCSpecMin;
+	double dYOCSpecMax;
 	double dXTiltSpecMin;
 	double dXTiltSpecMax;
 	double dYTiltSpecMin;
@@ -378,6 +393,8 @@ typedef struct _TFiducialMarkSpecN
 	double dDistortionSpecMax;
 
 	// Offset
+	double dOCXOffset;
+	double dOCYOffset;
 	double dTiltXOffset;
 	double dTiltYOffset;
 	double dHFOVOffset;
@@ -385,6 +402,10 @@ typedef struct _TFiducialMarkSpecN
 	double dDFOVOffset;
 	double dRotateOffset;
 	double dDistortionOffset;
+
+	_TFiducialMarkSpecN() : dOCXOffset(0.0), dOCYOffset(0.0), dTiltXOffset(0.0), dTiltYOffset(0.0), dHFOVOffset(1.0), dVFOVOffset(1.0), dDFOVOffset(1.0), dRotateOffset(0.0), dDistortionOffset(0.0)
+	{
+	}
 } TFiducialMarkSpecN;
 
 #define RESULT_FIDUCIAL_MARK_VERSION_MAJOR		1
@@ -414,6 +435,8 @@ typedef struct _TChartSpec
 
 	// spec.
 	DRANGE  rSFRSpec;
+	DRANGE	rXOCSpec; ///< chart x spec(min, max)
+	DRANGE	rYOCSpec; ///< chart y spec(min, max)
 	DRANGE	rXTiltSpec; ///< chart x tilt spec(min, max)
 	DRANGE	rYTiltSpec; ///< chart y tilt spec(min, max)
 	DRANGE	rDFOVSpec; ///< Diagonal FOV spec(min, max)
@@ -429,6 +452,8 @@ typedef struct _TChartSpec
 	double dRotateOffset;
 	double dTiltXOffset;
 	double dTiltYOffset;
+	double dOCXOffset;
+	double dOCYOffset;
 	double dDistortionOffset;
 
 	/// frequency(Nyquest) lists..
@@ -477,7 +502,8 @@ typedef struct _TChartSpec
 	int nFOVAlgorithmMethod; // EFOVAlgorithmMethod
 	int nDistortionAlgorithmMethod; // EDistortionAlgorithmType
 
-	_TChartSpec() : strDetailInfoPath(NULL), strDetailDeltaSpecInfoPath(NULL), nDeltaAlgorithmType(0), nAlgorithmType(0), strFiducialMarkInfoPath(NULL)
+	_TChartSpec() : strDetailInfoPath(NULL), strDetailDeltaSpecInfoPath(NULL), nDeltaAlgorithmType(0), nAlgorithmType(0), strFiducialMarkInfoPath(NULL),
+		dOCXOffset(0.0), dOCYOffset(0.0), dTiltXOffset(0.0), dTiltYOffset(0.0), dHFOVOffset(1.0), dVFOVOffset(1.0), dDFOVOffset(1.0), dRotateOffset(0.0), dDistortionOffset(0.0)
 	{
 		memset(&stMainFiducialMark, 0, sizeof(TFiducialMarkInfoN));
 		memset(&stSubFiducialMark, 0, sizeof(TFiducialMarkInfoN));

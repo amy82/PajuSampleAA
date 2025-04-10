@@ -141,15 +141,6 @@ private:
 	bool ConvertSpec(TOpticalCenterY _Spec, TOpticalCenterNY& _NewSpec); // Convert Spec from TOpticalCenterY to TOpticalCenterNY
 };
 
-class ACMISOPTICALCENTER_API CACMISOpticalCenterDistortionDev : public CACMISOpticalCenter<TOpticalCenterDistortionDev>
-{
-public:
-	CACMISOpticalCenterDistortionDev();
-	~CACMISOpticalCenterDistortionDev();
-
-	//const POINT* GetInspectionROI(int index) const;
-};
-
 class ACMISOPTICALCENTER_API CACMISOpticalCenterBrightest : public CACMISOpticalCenter<TOpticalCenterBrightest>
 {
 public:

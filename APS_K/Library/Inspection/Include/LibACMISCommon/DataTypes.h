@@ -19,144 +19,158 @@
 
 struct DBPOINT
 {
-	double	x;
-	double	y;
+	double x;
+	double y;
 };
+using LPDBPOINT = DBPOINT*;
+
+struct COMPLEX
+{
+	double re;
+	double im;
+};
+
+struct DSIZE
+{
+	double	width;
+	double	height;
+};
+
+typedef struct _DBox2D
+{
+	DBPOINT center;
+	DSIZE size;
+	double angle;
+	double saturation;
+} DBox2D;
 
 class CDPoint : public DBPOINT
 {
 public:
-	CDPoint( double _x=0, double _y=0 ) { x = _x; y = _y; }
-	//CDPoint() {}
-
-	CDPoint( const CDPoint& Other )
-	{
-		x = Other.x;
-		y = Other.y;
+	// constructor
+	CDPoint(double _x = 0.0, double _y = 0.0) 
+	{ 
+		x = _x; 
+		y = _y; 
 	}
-
-	CDPoint( const DBPOINT& Other )
+	CDPoint(const CDPoint& other)
 	{
-		x = Other.x;
-		y = Other.y;
+		x = other.x;
+		y = other.y;
 	}
-
-	CDPoint( const POINT& Other )
+	CDPoint(const DBPOINT& other)
 	{
-		x = (double)Other.x;
-		y = (double)Other.y;
+		x = other.x;
+		y = other.y;
+	}
+	CDPoint(const POINT& other)
+	{
+		FromPOINT(other);
 	}
 	
-	// did not support -> use ToPOINT
-	//operator POINT() const;
-
+	// converter
+	// operator POINT() const; // not allowed -> use ToPOINT
 	POINT ToPOINT() const
 	{
 		POINT point;
-		point.x	= (long)(x+.5);
-		point.y	= (long)(y+.5);
+		point.x	= static_cast<LONG>(x + 0.5);
+		point.y	= static_cast<LONG>(y + 0.5);
 		return point;
 	}
 
-	void FromPOINT( const POINT& other )
+	void FromPOINT(const POINT& other)
 	{
-		x = (double)other.x;
-		y = (double)other.y;
+		x = static_cast<double>(other.x);
+		y = static_cast<double>(other.y);
 	}
 
-	BOOL operator == ( const CDPoint& point ) const
+	// assignment operator
+	CDPoint& operator=(const CDPoint& other)
 	{
-		return ((point.x == x) && (point.y == y)) ? TRUE : FALSE;
-	}
-	BOOL operator != ( const CDPoint& point ) const
-	{
-		return ((point.x == x) && (point.y == y)) ? FALSE : TRUE;
-	}
-	void operator += (const CDPoint& point)
-	{
-		x += point.x; y += point.y;
-	}
-	void operator -= (const CDPoint& point)
-	{
-		x -= point.x; y -= point.y;
+		x = other.x;
+		y = other.y;
+		return *this;
 	}
 
-	CDPoint operator-() const
+	// arithmetic operator
+	CDPoint operator+(const CDPoint& pt) const
 	{
-		return CDPoint( -x, -y );
+		return CDPoint(x + pt.x, y + pt.y);
 	}
-	
-	CDPoint operator + ( CDPoint& point) const
+	CDPoint operator-(const CDPoint& pt) const
 	{
-		return CDPoint( x+point.x, y+point.y );
+		return CDPoint(x - pt.x, y - pt.y);
 	}
-
-	CDPoint operator - ( CDPoint& point) const
+	CDPoint operator*(double d) const
 	{
-		return CDPoint( x-point.x, y-point.y );
+		return CDPoint(x * d, y * d);
 	}
-
 	CDPoint operator/(double d) const
 	{
 		return CDPoint(x / d, y / d);
 	}
-
-	void operator/=(double d)
+	CDPoint operator-() const
 	{
-		x /= d; y /= d;
+		return CDPoint(-x, -y);
 	}
 
-	bool operator>(const CDPoint& point) const
+	// compound assignment operator
+	CDPoint& operator+=(const CDPoint& pt)
 	{
-		return x > point.x && y > point.y;
+		x += pt.x;
+		y += pt.y;
+		return *this;
+	}
+	CDPoint& operator-=(const CDPoint& pt)
+	{
+		x -= pt.x; 
+		y -= pt.y;
+		return *this;
+	}
+	CDPoint& operator*=(double d)
+	{
+		x *= d;
+		x *= d;
+		return *this;
+	}
+	CDPoint& operator/=(double d)
+	{
+		x /= d; 
+		y /= d;
+		return *this;
 	}
 
-	bool operator>=(const CDPoint& point) const
+	// relational operator
+	bool operator==(const CDPoint& other) const
 	{
-		return x >= point.x && y >= point.y;
+		return other.x == x && other.y == y;
 	}
-
-	bool operator<(const CDPoint& point) const
+	bool operator!=(const CDPoint& other) const
 	{
-		return x < point.x && y < point.y;
+		return other.x != x || other.y != y;
 	}
-
-	bool operator<=(const CDPoint& point) const
+	bool operator>(const CDPoint& other) const
 	{
-		return x <= point.x && y <= point.y;
+		return x > other.x && y > other.y;
 	}
-
-	const CDPoint& operator = ( const CDPoint& point )
+	bool operator>=(const CDPoint& other) const
 	{
-		(*this).x = point.x;
-		(*this).y = point.y;
-		return (*this);
+		return x >= other.x && y >= other.y;
 	}
-
-	void operator = ( const DBPOINT& point )
+	bool operator<(const CDPoint& other) const
 	{
-		(*this).x = point.x;
-		(*this).y = point.y;
+		return x < other.x && y < other.y;
 	}
-
-	void operator = (const POINT& other)
+	bool operator<=(const CDPoint& other) const
 	{
-		x = (double)other.x;
-		y = (double)other.y;
+		return x <= other.x && y <= other.y;
 	}
 };
-
-typedef DBPOINT* LPDBPOINT;
-
-inline CDPoint operator + ( const CDPoint& lhs, const CDPoint& rhs )
+inline CDPoint operator*(double d, const CDPoint& pt)
 {
-	return CDPoint( lhs.x+rhs.x, lhs.y+rhs.y );
+	return pt * d;
 }
 
-inline CDPoint operator - ( const CDPoint& lhs, const CDPoint& rhs )
-{
-	return CDPoint( lhs.x-rhs.x, lhs.y-rhs.y );
-}
 
 struct DBRECT
 {
@@ -169,29 +183,34 @@ struct DBRECT
 class CDRect : public DBRECT
 {
 public:
-	//CDRect() {}
-	CDRect( const DBRECT& OtherRect )
+	// constructor
+	CDRect(double l = 0.0, double t = 0.0, double r = 0.0, double b = 0.0) 
 	{
-		left	= OtherRect.left;
-		top		= OtherRect.top;
-		right	= OtherRect.right;
-		bottom	= OtherRect.bottom;
+		left   = l; 
+		top    = t; 
+		right  = r; 
+		bottom = b; 
+	}	
+	CDRect(const CDRect& other)
+	{
+		left = other.left;
+		top = other.top;
+		right = other.right;
+		bottom = other.bottom;
 	}
-	CDRect( const CDRect& OtherRect )
+	CDRect(const DBRECT& other)
 	{
-		left	= OtherRect.left;
-		top		= OtherRect.top;
-		right	= OtherRect.right;
-		bottom	= OtherRect.bottom;
+		left	= other.left;
+		top		= other.top;
+		right	= other.right;
+		bottom	= other.bottom;
 	}
-	CDRect( const RECT OtherRect )
+	CDRect(const RECT& other)
 	{
-		left	= (double)OtherRect.left;
-		top		= (double)OtherRect.top;
-		right	= (double)OtherRect.right;
-		bottom	= (double)OtherRect.bottom;
+		FromRECT(other);
 	}
 
+	// converter
 	RECT ToRECT() const
 	{
 		RECT rect;
@@ -201,16 +220,57 @@ public:
 		rect.bottom = (long)(bottom+.5);
 		return rect;	
 	}
+	void FromRECT(const RECT& other)
+	{
+		left   = static_cast<double>(other.left);
+		top    = static_cast<double>(other.top);
+		right  = static_cast<double>(other.right);
+		bottom = static_cast<double>(other.bottom);
+	}
 
-	CDRect( double l=0, double t=0, double r=0, double b=0 ) { left = l; top = t; right = r; bottom = b; }
+	// assignment operator
+	CDRect& operator=(const CDRect& other)
+	{
+		left   = other.left;
+		top    = other.top;
+		right  = other.right;
+		bottom = other.bottom;
+		return *this;
+	}
 
-	double Width() const { return fabs(right-left); }
-	double Height() const { return fabs(bottom-top); }
-	CDPoint CenterPoint() const { return CDPoint((left+right)/2., (top+bottom)/2.); }
+	// relational operator
+	bool operator==(const CDRect& other) const
+	{
+		return left == other.left && top == other.top && right == other.right && bottom == other.bottom;
+	}
+	bool operator!=(const CDRect& other) const
+	{
+		return left != other.left || top != other.top || right != other.right || bottom != other.bottom;
+	}
 
-	BOOL IsEmpty() const { if (Width() <= 0. || Height() <= 0.) return TRUE; return FALSE; }
+	// utility
+	double Width() const  
+	{
+		return fabs(right - left);
+	}
+	double Height() const 
+	{
+		return fabs(bottom - top); 
+	}
+	CDPoint CenterPoint() const 
+	{
+		return CDPoint((left + right) / 2.0, (top + bottom) / 2.0); 
+	}
 
-	void SetRectEmpty() { left = right = top = bottom = 0.; }
+	bool IsEmpty() const 
+	{
+		return Width() <= 0.0 || Height() <= 0.0;
+	}
+
+	void SetRectEmpty() 
+	{
+		left = right = top = bottom = 0.0;
+	}
 
 	BOOL PtInRect( const CDPoint& point ) const
 	{
@@ -220,11 +280,10 @@ public:
 		return TRUE;
 	}
 
-	void OffsetRect(DBPOINT point )
+	void OffsetRect(DBPOINT point)
 	{
 		OffsetRect(point.x, point.y);
 	}
-
 	void OffsetRect( double x, double y )
 	{
 		left += x;
@@ -233,8 +292,14 @@ public:
 		bottom += y;
 	}
 
-	void DeflateRect(double l, double t, double r, double b) { left+=l; top+=t; right-=r; bottom-=b; }
-	void InflateRect(double l, double t, double r, double b) { left-=l; top-=t; right+=r; bottom+=b; }
+	void DeflateRect(double l, double t, double r, double b) 
+	{
+		left+=l; top+=t; right-=r; bottom-=b; 
+	}
+	void InflateRect(double l, double t, double r, double b) 
+	{
+		left-=l; top-=t; right+=r; bottom+=b; 
+	}
 
 	void IntersectRect( const CDRect& rc1, const CDRect& rc2 ) 
 	{
@@ -270,43 +335,6 @@ public:
 		double t;
 		if ( left > right ) { t = left; left = right ; right = t; }
 		if ( top > bottom ) { t = top; top = bottom; bottom = t; }
-	}
-
-	void operator = ( const DBRECT& OtherRect )
-	{
-		left	= OtherRect.left;
-		top		= OtherRect.top;
-		right	= OtherRect.right;
-		bottom	= OtherRect.bottom;
-	}
-
-	const CDRect& operator = ( const CDRect& OtherRect )
-	{
-		left	= OtherRect.left;
-		top		= OtherRect.top;
-		right	= OtherRect.right;
-		bottom	= OtherRect.bottom;
-		return (*this);
-	}
-	const CDRect& operator = ( const RECT& OtherRect )
-	{
-		left	= (double)OtherRect.left;
-		top		= (double)OtherRect.top;
-		right	= (double)OtherRect.right;
-		bottom	= (double)OtherRect.bottom;
-		return (*this);
-	}
-
-	BOOL operator == ( const CDRect& OtherRect ) const
-	{
-		if ( (left == OtherRect.left) && (top == OtherRect.top) && (right == OtherRect.right) && (bottom == OtherRect.bottom) )
-			return TRUE;
-		return FALSE;
-	}
-
-	BOOL operator != ( const CDRect& OtherRect ) const
-	{
-		return !(operator == (OtherRect));
 	}
 
 	BOOL IsOverlap( const CDRect& OtherRect ) const
@@ -352,6 +380,62 @@ public:
 		else if ( dP1 < 0.0f ) { if ( dP2<0.0f && dP3<0.0f && dP4<0.0f ) return FALSE; }
 		
 		return TRUE;
+	}
+};
+
+class CRectEx
+{
+public:
+	int left, top, right, bottom;
+
+	CRectEx() : left(0), top(0), right(0), bottom(0) {}
+	CRectEx(int left, int top, int right, int bottom) : left(left), top(top), right(right), bottom(bottom) {}
+
+	int Width() const 
+	{
+		return right - left + 1;
+	}
+	int Height() const 
+	{
+		return bottom - top + 1;
+	}
+	POINT CenterPoint() const
+	{
+		POINT center;
+		center.x = (left + right) / 2;
+		center.y = (top + bottom) / 2;
+
+		return center;
+	}
+	RECT ToRECT() const
+	{
+		RECT rect;
+		rect.left = static_cast<LONG>(left);
+		rect.top = static_cast<LONG>(top);
+		rect.right = static_cast<LONG>(right);
+		rect.bottom = static_cast<LONG>(bottom);
+
+		return rect;
+	}
+
+	void SetRect(int left, int top, int right, int bottom)
+	{
+		this->left = left;
+		this->top = top;
+		this->right = right;
+		this->bottom = bottom;
+	}
+	void SetRectCentered(int centerx, int centery, int width, int height)
+	{
+		left = centerx - (width / 2);
+		top = centery - (height / 2);
+		right = left + width - 1;
+		bottom = top + height - 1;
+	}
+
+	bool PointInRect(int x, int y) const
+	{
+		return x >= left && x <= right && y >= top && y <= bottom;
 	}
 };
 

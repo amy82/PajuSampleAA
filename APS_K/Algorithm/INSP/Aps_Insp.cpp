@@ -3,11 +3,11 @@
 #include "../../GlobalDeclare.h"
 
 #include <bitset>
-#define R_RESULT_PASS							0	//양품 
-#define R_RESULT_FAIL							1	//불량
-#define R_FAIL_NOISE							2
-#define R_FAIL_BLACK_SPOT						3
-#define R_FAIL_STAIN							4
+//#define R_RESULT_PASS							0	//양품 
+//#define R_RESULT_FAIL							1	//불량
+//#define R_FAIL_NOISE							2
+//#define R_FAIL_BLACK_SPOT						3
+//#define R_FAIL_STAIN							4
 
 using namespace ACMISSoftISP;
 
@@ -36,9 +36,9 @@ CAPS_Insp::~CAPS_Insp(void)
 //	R/C,B/C,Cr/Cb 검사(ColorSensitivity)
 //
 //-----------------------------------------------------------------------------
-bool CAPS_Insp::func_Insp_ColorSensitivity(BYTE* img, int index, bool bAutoMode)	//R/C,B/C,Cr/Cb
+bool CAPS_Insp::func_Insp_ColorSensitivity(BYTE* rawImage, int index, bool bAutoMode)	//R/C,B/C,Cr/Cb
 {
-#if 0
+
 	bool bRes = false;
 	int i = 0;
    // TCHAR	szLog[SIZE_OF_1K];
@@ -50,57 +50,45 @@ bool CAPS_Insp::func_Insp_ColorSensitivity(BYTE* img, int index, bool bAutoMode)
     IplImage *cvImgRI = cvCreateImage(cvSize(nWidth, nHeight), 8, 3);
 	cvImgRI = gMIUDevice.imageItp;
 
+
+
     int specCount = 0;
 	TColorSensitivitySpecN m_stColorSensitivitySpec;
 	RECT rtRoi;
 	double dOffset[3] = { 0.0, 0.0, 0.0 }; // RGOffset, BGOffset, GrGbOffset
-	SetRect(&rtRoi, 856, 432, 965, 507);
+	SetRect(&rtRoi, 1448, 938, 10, 10);		//H46
+	//SetRect(&rtRoi, 1448, 938, 10, 10);		//H83
+
 	m_stColorSensitivitySpec.tROI.eROIType = ROIType_RECT;
 	m_stColorSensitivitySpec.tROI.ROICount = 1;
 	m_stColorSensitivitySpec.tROI.dOffset = dOffset;
 	m_stColorSensitivitySpec.tROI.pROIData = &rtRoi;
-	m_stColorSensitivitySpec.dSpecDevMaxRG = model.m_ColorSensitivitySpec[specCount++];//1.000000;
-    m_stColorSensitivitySpec.dSpecDevMinRG = model.m_ColorSensitivitySpec[specCount++];//1.000000;
-    m_stColorSensitivitySpec.dSpecDevMaxBG = model.m_ColorSensitivitySpec[specCount++];//1.000000;
-    m_stColorSensitivitySpec.dSpecDevMinBG = model.m_ColorSensitivitySpec[specCount++];//1.000000;
-    m_stColorSensitivitySpec.dSpecDevMaxGrGb = model.m_ColorSensitivitySpec[specCount++];//1.000000;
-    m_stColorSensitivitySpec.dSpecDevMinGrGb = model.m_ColorSensitivitySpec[specCount++];//1.000000;
-    m_stColorSensitivitySpec.nAdjustType = model.m_ColorSensitivitySpec[specCount++];// 0;
-    m_stColorSensitivitySpec.nTypicalValueType = model.m_ColorSensitivitySpec[specCount++];// 0;
-    std::shared_ptr<CACMISShadingColorSensitivity> m_pColorSensitivity = std::make_shared<CACMISShadingColorSensitivity>();
+    m_stColorSensitivitySpec.nAdjustType = 0;
+    m_stColorSensitivitySpec.nTypicalValueType = 0;
 
-    if (index == MID_6500K_RAW)
-    {
-        szLog.Format("	[Color Sensitivity] 6500K Image Insp");
-        
-    }
-    else if (index == MID_2800K_RAW)
-    {
-        szLog.Format("	[Color Sensitivity] 2800K Image Insp");
-    }
-    else
-    {
-        szLog.Format("	[Color Sensitivity] Manusl Image Insp");
-        //Manual Insp
-    }
-    theApp.MainDlg->putListLog(szLog);
-    //AddLog(szLog, 0, m_nUnit);
-    //std::cout << "[Color Sensitivity] Version = " << m_pColorSensitivity->GetVersion() << std::endl;
-   // _stprintf_s(szLog, SIZE_OF_1K, _T("	[Color Sensitivity] Version = %s"), m_pColorSensitivity->GetVersion());
-    szLog.Format("	[Color Sensitivity] Version = %s" , m_pColorSensitivity->GetVersion());
-    //AddLog(szLog, 0, m_nUnit);
+
+	m_stColorSensitivitySpec.dSpecDevMaxRG = 0.0;
+    m_stColorSensitivitySpec.dSpecDevMinRG = 0.0;
+    m_stColorSensitivitySpec.dSpecDevMaxBG = 0.0;
+    m_stColorSensitivitySpec.dSpecDevMinBG = 0.0;
+    m_stColorSensitivitySpec.dSpecDevMaxGrGb = 0.0;
+    m_stColorSensitivitySpec.dSpecDevMinGrGb = 0.0;
+
+	//model.m_ColorSensitivitySpec[specCount++];// 0;
+    std::shared_ptr<CACMISShadingColorSensitivity> m_pColorBalance = std::make_shared<CACMISShadingColorSensitivity>();
+
+    szLog.Format("	[Color Sensitivity] Version = %s" , m_pColorBalance->GetVersion());
 	theApp.MainDlg->putListLog(szLog);
-	bool result = m_pColorSensitivity->Inspect(img, 
-        nWidth, nHeight,
-        m_stColorSensitivitySpec, tDataSpec.eDataFormat, tDataSpec.eOutMode, tDataSpec.eSensorType,
-		nBlackLevel);
+
+	bool result = m_pColorBalance->Inspect(rawImage, nWidth, nHeight,
+        m_stColorSensitivitySpec, tDataSpec.eDataFormat, tDataSpec.eOutMode, tDataSpec.eSensorType,nBlackLevel, 0, 0);
 	//
     //Result
     int nResult = R_RESULT_PASS;
     std::vector<TColorSensitivityResult> m_stColorSensitivityResult;
     for (i = 0; i < m_stColorSensitivitySpec.tROI.ROICount; i++)
     {
-        m_stColorSensitivityResult.push_back(*m_pColorSensitivity->GetInspectionResult(i));
+        m_stColorSensitivityResult.push_back(*m_pColorBalance->GetInspectionResult(i));
 
         // Check Color Sensitivity RG
         if ((m_stColorSensitivitySpec.dSpecDevMinRG > m_stColorSensitivityResult[i].tAdjustColorRatio.RG) || (m_stColorSensitivitySpec.dSpecDevMaxRG < m_stColorSensitivityResult[i].tAdjustColorRatio.RG))
@@ -133,27 +121,24 @@ bool CAPS_Insp::func_Insp_ColorSensitivity(BYTE* img, int index, bool bAutoMode)
 
         //Logging
         TColorSensitivityResult* pResult = &m_stColorSensitivityResult[i];
-        //printf("[Color Sensitivity] RG=%.4f, BG=%.4f, GrGb=%.4f \n", pResult->tColorRatio.RG, pResult->tColorRatio.BG, pResult->tColorRatio.GrGb);
-        //_stprintf_s(szLog, SIZE_OF_1K, _T("	[Color Sensitivity] RG=%.4f, BG=%.4f, GrGb=%.4f"), pResult->tColorRatio.RG, pResult->tColorRatio.BG, pResult->tColorRatio.GrGb);
-        szLog.Format("	[Color Sensitivity] RG=%.4f, BG=%.4f, GrGb=%.4f" , pResult->tColorRatio.RG, pResult->tColorRatio.BG, pResult->tColorRatio.GrGb);
+        
+		szLog.Format("	[Color Sensitivity] RG=%.4f, BG=%.4f, GrGb=%.4f" , pResult->tColorRatio.RG, pResult->tColorRatio.BG, pResult->tColorRatio.GrGb);
         theApp.MainDlg->putListLog(szLog);
 		theApp.MainDlg->putListLog(szLog);
-        //printf("[Color Sensitivity] R=%.4f, B=%.4f, B=%.4f \n", pResult->tColorRatio.R, pResult->tColorRatio.G, pResult->tColorRatio.B);
-       // _stprintf_s(szLog, SIZE_OF_1K, _T("	[Color Sensitivity] R=%.4f, B=%.4f, B=%.4f"), pResult->tColorRatio.R, pResult->tColorRatio.G, pResult->tColorRatio.B);
         szLog.Format("	[Color Sensitivity] R=%.4f, B=%.4f, B=%.4f", pResult->tColorRatio.R, pResult->tColorRatio.G, pResult->tColorRatio.B);
         theApp.MainDlg->putListLog(szLog);
 		theApp.MainDlg->putListLog(szLog);
-        //printf("[Color Sensitivity] Gr=%.4f, Gb=%.4f \n", pResult->tColorRatio.Gr, pResult->tColorRatio.Gb);
-       // _stprintf_s(szLog, SIZE_OF_1K, _T("	[Color Sensitivity] Gr=%.4f, Gb=%.4f"), pResult->tColorRatio.Gr, pResult->tColorRatio.Gb);
         szLog.Format("	[Color Sensitivity] Gr=%.4f, Gb=%.4f", pResult->tColorRatio.Gr, pResult->tColorRatio.Gb);
 		theApp.MainDlg->putListLog(szLog);
         //Graphic
-        const RECT* rt = m_pColorSensitivity->GetInspectionROI((EPos)i);
+
+        const RECT* rt = m_pColorBalance->GetInspectionROI((EPos)i);
         cvRectangle(cvImgRI, cvPoint(rt->left, rt->top), cvPoint(rt->right, rt->bottom), CV_RGB(0, 0, 255));
     }
-    g_SaveLGITLog(m_nUnit, "ColorSensitivity", m_pColorSensitivity->GetLogHeader(), m_pColorSensitivity->GetLogData());
+
+    g_SaveLGITLog(m_nUnit, "ColorSensitivity", m_pColorBalance->GetLogHeader(), m_pColorBalance->GetLogData());
 	return bRes;
-#endif
+
 	return true;
 }
 
@@ -183,62 +168,103 @@ bool CAPS_Insp::func_Insp_Shm_Illumination(BYTE* rawImage, bool bAutoMode, bool 
 	memset(&tRelativeIlluminationSpecN, 0x00, sizeof(tRelativeIlluminationSpecN));
 
 	//TROIData tROI;
-	tRelativeIlluminationSpecN.dSpecRIcornerMin = 60.0;
-	tRelativeIlluminationSpecN.dSpecRIcornerMax = 100.0;
-	tRelativeIlluminationSpecN.dSpecRIminMin = 5;
-	tRelativeIlluminationSpecN.dSpecRIminMax = 100;
-	tRelativeIlluminationSpecN.dCenterIntensity = 2000;
+	tRelativeIlluminationSpecN.dSpecRIcornerMin = 0.0;// 60.0;
+	tRelativeIlluminationSpecN.dSpecRIcornerMax = 0.0;//100.0;
+	tRelativeIlluminationSpecN.dSpecRIminMin = 0.0;//5;
+	tRelativeIlluminationSpecN.dSpecRIminMax = 0.0;//100;
+	tRelativeIlluminationSpecN.dCenterIntensity = 0.0;//2000;
 	tRelativeIlluminationSpecN.nSpecRINormalizeIndex = 0;
 
-	tRelativeIlluminationSpecN.tROI.ROICount = 5;
+	if (LGIT_MODEL_INDEX == M_THUNDER_CHEETAH)
+	{
+		tRelativeIlluminationSpecN.tROI.ROICount = 4;
+	}
+	else
+	{
+		tRelativeIlluminationSpecN.tROI.ROICount = 5;
+	}
+	
 	vROI.resize(tRelativeIlluminationSpecN.tROI.ROICount);
 	tRelativeIlluminationSpecN.tROI.pROIData = vROI.data();
 	tRelativeIlluminationSpecN.tROI.eROIType = ROIType_RECT;
 	tRelativeIlluminationSpecN.tROI.dOffset = vOffset.data();
 
 
-	//for (i = 0; i < tRelativeIlluminationSpecN.tROI.ROICount; i++)
-	//{
-	//	vROI[i].left = 10 + (i * 20) ;// g_clModelData[m_nUnit].m_LensShadingRoi[i].left;
-	//	vROI[i].top = 10;//g_clModelData[m_nUnit].m_LensShadingRoi[i].top;
-	//	vROI[i].right = vROI[i].left + 50;
-	//	vROI[i].bottom = vROI[i].top + 50;
-	//}
+
 	RECT rtRefEdge;
 	int roiSize = 50;
 	double nfield = 0.85;
+
+
 	int fieldGapW = (nWidth * nfield);
 	int fieldGapH = (nHeight * nfield);
 
-	vROI[0].left = nWidth / 2 - (roiSize / 2);
-	vROI[0].top = nHeight / 2 - (roiSize / 2);
-	vROI[0].right = vROI[0].left + roiSize;
-	vROI[0].bottom = vROI[0].top + roiSize;
+	int xalpha = 100;
+	int yalpha = 100;
+	if (LGIT_MODEL_INDEX == M_THUNDER_CHEETAH)
+	{
+		roiSize = 50;
+		//Model - H46
+		//Model - H83
+		//Model - H180 - 너만 xAlpha 360으로 변경
+		//TODO: 모델별 다르게 설정될수있게
+		//4귀퉁이 x,y-100
+		vROI[0].left = xalpha;
+		vROI[0].top = yalpha;
+		vROI[0].right = vROI[0].left + roiSize;
+		vROI[0].bottom = vROI[0].top + roiSize;
+
+		vROI[1].left = nWidth - xalpha;
+		vROI[1].top = yalpha;
+		vROI[1].right = vROI[1].left + roiSize;
+		vROI[1].bottom = vROI[1].top + roiSize;
+
+		vROI[2].left = 100;
+		vROI[2].top = nHeight - yalpha;
+		vROI[2].right = vROI[2].left + roiSize;
+		vROI[2].bottom = vROI[2].top + roiSize;
+
+		vROI[3].left = nWidth - xalpha;
+		vROI[3].top = nHeight - yalpha;
+		vROI[3].right = vROI[3].left + roiSize;
+		vROI[3].bottom = vROI[3].top + roiSize;
+	}
+	else
+	{
+		roiSize = 50;
+
+		vROI[0].left = nWidth / 2 - (roiSize / 2);
+		vROI[0].top = nHeight / 2 - (roiSize / 2);
+		vROI[0].right = vROI[0].left + roiSize;
+		vROI[0].bottom = vROI[0].top + roiSize;
+
+
+		//LT
+		vROI[1].left = nWidth - fieldGapW;
+		vROI[1].top = nHeight - fieldGapH;
+		vROI[1].right = vROI[1].left + roiSize;
+		vROI[1].bottom = vROI[1].top + roiSize;
+
+		//RT
+		vROI[2].left = fieldGapW;
+		vROI[2].top = nHeight - fieldGapH;
+		vROI[2].right = vROI[2].left + roiSize;
+		vROI[2].bottom = vROI[2].top + roiSize;
+
+		//BL
+		vROI[3].left = nWidth - fieldGapW;
+		vROI[3].top = fieldGapH;
+		vROI[3].right = vROI[3].left + roiSize;
+		vROI[3].bottom = vROI[3].top + roiSize;
+
+		//BR
+		vROI[4].left = fieldGapW;
+		vROI[4].top = fieldGapH;
+		vROI[4].right = vROI[4].left + roiSize;
+		vROI[4].bottom = vROI[4].top + roiSize;
+	}
+
 	
-
-	//LT
-	vROI[1].left = nWidth - fieldGapW;
-	vROI[1].top = nHeight - fieldGapH;
-	vROI[1].right = vROI[1].left + roiSize;
-	vROI[1].bottom = vROI[1].top + roiSize;
-
-	//RT
-	vROI[2].left = fieldGapW;
-	vROI[2].top = nHeight - fieldGapH;
-	vROI[2].right = vROI[2].left + roiSize;
-	vROI[2].bottom = vROI[2].top + roiSize;
-
-	//BL
-	vROI[3].left = nWidth - fieldGapW;
-	vROI[3].top = fieldGapH;
-	vROI[3].right = vROI[3].left + roiSize;
-	vROI[3].bottom = vROI[3].top + roiSize;
-
-	//BR
-	vROI[4].left = fieldGapW;
-	vROI[4].top = fieldGapH;
-	vROI[4].right = vROI[4].left + roiSize;
-	vROI[4].bottom = vROI[4].top + roiSize;
 
 	
 	for (i = 0; i < 5; i++)
@@ -297,6 +323,14 @@ bool CAPS_Insp::func_Insp_Shm_Illumination(BYTE* rawImage, bool bAutoMode, bool 
 
 	sTemp.Format("RI MaxDiff: %.6lf", MandoInspLog.dRiDiff);
 	theApp.MainDlg->putListLog(sTemp);
+
+	if (LGIT_MODEL_INDEX == M_THUNDER_CHEETAH)
+	{
+		//Spec
+		//Uniformity < 2% (No flickering)
+		//CCT 6500 K
+		//AE Target 60-90% of FSR
+	}
 
 	//if (MandoInspLog.dRiDiff < MandoSfrSpec.INSP_RIDiff_Spec)
 	//{
@@ -1168,15 +1202,353 @@ bool CAPS_Insp::func_Insp_Saturation(BYTE* ChartRawImage, bool bAutoMode)
 	
 	return true;
 }
+
+bool CAPS_Insp::func_Insp_BlackMaskEdge(BYTE* rawImage, bool bAutoMode)
+{
+	bool bRet = true;
+	int i = 0;
+	int nWidth = gMIUDevice.nWidth;
+	int nHeight = gMIUDevice.nHeight;
+	TDATASPEC& tDataSpec = gMIUDevice.dTDATASPEC_n;
+	int nBlackLevel = 0;
+	//CACMISShadingRelativeIllumination
+
+	TRelativeIlluminationSpecN tRelativeIlluminationSpecN;
+	// Image buffers
+	std::vector<RECT> vROI;
+	std::vector<double> vOffset;
+
+
+	
+
+	memset(&tRelativeIlluminationSpecN, 0x00, sizeof(tRelativeIlluminationSpecN));
+
+	//TROIData tROI;
+	tRelativeIlluminationSpecN.tROI.ROICount = 5;
+	tRelativeIlluminationSpecN.tROI.dOffset = vOffset.data();
+	tRelativeIlluminationSpecN.tROI.eROIType = ROIType_RECT;
+	tRelativeIlluminationSpecN.tROI.pROIData = vROI.data();
+
+	
+
+	tRelativeIlluminationSpecN.tROI.ROICount = 4;
+
+	vROI.resize(tRelativeIlluminationSpecN.tROI.ROICount);
+	vOffset.resize(tRelativeIlluminationSpecN.tROI.ROICount);
+
+
+
+	vROI[0].left = nWidth / 2 - 50;
+	vROI[0].top = nHeight / 2 - 50;
+	vROI[0].right = vROI[0].left + 100;
+	vROI[0].bottom = vROI[0].top + 100;
+
+	vROI[1].left = nWidth / 2 - 250;
+	vROI[1].top = 0;
+	vROI[1].right = vROI[1].left + 500;
+	vROI[1].bottom = vROI[1].top + 2;
+
+	vROI[2].left = nWidth / 2 - 250;
+	vROI[2].top = nHeight - 2;
+	vROI[2].right = vROI[2].left + 500;
+	vROI[2].bottom = vROI[2].top + 2;
+
+	vROI[3].left = 0;
+	vROI[3].top = nHeight / 2 - 250;
+	vROI[3].right = vROI[3].left + 2;
+	vROI[3].bottom = vROI[3].top + 500;
+
+	vROI[4].left = nWidth - 2;
+	vROI[4].top = nHeight / 2 - 250;
+	vROI[4].right = vROI[4].left + 2;
+	vROI[4].bottom = vROI[4].top + 500;
+
+
+	vOffset[0] = 0.0;
+	vOffset[1] = 0.0;
+	vOffset[2] = 0.0;
+	vOffset[3] = 0.0;
+
+
+	tRelativeIlluminationSpecN.tROI.pROIData = vROI.data();
+	tRelativeIlluminationSpecN.tROI.eROIType = ROIType_RECT;
+	tRelativeIlluminationSpecN.tROI.dOffset = vOffset.data();
+
+
+	tRelativeIlluminationSpecN.dSpecRIcornerMin = 0.0;
+	tRelativeIlluminationSpecN.dSpecRIcornerMax = 0.0;
+	tRelativeIlluminationSpecN.dSpecRIminMin = 0.0;
+	tRelativeIlluminationSpecN.dSpecRIminMax = 0.0;
+	tRelativeIlluminationSpecN.dCenterIntensity = 0.0;
+	tRelativeIlluminationSpecN.nSpecRINormalizeIndex = 0;
+	std::shared_ptr<CACMISShadingRelativeIllumination> m_pBlackMaskEdge = std::make_shared<CACMISShadingRelativeIllumination>();
+
+
+	if (!m_pBlackMaskEdge->Inspect(rawImage, nWidth, nHeight, tRelativeIlluminationSpecN, tDataSpec.eDataFormat, tDataSpec.eOutMode, tDataSpec.eSensorType, nBlackLevel, 0, 0))
+	{
+		return false;
+	}
+
+	TRelativeIlluminationResultN m_stRelativeIlluminationResult;
+	m_stRelativeIlluminationResult = *m_pBlackMaskEdge->GetInspectionResult(0);  //dRicorner
+
+	MandoInspLog.dRicorner[0] = m_stRelativeIlluminationResult.dRIcornerRatio[1];
+	MandoInspLog.dRicorner[1] = m_stRelativeIlluminationResult.dRIcornerRatio[2];
+	MandoInspLog.dRicorner[2] = m_stRelativeIlluminationResult.dRIcornerRatio[3];
+	MandoInspLog.dRicorner[3] = m_stRelativeIlluminationResult.dRIcornerRatio[4];
+
+	MandoInspLog.dRiDiff = m_pBlackMaskEdge->GetMaxDiff();
+	CString sTemp;
+
+	sTemp.Format("RIcorner 0: %.6lf", MandoInspLog.dRicorner[0]);
+	theApp.MainDlg->putListLog(sTemp);
+	sTemp.Format("RIcorner 1: %.6lf", MandoInspLog.dRicorner[1]);
+	theApp.MainDlg->putListLog(sTemp);
+	sTemp.Format("RIcorner 2: %.6lf", MandoInspLog.dRicorner[2]);
+	theApp.MainDlg->putListLog(sTemp);
+	sTemp.Format("RIcorner 3: %.6lf", MandoInspLog.dRicorner[3]);
+	theApp.MainDlg->putListLog(sTemp);
+
+
+
+	sTemp.Format("RI MaxDiff: %.6lf", MandoInspLog.dRiDiff);
+	theApp.MainDlg->putListLog(sTemp);
+
+
+	return bRet;
+}
+
+
+
+bool CAPS_Insp::func_Insp_IlluminationOc(BYTE* rawImage, bool bAutoMode)
+{
+	bool bRet = true;
+	int nWidth = gMIUDevice.nWidth;
+	int nHeight = gMIUDevice.nHeight;
+	int nBlackLevel = 0;
+	TDATASPEC& tDataSpec = gMIUDevice.dTDATASPEC_n;
+
+	//CACMISOpticalCenterCentroidCircle
+	TOpticalCenterCentroidCircle ocSepc;
+	memset(&ocSepc, 0x00, sizeof(TOpticalCenterCentroidCircle));
+	//ocSepc.tROI
+	ocSepc.dOpticalCenterSpecX = 10;
+	ocSepc.dOpticalCenterSpecY = 10;
+	ocSepc.dPixelPitch = 3.0;
+	ocSepc.dThresholdRatio = 0.95;
+	ocSepc.dThresholdMargin = 0.5;
+	ocSepc.bEnableChannel = false;
+
+	std::shared_ptr<CACMISOpticalCenterCentroidCircle> opticalOc = std::make_shared<CACMISOpticalCenterCentroidCircle>();
+	opticalOc->Inspect((const BYTE*)rawImage, nWidth, nHeight, ocSepc, tDataSpec.eDataFormat, tDataSpec.eOutMode, tDataSpec.eSensorType, nBlackLevel, 0);// , DEMOSAICMETHOD_GRADIENT);
+
+
+	const DBPOINT *ptOCpt;
+	ptOCpt = opticalOc->GetOpticalCenterResult();
+	double decenterX = (ptOCpt->x - (nWidth / 2));
+	double decenterY = (ptOCpt->y - (nHeight / 2));
+
+	return bRet;
+}
+
+
+bool CAPS_Insp::func_Insp_LensShading(BYTE* lowImage, bool bAutoMode)
+{
+	bool bRet = true;
+	int nWidth = gMIUDevice.nWidth;
+	int nHeight = gMIUDevice.nHeight;
+	TDATASPEC& tDataSpec = gMIUDevice.dTDATASPEC_n;
+	//
+	//검사 순서
+	//1. A Mode 설정
+		//G - 204 Image Capture 
+		//R - 204 Image Capture 
+		//G - 204 Image Capture 
+		//B - 204 Image Capture 
+	//2. B Mode 설정
+
+
+	return bRet;
+}
+
+bool CAPS_Insp::func_Insp_Dark(BYTE* lowImage, bool bAutoMode)
+{
+	bool bRet = true;
+	int i = 0;
+	//이미지를 각각 30장씩 총 60장 캡처
+	//DARK_SP1H_01 ~ DARK_SP1H_30
+	//DARK_SP1L_01 ~ DARK_SP1L_30
+
+	//CACMISDarkNoise 알고리즘 사용
+	TDATASPEC& tDataSpec = gMIUDevice.dTDATASPEC_n;
+	TDarkNoiseSpec DarkSpec;
+	memset(&DarkSpec, 0x00, sizeof(TDarkNoiseSpec));
+	RECT rtRoi;
+	double dOffset[3] = { 0.0, 0.0, 0.0 };
+	SetRect(&rtRoi, 0, 0, 2895, 1876);
+
+	DarkSpec.tROI.eROIType = ROIType_RECT;
+	DarkSpec.tROI.ROICount = 1;
+	DarkSpec.tROI.dOffset = dOffset;
+	DarkSpec.tROI.pROIData = &rtRoi;
+
+	DarkSpec.dK = 15;
+	DarkSpec.nAlternativeValue = 168;
+	DarkSpec.nEnableChannel = 1;
+	DarkSpec.nBitDepth = 12;
+	DarkSpec.nPedestal = 240;
+	DarkSpec.nConvKerenelSize = 11;
+
+//	DarkSpec.pConvKernel = new double[]{ -0.1,-0.1,-0.1,-0.1,-0.1,-0.1,1.0,-0.1,-0.1,-0.1,-0.1,-0.1, };
+	for ( i = 0; i < 4; i++)
+	{
+		DarkSpec.dFPNPThreshold[i] = 0.0;
+		DarkSpec.dColumnFPNPThreshold[i] = 0.0;
+		DarkSpec.dRowFPNPThreshold[i] = 0.0;
+		DarkSpec.dMaxColumnFPNPThreshold[i] = 0.0;
+		DarkSpec.dMaxRowFPNPThreshold[i] = 0.0;
+		DarkSpec.dColumnFPNVThreshold[i] = 0.0;
+		DarkSpec.dRowFPNVThreshold[i] = 0.0;
+		DarkSpec.dTemporalNoisePThreshold[i] = 0.0;
+		DarkSpec.dColumnNoisePThreshold[i] = 0.0;
+		DarkSpec.dRowNoisePThreshold[i] = 0.0;
+		DarkSpec.dTThreshold[i] = 0.0;
+		DarkSpec.dColumnNoiseVThreshold[i] = 0.0;
+		DarkSpec.dRowNoiseVThreshold[i] = 0.0;
+		DarkSpec.dBlackLevelThreshold[i] = 0.0;
+	}
+	
+
+	int nWidth = gMIUDevice.nWidth;
+	int nHeight = gMIUDevice.nHeight;
+	int nBlackLevel = 0;
+	//<TDarkNoiseSpec, TDarkNoiseResult
+
+
+	std::shared_ptr<CACMISDarkNoise> darkNoise = std::make_shared<CACMISDarkNoise>();
+	BYTE *pBuffer[30] = { NULL, NULL };
+
+	darkNoise->InspectM((const BYTE**)pBuffer, nWidth, nHeight, DarkSpec, tDataSpec.eDataFormat, tDataSpec.eOutMode, tDataSpec.eSensorType, nBlackLevel,0,1,0);
+
+	return bRet;
+}
 //-----------------------------------------------------------------------------
 //
 //	DEFECT 검사 (dark , white , hot)
 //
 //-----------------------------------------------------------------------------
-//bool CPRIFunc_Insp::func_Insp_Defect(BYTE* img, bool bAutoMode)
+
 bool CAPS_Insp::func_Insp_Defect(BYTE* midImage, BYTE* lowImage, bool bAutoMode)
 {
 	bool bRet = false;
+	int i = 0;
+	int nWidth = gMIUDevice.nWidth;
+	int nHeight = gMIUDevice.nHeight;
+	TDATASPEC& tDataSpec = gMIUDevice.dTDATASPEC_n;
+
+	//CACMISDefectAllDefectPixel_SONY
+
+	TAllDefectPixel_SONY stSpecAllDefectSpec;
+	memset(&stSpecAllDefectSpec, 0x00, sizeof(stSpecAllDefectSpec));
+
+	stSpecAllDefectSpec.nThresholdTypeDarkSP1L = 0;
+	stSpecAllDefectSpec.nThresholdTypeDarkSP2L = 0;
+	stSpecAllDefectSpec.nThresholdTypeBrightSP1L = 0;
+	stSpecAllDefectSpec.nThresholdTypeBrightSP2L = 0;
+
+	stSpecAllDefectSpec.nThresholdTypeBrightInDarkSP1L = 0;
+	stSpecAllDefectSpec.nThresholdTypeBrightInDarkSP2H = 0;
+	stSpecAllDefectSpec.nThresholdTypeBrightInDarkSP2L = 0;
+
+	stSpecAllDefectSpec.nThresholdTypeDarkInSaturatedSP1H = 0;
+	stSpecAllDefectSpec.nThresholdTypeDarkInSaturatedSP1L = 0;
+	stSpecAllDefectSpec.nThresholdTypeDarkInSaturatedSP2H = 0;
+	stSpecAllDefectSpec.nThresholdTypeDarkInSaturatedSP2L = 0;
+
+	for (i = 0; i < 4; i++)
+	{
+		stSpecAllDefectSpec.dDefectThresholdDarkSP1L[i] = 30;
+		stSpecAllDefectSpec.dDefectThresholdDarkSP2L[i] = 30;
+		stSpecAllDefectSpec.dDefectThresholdBrightSP1L[i] = 30;
+		stSpecAllDefectSpec.dDefectThresholdBrightSP2L[i] = 30;
+		//
+		stSpecAllDefectSpec.dDefectThresholdBrightInDarkSP1L[i] = 38 * 4;
+		stSpecAllDefectSpec.dDefectThresholdBrightInDarkSP2H[i] = 7 * 4;
+
+		stSpecAllDefectSpec.dDefectThresholdBrightInDarkSP2L[i] = 109 * 4;
+		stSpecAllDefectSpec.dDefectThresholdDarkInSaturatedSP1H[i] = 152 * 4;
+		stSpecAllDefectSpec.dDefectThresholdDarkInSaturatedSP1L[i] = 579 * 4;
+		stSpecAllDefectSpec.dDefectThresholdDarkInSaturatedSP2H[i] = 31 * 4;
+		stSpecAllDefectSpec.dDefectThresholdDarkInSaturatedSP2L[i] = 534 * 4;
+	}
+	stSpecAllDefectSpec.nMaxDefectNumSP1 = 1000;
+	stSpecAllDefectSpec.nMaxDefectNumSP2 = 1000;
+	stSpecAllDefectSpec.nMaxClusterNum = 0;
+
+	stSpecAllDefectSpec.nOBStartLineInHighlightSP1L = 1;
+	stSpecAllDefectSpec.nOBStartLineInHighlightSP2L = 1;
+	stSpecAllDefectSpec.nOBStartLineInDarkSP1L = 1;
+	stSpecAllDefectSpec.nOBStartLineInDarkSP2H = 1;
+	stSpecAllDefectSpec.nOBStartLineInDarkSP2L = 1;
+	stSpecAllDefectSpec.nOBStartLineInSaturatedSP1H = 1;
+	stSpecAllDefectSpec.nOBStartLineInSaturatedSP1L = 1;
+	stSpecAllDefectSpec.nOBStartLineInSaturatedSP2H = 1;
+	stSpecAllDefectSpec.nOBStartLineInSaturatedSP2L = 1;
+	stSpecAllDefectSpec.nOBLineCountInHighlightSP1L = 4;
+	stSpecAllDefectSpec.nOBLineCountInHighlightSP2L = 4;
+	stSpecAllDefectSpec.nOBLineCountInDarkSP1L = 4;
+	stSpecAllDefectSpec.nOBLineCountInDarkSP2H = 4;
+	stSpecAllDefectSpec.nOBLineCountInDarkSP2L = 4;
+	stSpecAllDefectSpec.nOBLineCountInSaturatedSP1H = 4;
+	stSpecAllDefectSpec.nOBLineCountInSaturatedSP1L = 4;
+	stSpecAllDefectSpec.nOBLineCountInSaturatedSP2H = 4;
+	stSpecAllDefectSpec.nOBLineCountInSaturatedSP2L = 4;
+
+	stSpecAllDefectSpec.nEnableChannel = 1;
+	stSpecAllDefectSpec.nDefectInCluster = 2;
+	stSpecAllDefectSpec.nLeftEdgeSize = 0;
+	stSpecAllDefectSpec.nTopEdgeSize = 0;
+	stSpecAllDefectSpec.nRightEdgeSize = 0;
+	stSpecAllDefectSpec.nBottomEdgeSize = 0;
+	stSpecAllDefectSpec.nWindowSize = 32;
+	stSpecAllDefectSpec.nDivideSubRegion = 7;
+
+	//Dark
+	stSpecAllDefectSpec.nDefectType = EDefectKind_WhitePixelInDark_SP1L| EDefectKind_WhitePixelInDark_SP2H | EDefectKind_WhitePixelInDark_SP2L |
+		EDefectKind_WhiteClusterColorInDark_SP1L | EDefectKind_WhiteClusterColorInDark_SP2H | EDefectKind_WhiteClusterColorInDark_SP2L;
+	//D65
+	stSpecAllDefectSpec.nDefectType = EDefectKind_BlackPixelInSaturated_SP1H | EDefectKind_BlackPixelInSaturated_SP1L | EDefectKind_BlackPixelInSaturated_SP2H |
+		EDefectKind_BlackPixelInSaturated_SP2L | EDefectKind_BlackClusterColorInSaturated_SP1H | EDefectKind_BlackClusterColorInSaturated_SP1L | 
+		EDefectKind_BlackClusterColorInSaturated_SP2H |
+		EDefectKind_BlackClusterColorInSaturated_SP2L;
+	//Saturated
+	stSpecAllDefectSpec.nDefectType = EDefectKind_WhitePixel_SP1L | EDefectKind_WhitePixel_SP2L | EDefectKind_BlackPixel_SP1L |
+		EDefectKind_BlackPixel_SP2L | EDefectKind_WhiteClusterColor_SP1L | EDefectKind_WhiteClusterColor_SP2L |
+		EDefectKind_BlackClusterColor_SP1L |
+		EDefectKind_BlackClusterColor_SP2L;
+
+	stSpecAllDefectSpec.tCircleSpec.bEnableCircle = false;
+	stSpecAllDefectSpec.tCircleSpec.nPosOffsetX = 0;
+	stSpecAllDefectSpec.tCircleSpec.nPosOffsetY = 0;
+	stSpecAllDefectSpec.tCircleSpec.dRadiusRatioX = 0;
+	stSpecAllDefectSpec.tCircleSpec.dRadiusRatioY = 0;
+	stSpecAllDefectSpec.tCircleSpec.dThresholdRatio = 0;
+	stSpecAllDefectSpec.tCircleSpec.dROIRange = 0;
+	stSpecAllDefectSpec.tCircleSpec.nUsedFixedCircle = 0;
+
+	BYTE *pBuffer[2] = { NULL, NULL };
+
+	pBuffer[0] = midImage;	// mid-level image for detecting dark/bright defect
+	pBuffer[1] = lowImage;	// low-level image for detecting hot defect
+
+	std::shared_ptr<CACMISDefectAllDefectPixel_SONY> pACMISDefectAllDefect = std::make_shared<CACMISDefectAllDefectPixel_SONY>();
+
+	bRet = pACMISDefectAllDefect->InspectM((const BYTE**)pBuffer, nWidth, nHeight, stSpecAllDefectSpec,
+		tDataSpec.eDataFormat, tDataSpec.eOutMode, tDataSpec.eSensorType, tDataSpec.nBlackLevel, true, 2);	//defect는 true맞음
+	if (bRet)
+	{
+
+	}
 #if 0
 	int nBlackLevel = 0;
 	TCHAR szLog[SIZE_OF_1K];
@@ -1843,6 +2215,7 @@ int CAPS_Insp::FDFInsp(BYTE* img, bool bAutoMode)
 	stSpecFDF.tMultiCircleSpec.nBlobSize[2] = model.m_FDFSpec[specCount++];
 
 	//std::shared_ptr<CACMISImageStainRU_YmeanCommon> pInspectBlemish_Ymean = std::make_shared<CACMISImageStainRU_YmeanCommon>();//delete,x
+
 	std::shared_ptr<CACMISImageFastDifferenceFiltering> m_pFDF = std::make_shared<CACMISImageFastDifferenceFiltering>();
 
 	m_pFDF->Inspect((BYTE*)img, nWidth, nHeight, stSpecFDF, tDataSpec.eDataFormat, tDataSpec.eOutMode, tDataSpec.eSensorType, nBlackLevel, 0, 0);

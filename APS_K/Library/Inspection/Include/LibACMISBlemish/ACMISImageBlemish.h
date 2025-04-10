@@ -3,14 +3,6 @@
 #include "export.h"
 #include <LibACMISBlemish\ACMISBlemishDef.h>
 
-// DO NOT INCLUDE HEADER FILE
-//class ACMISBLEMISH_API CACMISImageBlackSpotContrast : public CACMISImage<TBlackSpotContrast>
-//{
-//public:
-//	CACMISImageBlackSpotContrast();
-//	~CACMISImageBlackSpotContrast();
-//};
-
 class ACMISBLEMISH_API CACMISImageBlackSpotContrastCommon : public CACMISBlemishCommon<TBlackSpotContrastN>
 {
 public:
@@ -45,22 +37,6 @@ public:
 private:
 	bool ConvertSpec(TBlackSpotContrast _Spec, TBlackSpotContrastN& _NewSpec); // Convert Spec from TBlackSpotContrast to TBlackSpotContrastN
 };
-
-
-//class ACMISBLEMISH_API CACMISImageFocusedBlemish : public CACMISImage<TFocusedBlemish, byte, EImageArea5>
-//{
-//public:
-//	CACMISImageFocusedBlemish();
-//	~CACMISImageFocusedBlemish();
-//};
-
-
-//class ACMISBLEMISH_API CACMISImageStainLCB : public CACMISImage<TLCBSpec, short, EImageRegion>
-//{
-//public:
-//	CACMISImageStainLCB();
-//	~CACMISImageStainLCB();
-//};
 
 class ACMISBLEMISH_API CACMISImageStainLCBCommon : public CACMISBlemishCommon<TLCBSpecN>
 {
@@ -130,20 +106,6 @@ private:
 	bool ConvertSpec(TFDFSpec _Spec, TFDFSpecN& _NewSpec); // Convert Spec from TFDFSpec to TFDFSpecN
 };
 
-//class ACMISBLEMISH_API CACMISImageStainLCBCommon_Raw : public CACMISBlemishCommon<TLCBSpecN>
-//{
-//public:
-//	CACMISImageStainLCBCommon_Raw();
-//	~CACMISImageStainLCBCommon_Raw();
-//};
-//
-//class ACMISBLEMISH_API CACMISImageStainRU_Ymean : public CACMISImage<TRU_YmeanSpec>
-//{
-//public:
-//	CACMISImageStainRU_Ymean();
-//	~CACMISImageStainRU_Ymean();
-//};
-//
 class ACMISBLEMISH_API CACMISImageStainRU_YmeanCommon : public CACMISBlemishCommon<TRU_YmeanSpecN>
 {
 public:
@@ -178,43 +140,3 @@ public:
 private:
 	bool ConvertSpec(TRU_YmeanSpec _Spec, TRU_YmeanSpecN& _NewSpec); // Convert Spec from TRU_YmeanSpec to TRU_YmeanSpecN
 };
-
-//class ACMISBLEMISH_API CACMISImageStainRU_MultiFilter : public CACMISImage<TRUMultiFilterSpec, short, EImageRegion>
-//{
-//public:
-//	CACMISImageStainRU_MultiFilter();
-//	~CACMISImageStainRU_MultiFilter();
-//};
-//
-////bins
-//class ACMISBLEMISH_API CACMISImageStainRU_Bayer : public CACMISImage<TRUBayerSpec, BYTE, EBlockType>
-//{
-//public:
-//	CACMISImageStainRU_Bayer();
-//	~CACMISImageStainRU_Bayer();
-//};
-//
-//class ACMISBLEMISH_API CACMISImageStatinUB : public CACMISImage<TUnfocusedBlemish, BYTE, EImageArea5>
-//{
-//	const TDefectResult* GetDefectResult(EImageArea5 pos, int nIndex) const; // DO NOT PROVIDE THIS FUNCTION!!
-//public:
-//	CACMISImageStatinUB();
-//	~CACMISImageStatinUB();
-//};
-
-
-//class ACMISBLEMISH_API CACMISImageBlemishOVT : public CACMISBlemishCommon<TBlemishOVTSpec>
-//{
-//public:
-//	CACMISImageBlemishOVT();
-//	~CACMISImageBlemishOVT();
-//
-//	bool Inspect(const BYTE* pBuffer, int nImageWidth, int nImageHeight, TBlemishOVTSpec& _Spec, EDATAFORMAT nDataFormat, EOUTMODE nOutMode, ESENSORTYPE nSensorType, int nBlackLevel, bool bUsing8BitOnly = false, bool bPartialDemosaic = false, EDEMOSAICMETHOD nDemosaicMethod = DEMOSAICMETHOD_GRADIENT);
-//	bool Inspect(TBufferInfo& tBufferInfo, TBlemishOVTSpec& _Spec);
-//	bool Inspect(TFileInfo& tFileInfo, TBlemishOVTSpec& _Spec);
-//	bool InspectM(const BYTE** pBuffer, int nImageWidth, int nImageHeight, TBlemishOVTSpec& _Spec, EDATAFORMAT nDataFormat, EOUTMODE nOutMode, ESENSORTYPE nSensorType, int nBlackLevel, bool bUsing8BitOnly = false, int nImageCount = 1, bool bPartialDemosaic = false, EDEMOSAICMETHOD nDemosaicMethod = DEMOSAICMETHOD_GRADIENT);
-//	bool InspectM(TBufferInfoM& tBufferInfo, TBlemishOVTSpec& _Spec);
-//	bool InspectM(TFileInfoM& tFileInfo, TBlemishOVTSpec& _Spec);
-//};
-
-

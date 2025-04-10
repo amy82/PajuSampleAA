@@ -9,7 +9,8 @@
 
 #include "./Library/Utility/ximg/ximage.h"	//2017101201
 
-
+#include "Library/Inspection/Include/LibACMISNoise/ACMISSignalNoiseRatio.h"
+#include "Library/Inspection/Include/LibACMISNoise/ACMISSignalNoiseRatioDef.h"
 #include "Library/Inspection/Include/LibACMISCommon/ACMISCommon.h"
 #include "Library/Inspection/Include/LibACMISSoftISP/SoftISP.h"
 #include "Library/Inspection/Include/LibACMISResolution/ACMISResolutionSFR.h"
@@ -25,6 +26,7 @@
 #include "Library/Inspection/Include/LibACMISEtc/ACMISEtcDef.h"
 #include "Library/Inspection/Include/LibACMISSoftISPBasic/RawImageProcessing.h"
 #include "Library/Inspection/Include/LibACMISOpticalCenter/ACMISImageOpticalCenter.h"
+#include "Library/Inspection/Include/LibACMISDefect/ACMISImageDarkTest.h"
 
 #include <math.h>
 #include <float.h>
@@ -57,10 +59,10 @@
 #include "Device\Light\OCControl.h"
 //#include "visa.h"
 //! <--------------------------------------------------------------------------
+
 //! 전역 Utility 함수를 사용하기 위해 필요하다. 
-#include "Library/Utility/UtilityFunc.h"	//! (Added by LHW, 2013/2/5)
-#include "Library/Utility/TimeChecker.h"	//! (Added by LHW, 2013/3/4)
-///#include "Algorithm\INSP\PRIFunc_Insp.h"
+#include "Library/Utility/UtilityFunc.h"
+#include "Library/Utility/TimeChecker.h"
 #include "Algorithm\INSP\Aps_Insp.h"
 //! <--------------------------------------------------------------------------
 extern  CAxlMotorSet	motor;

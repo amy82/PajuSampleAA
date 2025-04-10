@@ -71,7 +71,10 @@ public:
 	
 	//dark , white , hot
 	bool func_Insp_Defect(BYTE* midImage, BYTE* lowImage, bool bAutoMode = false);
-
+	bool func_Insp_Dark(BYTE* lowImage, bool bAutoMode = false);
+	bool func_Insp_LensShading(BYTE* lowImage, bool bAutoMode = false);
+	bool func_Insp_IlluminationOc(BYTE* lowImage, bool bAutoMode = false);
+	bool func_Insp_BlackMaskEdge(BYTE* lowImage, bool bAutoMode = false);
 	bool func_Insp_Saturation(BYTE* ChartRawImage, bool bAutoMode = false);
 
 public:

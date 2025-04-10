@@ -90,11 +90,3 @@ using namespace std;
 #include "GlobalDefine.h"
 #include "GlobalDeclare.h"
 
-
-
-
-//
-//const float imageWidth = 1280;
-//const float imageHeight = 1080;
-//
-

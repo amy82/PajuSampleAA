@@ -1,7 +1,7 @@
 #pragma once
 
 #include "export.h"
-#include <LibACMISCommon\ACMISCommon.h>
+#include "LibACMISCommon/CommonStruct.h"
 
 namespace ACMISSoftISP
 {

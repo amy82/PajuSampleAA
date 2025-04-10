@@ -449,43 +449,44 @@ bool CLightControl::ChartAllControl(bool onOff)
 	return true;
 }
 
-int CLightControl::DPS_SetChannel_Value(int iNoChannel, int iValue)
+int CLightControl::DPS_SetChannel_Value(int channel, stColor target , stColor current)
 {
-	if (iValue < 0)
-	{
-		iValue = 0;
-	}
-	if (iValue > 999)	//255)
-	{
-		iValue = 999;// 255;
-	}
-	int nSendSize;
-	int nRetVal;
-	int nIndex;
-#if 1
+	int nSendSize = 0;
+	int nRetVal = 0;
+	int nIndex = 0;
+	int i = 0;
 	BYTE sSendBuff[100];
 	memset(sSendBuff, 0x00, sizeof(sSendBuff));
-	sSendBuff[0] = 0x59;		//ASCII 'Y'  Hex Code 0x59 로 고정
-	sSendBuff[1] = 0x07;		//Header ~ Checksum까지의 byte수 , 7로 고정
-	sSendBuff[2] = iNoChannel + 1;			//채널 0x01 ~ 0x08 , 1채널모델의 경우 0x01로 고정
-	sSendBuff[3] = 0x31;			//On = 0x31 , Off = 0x30 , Ready Check = 0x3F
-	sSendBuff[4] = (char)((iValue >> 8) & 0x00FF);		//Value-0 , MSB, OFF인경우 값의미없음, 1024 Level의 경우 0ㅌ0000 ~ 0x03ff까지 사용가능
-	sSendBuff[5] = (char)(iValue & 0x00FF);;		//Value-1 , LSB, OFF인경우 값의미없음
-	sSendBuff[6] = 0x00;
-	for (int i = 0; i < 6; i++)
+	sSendBuff[0] = 0x59;				//STX
+	sSendBuff[1] = 0x10;				//Length
+	sSendBuff[2] = 0x10 + channel;			//채널 0x01 ~ 0x08 , 1채널모델의 경우 0x01로 고정
+	//
+	//
+	sSendBuff[3] = (char)((target.red >> 8) & 0x00FF);		//Data[MSB]
+	sSendBuff[4] = (char)(target.red & 0x00FF);				//Data[LSB]
+	sSendBuff[5] = (char)((target.green >> 8) & 0x00FF);	//Data[MSB]
+	sSendBuff[6] = (char)(target.green & 0x00FF);			//Data[LSB]
+	sSendBuff[7] = (char)((target.blue >> 8) & 0x00FF);		//Data[MSB]
+	sSendBuff[8] = (char)(target.blue & 0x00FF);			//Data[LSB]
+	//
+	sSendBuff[9] = (char)((current.red >> 8) & 0x00FF);		//Data[MSB]
+	sSendBuff[10] = (char)(current.red & 0x00FF);			//Data[LSB]
+	sSendBuff[11] = (char)((current.green >> 8) & 0x00FF);	//Data[MSB]
+	sSendBuff[12] = (char)(current.green & 0x00FF);			//Data[LSB]
+	sSendBuff[13] = (char)((current.blue >> 8) & 0x00FF);	//Data[MSB]
+	sSendBuff[14] = (char)(current.blue & 0x00FF);			//Data[LSB]
+
+	//
+	sSendBuff[15] = 0x00;			//Checksum
+	for (i = 0; i < 15; i++)
 	{
-		sSendBuff[6] += sSendBuff[i];		//Checksum = Header ~ Value-1까지의 합
+		sSendBuff[15] += sSendBuff[i];	//Bcc
 	}
 
-	nSendSize = 7;
+	nSendSize = 16;
 
 
 
-#else
-	CString sSend = _T("");
-	sSend.Empty();
-	sSend.Format(_T("[%02d%03d"), iNoChannel, iValue);
-#endif
 	int iRet = SendData_Light_Controller(sSendBuff, nSendSize);
 	if (iRet < 0)
 	{

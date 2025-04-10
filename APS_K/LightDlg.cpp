@@ -235,7 +235,7 @@ void CLightDlg::OnClickedOc(UINT nID)
 
 	 if (LGIT_MODEL_INDEX == M_THUNDER_CHEETAH)
 	 {
-		 OcLight_Dms50v52.DPS_SetChannel_Value(m_Oc_Sel_Index, model.m_iLedValue[(m_OcData_Sel_Index)]);
+		 //OcLight_Dms50v52.DPS_SetChannel_Value(m_Oc_Sel_Index, model.m_iLedValue[(m_OcData_Sel_Index)]);
 	 }
 	 else
 	 {
@@ -577,7 +577,7 @@ void CLightDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 
 		if (LGIT_MODEL_INDEX == M_THUNDER_CHEETAH)
 		{
-			OcLight_Dms50v52.DPS_SetChannel_Value(m_Oc_Sel_Index, m_sliderCam2Led.GetPos());
+			//OcLight_Dms50v52.DPS_SetChannel_Value(m_Oc_Sel_Index, m_sliderCam2Led.GetPos());
 		}
 		else
 		{
@@ -679,7 +679,7 @@ void CLightDlg::OnStnClickedEditOcLed()
 
 		if (LGIT_MODEL_INDEX == M_THUNDER_CHEETAH)
 		{
-			OcLight_Dms50v52.DPS_SetChannel_Value(m_Oc_Sel_Index, m_sliderCam2Led.GetPos());
+//			OcLight_Dms50v52.DPS_SetChannel_Value(m_Oc_Sel_Index, m_sliderCam2Led.GetPos());
 		}
 		else
 		{

@@ -112,6 +112,8 @@ public:
 	bool InSpecTiltY(double dValue = UNDEFINED_RESOLUTION_VALUE);
 	bool InSpecRotation(double dValue = UNDEFINED_RESOLUTION_VALUE);
 	bool InSpecDistortion(double dValue = UNDEFINED_RESOLUTION_VALUE);
+	bool InSpecOCX(double dValue = UNDEFINED_RESOLUTION_VALUE);
+	bool InSpecOCY(double dValue = UNDEFINED_RESOLUTION_VALUE);
 
 	const double& GetSpecDFOVMin() const;
 	const double& GetSpecDFOVMax() const;
@@ -127,12 +129,21 @@ public:
 	const double& GetSpecRotationMax() const;
 	const double& GetSpecDistortionMin() const;
 	const double& GetSpecDistortionMax() const;
+	const double& GetSpecOCXMin() const;
+	const double& GetSpecOCXMax() const;
+	const double& GetSpecOCYMin() const;
+	const double& GetSpecOCYMax() const;
 
 	/// forced Setting data
 	void SetFiducialMarkPoint(std::vector<CDPoint>& vData);
 
 	inline void SetInspectPosOffset(int nStartOffsetX, int nStartOffsetY, int nEndOffsetX, int nEndOffsetY) const;
 	inline void SetInspectPosOffset(TInspectRegionOffset tInspectRegionOffset) const;
+	inline void SetFOVOffset(double dHFOVOffset = 1.0, double dVFOVOffset = 1.0, double dDFOVOffset = 1.0) const;
+	inline void SetDistortionOffset(double dDistortionOffset = 0.0) const;
+	inline void SetRotationOffset(double dRotationOffset = 0.0) const;
+	inline void SetTiltOffset(double dTiltXOffset = 0.0, double dTiltYOffset = 0.0) const;
+	inline void SetOCOffset(double dOCXOffset = 0.0, double dOCYOffset = 0.0) const;
 	inline long long GetElapsedTime() const;
 	inline double GetSaturationResult(int nIndex = 0) const;
 	inline bool GetCertificationResult() const;

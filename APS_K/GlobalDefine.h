@@ -25,9 +25,10 @@ const int M_THUNDER_CHEETAH = 200501;		//유스테크 4채널 이물광원 사용 RPS-50V5-4
 
 const int M2_FF_MODULE = 200200;		//240726 박동찬, 김세영 선임, 사각도포 얇은 제품 사격형 도포 차트 9개 LGIT_GRABBER_20240715_01_v2.2.3  epoxy무게 = 0.035
 
-static int LGIT_MODEL_INDEX = M_THUNDER_CHEETAH;
+static int LGIT_MODEL_INDEX = M_THUNDER_CHEETAH;		//피규어설비에서 46도 (aa , eol) , 83도 (eol만 aa는 1호기)
 //----------------------------------------------------------------------------------------------------------------------------------- 
-#define					VER_STR		"250327_2"				//4채널 이물광원 프로토콜 추가 RPS-50V5-4
+#define					VER_STR		"250409_1"
+//#define					VER_STR		"250327_2"				//4채널 이물광원 프로토콜 추가 RPS-50V5-4
 //#define					VER_STR		"250327_1"			//git 이동
 
 //#define					VER_STR		"250212_2"			//VC.db 이거때문??

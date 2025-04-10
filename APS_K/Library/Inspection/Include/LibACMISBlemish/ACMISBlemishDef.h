@@ -297,61 +297,6 @@ protected:
 	std::string m_strLogData;
 };
 
-template<typename T, typename DataType=BYTE, typename AREA=EImageRegion>
-class CACMISImage
-{
-protected:
-#if (_MSC_VER >= 1700)	// Visual C++ 11
-	std::shared_ptr<IBlemishMethod<T, DataType, AREA>> m_pMethod;
-	CACMISImage() {}
-	CACMISImage(const CACMISImage&) {}
-#else
-	IBlemishMethod<T, DataType, AREA>* m_pMethod;
-	CACMISImage() : m_pMethod(NULL) {}
-	CACMISImage(const CACMISImage&) { delete m_pMethod; }
-#endif
-
-public:
-	virtual ~CACMISImage() {}
-
-	inline int Inspect(const DataType* pBuffer, int nWidth, int nHeight, T& _Spec)
-	{
-		return m_pMethod->Inspect(pBuffer, nWidth, nHeight, _Spec);
-	}
-	inline int GetSingleDefectCount() const
-	{
-		return m_pMethod->GetSingleDefectCount();
-	}
-	inline int GetDefectCount(AREA pos) const
-	{
-		return m_pMethod->GetDefectCount(pos);
-	}
-	inline const TDefectResult* GetDefectResult(AREA pos, int nIndex) const
-	{
-		return m_pMethod->GetDefectResult(pos, nIndex);
-	}
-	inline const TDefectResult* GetMaxDefectResult(AREA pos) const
-	{
-		return m_pMethod->GetMaxDefectResult(pos);
-	}
-	inline int GetDefectBlobCount() const
-	{
-		return m_pMethod->GetDefectBlobCount();
-	}
-	inline const RECT* GetDefectBlobRect(int nIndex) const
-	{
-		return m_pMethod->GetDefectBlobRect(nIndex);
-	}
-	inline const char* GetLogHeader() const
-	{
-		return m_pMethod->GetLogHeader();
-	}
-	inline const char* GetLogData() const
-	{
-		return m_pMethod->GetLogData();
-	}
-};
-
 //////////////////////////////////////////////////////////////////////////
 // Blemish의 입력영상을 센서 입력 영상 그대로 사용하기 위해 Class 내 DataFormat 추가
 template<typename T, typename DataType = BYTE, typename AREA = EImageRegion, typename DataFormat = EDATAFORMAT, typename OutMode = EOUTMODE, typename SensorType = ESENSORTYPE, typename DemosaicMethod = EDEMOSAICMETHOD>
@@ -590,4 +535,3 @@ public:
 		return m_pMethod->GetCertificationResult();
 	}
 };
-

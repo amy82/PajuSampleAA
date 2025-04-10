@@ -66,4 +66,7 @@ public:
 	afx_msg void OnBnClickedBtnInspSensorId();
 	afx_msg void OnBnClickedBtnInspFwVersion();
 	afx_msg void OnBnClickedBtnInspOtpVerify();
+	afx_msg void OnBnClickedBtnInspLensShading();
+	afx_msg void OnBnClickedBtnInspIlluminationOc();
+	afx_msg void OnBnClickedBtnInspBlackMaskEdge();
 };

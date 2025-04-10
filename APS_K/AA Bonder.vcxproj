@@ -145,21 +145,22 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)\Library\Inspection\Include\LibACMISBlemish;$(ProjectDir)\Library\InspectionK\Include\LibACMISCertification;$(ProjectDir)\Library\Inspection\Include\LibACMISCodec;$(ProjectDir)\Library\Inspection\Include\LibACMISCommon;$(ProjectDir)\Library\Inspection\Include\LibACMISDefect;$(ProjectDir)\Library\Inspection\Include\LibACMISEtc;$(ProjectDir)\Library\Inspection\Include\LibACMISImage;$(ProjectDir)\Library\Inspection\Include\LibACMISNoise;$(ProjectDir)\Library\InspectionK\Include\LibACMISOpticalCenter;$(ProjectDir)\Library\InspectionK\Include\LibACMISParallelInspection;$(ProjectDir)\Library\InspectionK\Include\LibACMISResolution;$(ProjectDir)\Library\InspectionK\Include\LibACMISShading;$(ProjectDir)\Library\InspectionK\Include\LibACMISSoftISP;$(ProjectDir)\Library\InspectionK\Include\LibACMISSoftISPBasic;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CallingConvention>Cdecl</CallingConvention>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <MinimalRebuild>false</MinimalRebuild>
+      <MultiProcessorCompilation>
+      </MultiProcessorCompilation>
+      <MinimalRebuild>true</MinimalRebuild>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <AdditionalOptions>-Zm200 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opencv_core346d.lib;opencv_highgui346d.lib;opencv_imgproc346d.lib;opencv_calib3d346d.lib;opencv_flann346d.lib;opencv_features2d346d.lib;opencv_imgcodecs346d.lib;EECvtColor.lib;LibACMISBlemish.lib;LibACMISCertification.lib;LibACMISCodec.lib;LibACMISDefect.lib;LibACMISEtc.lib;LibACMISImage.lib;LibACMISNoise.lib;LibACMISOpticalCenter.lib;LibACMISParallelInspection.lib;LibACMISResolution.lib;LibACMISShading.lib;LibACMISSoftISP.lib;LibACMISSoftISPBasic.lib;GrabberDLL.lib;AXL.lib;visa64.lib</AdditionalDependencies>
+      <AdditionalDependencies>opencv_core346d.lib;opencv_highgui346d.lib;opencv_imgproc346d.lib;opencv_calib3d346d.lib;opencv_flann346d.lib;opencv_features2d346d.lib;opencv_imgcodecs346d.lib;EECvtColor.lib;LibACMISBlemish.lib;LibACMISCertification.lib;LibACMISNoise.lib;LibACMISCodec.lib;LibACMISDefect.lib;LibACMISEtc.lib;LibACMISImage.lib;LibACMISOpticalCenter.lib;LibACMISParallelInspection.lib;LibACMISResolution.lib;LibACMISShading.lib;LibACMISSoftISP.lib;LibACMISSoftISPBasic.lib;GrabberDLL.lib;AXL.lib;visa64.lib</AdditionalDependencies>
       <ShowProgress>NotSet</ShowProgress>
       <AdditionalLibraryDirectories>$(SolutionDir)PRI_INSP;%(AdditionalLibraryDirectories);C:\opencv346\install\x64\vc14\lib;$(SolutionDir)Library\Utility\ximg</AdditionalLibraryDirectories>
       <LargeAddressAware>true</LargeAddressAware>
