@@ -331,6 +331,7 @@ public:
 	//! <---------------------------------------------------------------------------------------------------------------------------
 	//Head Model
 	bool CheetahModeChange(int mode);
+	bool Cheetah_Light_Change(int Channel , int targetValue, int Color);
 
 	bool OtpWrite_Head_Fn();		//AA
 	bool SensorIdRead_Head_Fn();	//AA + Eol

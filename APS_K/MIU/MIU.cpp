@@ -619,6 +619,55 @@ unsigned short ChecksumCalc(unsigned short* arr, unsigned int size)
 }
 
 
+bool CMIU::Cheetah_Light_Change(int Channel, int targetValue, int Color)
+{
+	int targetColor = targetValue;
+
+	OcLight_Dms50v52.targetColor.red = 0;
+	OcLight_Dms50v52.targetColor.green = 0;
+	OcLight_Dms50v52.targetColor.blue = 0;
+	OcLight_Dms50v52.currentColor.red = 0;
+	OcLight_Dms50v52.currentColor.green = 0;
+	OcLight_Dms50v52.currentColor.blue = 0;
+
+	vision.MilBufferUpdate();
+
+	int width = MbufInquire(vision.MilGrabImageChild[4], M_PITCH, M_NULL);
+
+	//p.x = m_ClickP.x * gMIUDevice.nWidth / SMALL_CCD_SIZE_X;
+	//p.y = m_ClickP.y * gMIUDevice.nHeight / SMALL_CCD_SIZE_Y;
+
+
+	//int pos = p.y * width + p.x;
+	int pos = (gMIUDevice.nHeight /2) * width + (gMIUDevice.nWidth / 2);
+
+	//sprintf_s(szTmp, "(%d, %d) ==> RGB %d, %d, %d", p.x, p.y, vision.MilImageBuffer[3][pos], vision.MilImageBuffer[4][pos], vision.MilImageBuffer[5][pos]);
+	//currentColor = 영상에서 값 찍어서
+
+	if (Color == R_COLOR)
+	{
+		//0 = R
+		OcLight_Dms50v52.targetColor.red = targetValue;
+	}
+	else if (Color == G_COLOR)
+	{
+		//1 = G
+		OcLight_Dms50v52.targetColor.green = targetValue;
+	}
+	else if (Color == B_COLOR)
+	{
+		//2 = B
+		OcLight_Dms50v52.targetColor.blue = targetValue;
+	}
+
+	
+	
+
+	OcLight_Dms50v52.DPS_SetChannel_Value(Channel);	//LIGHT_RMS_D56
+
+
+	return true;
+}
 
 bool CMIU::OtpWrite_Head_Fn()
 {
@@ -968,7 +1017,7 @@ bool CMIU::CheetahModeChange(int mode)
 		0x36c0 , 0x36c1, 0x36c2,	//SP1 INTEGRATION TIME TO 11 MS
 		0x36c4, 0x36c5, 0x36c6		//SP2 INTEGRATION TIME TO 11 MS
 	};
-
+	unsigned short Common_Second_writeAddr[2] = { 0x2ade, 0x2ae0 };
 	unsigned short Common_End_writeAddrArr[13] = 
 	{ 
 		0x2f51,							// DENOISE OFF
@@ -986,11 +1035,12 @@ bool CMIU::CheetahModeChange(int mode)
 	memset(Common_Second_writeData, 0x00, sizeof(Common_Second_writeData));
 	memset(Common_End_writeData, 0x00, sizeof(Common_End_writeData));
 
+	//A_MODEL = 0, B_MODEL, C_MODEL, D_MODEL, E_MODEL, F_MODEL, G_MODEL, H_MODEL, I_MODEL
 	TCHAR szPos[SIZE_OF_1K];
 	int writeDelay = 20;
 	switch (mode)
 	{
-	case  0:		//A
+	case  A_MODEL:		//A
 		Common_First_writeData[0] = 0xfa;
 		Common_First_writeData[1] = 0x03;
 		Common_First_writeData[2] = 0x00;
@@ -1011,6 +1061,17 @@ bool CMIU::CheetahModeChange(int mode)
 		//
 		Common_Second_writeData[0] = 0x00;
 		Common_Second_writeData[1] = 0x00;
+		for (i = 0; i < 2; i++)
+		{
+			Sleep(writeDelay);
+			errorCode = m_pBoard->WriteI2CBurst(SlaveAddr, Common_Second_writeAddr[i], 2, Common_Second_writeData + i, 1);
+			if (errorCode)
+			{
+				_stprintf_s(szPos, SIZE_OF_1K, _T("#A Addr:%0x WriteI2CBurst errorCode:%d"), Common_Second_writeAddr[i], errorCode);
+				theApp.MainDlg->putListLog(szPos);
+				return false;
+			}
+		}
 		//
 		Common_End_writeData[0] = 0x00;
 		Common_End_writeData[1] = 0x01;
@@ -1037,7 +1098,7 @@ bool CMIU::CheetahModeChange(int mode)
 			}
 		}
 		break;
-	case  1:		//B
+	case  B_MODEL:		//B
 		Common_First_writeData[0] = 0xfa;
 		Common_First_writeData[1] = 0x03;
 		Common_First_writeData[2] = 0x00;
@@ -1058,6 +1119,17 @@ bool CMIU::CheetahModeChange(int mode)
 		//
 		Common_Second_writeData[0] = 0x00;
 		Common_Second_writeData[1] = 0x02;
+		for (i = 0; i < 2; i++)
+		{
+			Sleep(writeDelay);
+			errorCode = m_pBoard->WriteI2CBurst(SlaveAddr, Common_Second_writeAddr[i], 2, Common_Second_writeData + i, 1);
+			if (errorCode)
+			{
+				_stprintf_s(szPos, SIZE_OF_1K, _T("#B Addr:%0x WriteI2CBurst errorCode:%d"), Common_Second_writeAddr[i], errorCode);
+				theApp.MainDlg->putListLog(szPos);
+				return false;
+			}
+		}
 		//
 		Common_End_writeData[0] = 0x00;
 		Common_End_writeData[1] = 0x01;
@@ -1084,7 +1156,7 @@ bool CMIU::CheetahModeChange(int mode)
 			}
 		}
 		break;
-	case  2:		//C
+	case  C_MODEL:		//C
 		Common_First_writeData[0] = 0xfa;
 		Common_First_writeData[1] = 0x03;
 		Common_First_writeData[2] = 0x00;
@@ -1105,6 +1177,17 @@ bool CMIU::CheetahModeChange(int mode)
 
 		//
 		Common_Second_writeData[0] = 0x1;//--
+		for (i = 0; i < 1; i++)
+		{
+			Sleep(writeDelay);
+			errorCode = m_pBoard->WriteI2CBurst(SlaveAddr, Common_Second_writeAddr[i], 2, Common_Second_writeData + i, 1);
+			if (errorCode)
+			{
+				_stprintf_s(szPos, SIZE_OF_1K, _T("#C Addr:%0x WriteI2CBurst errorCode:%d"), Common_Second_writeAddr[i], errorCode);
+				theApp.MainDlg->putListLog(szPos);
+				return false;
+			}
+		}
 		//
 		Common_End_writeData[0] = 0x00;
 		Common_End_writeData[1] = 0x01;
@@ -1131,7 +1214,7 @@ bool CMIU::CheetahModeChange(int mode)
 			}
 		}
 		break;
-	case  3:		//D
+	case  D_MODEL:		//D
 		Common_First_writeData[0] = 0x6d;
 		Common_First_writeData[1] = 0x05;
 		Common_First_writeData[2] = 0x00;
@@ -1152,6 +1235,17 @@ bool CMIU::CheetahModeChange(int mode)
 		//
 		Common_Second_writeData[0] = 0x00;
 		Common_Second_writeData[1] = 0x00;
+		for (i = 0; i < 2; i++)
+		{
+			Sleep(writeDelay);
+			errorCode = m_pBoard->WriteI2CBurst(SlaveAddr, Common_Second_writeAddr[i], 2, Common_Second_writeData + i, 1);
+			if (errorCode)
+			{
+				_stprintf_s(szPos, SIZE_OF_1K, _T("#D Addr:%0x WriteI2CBurst errorCode:%d"), Common_Second_writeAddr[i], errorCode);
+				theApp.MainDlg->putListLog(szPos);
+				return false;
+			}
+		}
 		//
 		//
 		Common_End_writeData[0] = 0x00;
@@ -1179,7 +1273,7 @@ bool CMIU::CheetahModeChange(int mode)
 			}
 		}
 		break;
-	case  4:		//E
+	case  E_MODEL:		//E
 		Common_First_writeData[0] = 0x6d;
 		Common_First_writeData[1] = 0x05;
 		Common_First_writeData[2] = 0x00;
@@ -1200,6 +1294,17 @@ bool CMIU::CheetahModeChange(int mode)
 		//
 		Common_Second_writeData[0] = 0x00;
 		Common_Second_writeData[1] = 0x02;
+		for (i = 0; i < 2; i++)
+		{
+			Sleep(writeDelay);
+			errorCode = m_pBoard->WriteI2CBurst(SlaveAddr, Common_Second_writeAddr[i], 2, Common_Second_writeData + i, 1);
+			if (errorCode)
+			{
+				_stprintf_s(szPos, SIZE_OF_1K, _T("#E Addr:%0x WriteI2CBurst errorCode:%d"), Common_Second_writeAddr[i], errorCode);
+				theApp.MainDlg->putListLog(szPos);
+				return false;
+			}
+		}
 		//
 		Common_End_writeData[0] = 0x00;
 		Common_End_writeData[1] = 0x01;
@@ -1226,7 +1331,7 @@ bool CMIU::CheetahModeChange(int mode)
 			}
 		}
 		break;
-	case  5:		//F
+	case  F_MODEL:		//F
 		Common_First_writeData[0] = 0x6d;
 		Common_First_writeData[1] = 0x05;
 		Common_First_writeData[2] = 0x00;
@@ -1247,6 +1352,18 @@ bool CMIU::CheetahModeChange(int mode)
 		//
 		Common_Second_writeData[0] = 0x00;
 		Common_Second_writeData[1] = 0x01;
+
+		for (i = 0; i < 2; i++)
+		{
+			Sleep(writeDelay);
+			errorCode = m_pBoard->WriteI2CBurst(SlaveAddr, Common_Second_writeAddr[i], 2, Common_Second_writeData + i, 1);
+			if (errorCode)
+			{
+				_stprintf_s(szPos, SIZE_OF_1K, _T("#F Addr:%0x WriteI2CBurst errorCode:%d"), Common_Second_writeAddr[i], errorCode);
+				theApp.MainDlg->putListLog(szPos);
+				return false;
+			}
+		}
 		//
 		Common_End_writeData[0] = 0x00;
 		Common_End_writeData[1] = 0x01;
@@ -1273,7 +1390,7 @@ bool CMIU::CheetahModeChange(int mode)
 			}
 		}
 		break;
-	case  6:		//G
+	case  G_MODEL:		//G
 		Common_First_writeData[0] = 0x6d;
 		Common_First_writeData[1] = 0x05;
 		Common_First_writeData[2] = 0x00;
@@ -1294,6 +1411,17 @@ bool CMIU::CheetahModeChange(int mode)
 		//
 		Common_Second_writeData[0] = 0x00;
 		Common_Second_writeData[1] = 0x03;
+		for (i = 0; i < 2; i++)
+		{
+			Sleep(writeDelay);
+			errorCode = m_pBoard->WriteI2CBurst(SlaveAddr, Common_Second_writeAddr[i], 2, Common_Second_writeData + i, 1);
+			if (errorCode)
+			{
+				_stprintf_s(szPos, SIZE_OF_1K, _T("#G Addr:%0x WriteI2CBurst errorCode:%d"), Common_Second_writeAddr[i], errorCode);
+				theApp.MainDlg->putListLog(szPos);
+				return false;
+			}
+		}
 		//
 		Common_End_writeData[0] = 0x00;
 		Common_End_writeData[1] = 0x01;
@@ -1320,7 +1448,7 @@ bool CMIU::CheetahModeChange(int mode)
 			}
 		}
 		break;
-	case  7:		//H
+	case  H_MODEL:		//H
 		Common_First_writeData[0] = 0x6d;
 		Common_First_writeData[1] = 0x05;
 		Common_First_writeData[2] = 0x00;
@@ -1341,6 +1469,18 @@ bool CMIU::CheetahModeChange(int mode)
 		//
 		Common_Second_writeData[0] = 0x00;
 		Common_Second_writeData[1] = 0x00;
+		
+		for (i = 0; i < 2; i++)
+		{
+			Sleep(writeDelay);
+			errorCode = m_pBoard->WriteI2CBurst(SlaveAddr, Common_Second_writeAddr[i], 2, Common_Second_writeData + i, 1);
+			if (errorCode)
+			{
+				_stprintf_s(szPos, SIZE_OF_1K, _T("#H Addr:%0x WriteI2CBurst errorCode:%d"), Common_Second_writeAddr[i], errorCode);
+				theApp.MainDlg->putListLog(szPos);
+				return false;
+			}
+		}
 		//
 		Common_End_writeData[0] = 0x00;
 		Common_End_writeData[1] = 0x00;
@@ -1367,7 +1507,7 @@ bool CMIU::CheetahModeChange(int mode)
 			}
 		}
 		break;
-	case  8:		//I
+	case  I_MODEL:		//I
 		Common_First_writeData[0] = 0x6d;
 		Common_First_writeData[1] = 0x05;
 		Common_First_writeData[2] = 0x00;
@@ -1388,6 +1528,18 @@ bool CMIU::CheetahModeChange(int mode)
 		//
 		Common_Second_writeData[0] = 0x00;
 		Common_Second_writeData[1] = 0x02;
+
+		for (i = 0; i < 2; i++)
+		{
+			Sleep(writeDelay);
+			errorCode = m_pBoard->WriteI2CBurst(SlaveAddr, Common_Second_writeAddr[i], 2, Common_Second_writeData + i, 1);
+			if (errorCode)
+			{
+				_stprintf_s(szPos, SIZE_OF_1K, _T("#I Addr:%0x WriteI2CBurst errorCode:%d"), Common_Second_writeAddr[i], errorCode);
+				theApp.MainDlg->putListLog(szPos);
+				return false;
+			}
+		}
 		//
 		Common_End_writeData[0] = 0x00;
 		Common_End_writeData[1] = 0x00;

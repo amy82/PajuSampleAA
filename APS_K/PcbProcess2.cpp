@@ -3652,18 +3652,25 @@ int	CPcbProcess2::Complete_FinalInsp(int iStep)
 		break;
 	case 122580:
 		//Dome 이물 광원에서 검사하는 항목
-		//Lens Shading
-		//Blemish
-		//RI
-		//Black Mask Edge Test
-		//Illumination Center
-		//SNR
-		//R/G , B/G
-		//Defect
-		//Dark Noise
+		//Lens Shading - 7장 이미지 4 + 3
+		//-----------------------------------------------------------------
+		//Blemish - 1장 이미지 A Mode
+		//RI - 1장 이미지 A Mode
+		//Black Mask Edge Test - 1장 이미지 A Mode
+		//Illumination Center - 1장 이미지 A Mode
+		//SNR - 1장 이미지 A Mode
+		//R/G , B/G - 1장 이미지 A Mode
+		//-----------------------------------------------------------------
+		//Defect - 9장 이미지
+		//Dark Noise - 총 60장 30(H) + 30(I)
 		iRtnFunction = 122590; 
 		break;
 	case 122590:
+		MIU.CheetahModeChange(A_MODEL);		//모드 변경
+		MIU.Cheetah_Light_Change(LIGHT_RMS_D56, 204, G_COLOR);
+		
+		
+		////OcLight_Dms50v52.DPS_Light_OnOffLevel(LIGHT_RMS_D56, true, model.m_iLedValue[LEDDATA_D6500]);
 		iRtnFunction = 122600;
 		break;
 	case 122600:
@@ -3751,7 +3758,7 @@ int	CPcbProcess2::Complete_FinalInsp(int iStep)
 		break;
 	case 123500:
 		
-		LightControl.ctrlLedVolume(LIGHT_OC, model.m_iLedValue[LEDDATA_STAIN]);
+		LightControl.ctrlLedVolume(LIGHT_OC, model.m_iLedValue[LEDDATA_D6500]);
 
 		iRtnFunction = 123600;
 		break;
@@ -4378,7 +4385,7 @@ int	CPcbProcess2::func_MandoFinalSFR(int iStep)
 			iRtnFunction = 124500;
 			break;
 		}
-		LightControl.ctrlLedVolume(LIGHT_OC, model.m_iLedValue[LEDDATA_STAIN]);
+		LightControl.ctrlLedVolume(LIGHT_OC, model.m_iLedValue[LEDDATA_D6500]);
 
 		iRtnFunction = 123055;
 

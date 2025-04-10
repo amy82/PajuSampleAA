@@ -27,8 +27,8 @@ IMPLEMENT_DYNAMIC(CLightDlg, CDialogEx)
 	m_BchartData_Sel_Index = LEDDATA_TOP1_CHART;
 	m_AlignData_Sel_Index = LEDDATA_SENSOR;
 	//
-	m_OcData_Sel_Index = LEDDATA_OC;//LEDDATA_STAIN
-	m_Oc_Sel_Index = LIGHT_OC;// LIGHT_OC_6500K;
+	m_OcData_Sel_Index = LEDDATA_OC;
+	m_Oc_Sel_Index = LIGHT_RMS_D56;
 }
 
 CLightDlg::~CLightDlg()
@@ -206,24 +206,24 @@ void CLightDlg::OnClickedOc(UINT nID)
 	 {
 		case IDC_BTN_OC_6500K_LED:
 			 m_bStainOc.m_iStateBtn = 1;
-			 m_Oc_Sel_Index = LIGHT_OC;
-			 m_OcData_Sel_Index = LEDDATA_STAIN;
+			 m_Oc_Sel_Index = LIGHT_RMS_D56;
+			 m_OcData_Sel_Index = LEDDATA_D6500;
 			break;
 		case IDC_BTN_OC_6500K_LED2:
 			m_bStainOc2.m_iStateBtn = 1;
-			m_Oc_Sel_Index = LIGHT_RMS_OC2;
+			m_Oc_Sel_Index = LIGHT_RMS_BLUE;
 			//m_OcData_Sel_Index = LEDDATA_DEFECT;
-			m_OcData_Sel_Index = LEDDATA_STAIN2;
+			m_OcData_Sel_Index = LEDDATA_OC_BLUE;
 			break;
 		case IDC_BTN_OC_6500K_LED3:
 			m_bStainOc3.m_iStateBtn = 1;
-			m_Oc_Sel_Index = LIGHT_RMS_OC3;
-			m_OcData_Sel_Index = LEDDATA_STAIN3;
+			m_Oc_Sel_Index = LIGHT_RMS_GREEN;
+			m_OcData_Sel_Index = LEDDATA_OC_GREEN;
 			break;
 		case IDC_BTN_OC_6500K_LED4:
 			m_bStainOc4.m_iStateBtn = 1;
-			m_Oc_Sel_Index = LIGHT_RMS_OC4;
-			m_OcData_Sel_Index = LEDDATA_STAIN4;
+			m_Oc_Sel_Index = LIGHT_RMS_RED;
+			m_OcData_Sel_Index = LEDDATA_OC_RED;
 			break;
 
 
@@ -407,13 +407,10 @@ void CLightDlg::dispData_second(int channel)
 	CString tmpStr="";
 	if(Task.AutoFlag != 1)
 	{
-		if(channel == LIGHT_OC || channel == LIGHT_OC)
-		{
-			tmpStr.Format("%d",model.m_iLedValue[m_OcData_Sel_Index]);
-			GetDlgItem(IDC_EDIT_CAM2_LED)->SetWindowText(tmpStr);
+		tmpStr.Format("%d", model.m_iLedValue[m_OcData_Sel_Index]);
+		GetDlgItem(IDC_EDIT_CAM2_LED)->SetWindowText(tmpStr);
 
-			m_sliderCam2Led.SetPos(model.m_iLedValue[m_OcData_Sel_Index]);
-		}
+		m_sliderCam2Led.SetPos(model.m_iLedValue[m_OcData_Sel_Index]);
 		//
 	}else
 	{
