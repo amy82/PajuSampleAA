@@ -57,7 +57,7 @@ bool CVision::initVB()
 	}
 
 
-	MbufAlloc2d(MilSystem, CAM_SIZE_X, CAM_SIZE_Y, M_DEF_IMAGE_TYPE, lBufferAttributes[0], &MilGrabImage[0]);
+	MbufAlloc2d(MilSystem, CAM_SIZE_X, CAM_SIZE_Y, (8 + M_UNSIGNED), lBufferAttributes[0], &MilGrabImage[0]);
 
 	if (MilGrabImage[0])
 	{
@@ -75,7 +75,7 @@ bool CVision::initVB()
 		}
 	}
 	
-	MbufAlloc2d(MilSystem, CAM_SIZE_X, CAM_SIZE_Y, M_DEF_IMAGE_TYPE, lBufferAttributes[1], &MilProcImage[0]);
+	MbufAlloc2d(MilSystem, CAM_SIZE_X, CAM_SIZE_Y, (8 + M_UNSIGNED), lBufferAttributes[1], &MilProcImage[0]);
 	if (MilProcImage[0])
 	{
 		MbufClear(MilProcImage[0], 0);
@@ -102,8 +102,8 @@ bool CVision::initVB()
 	for(int ccd=0; ccd<2; ccd++)
 	{
 		/* 디스플레이용 버퍼 Alloc */
-		//MbufAlloc2d(MilSystem, SMALL_CCD_SIZE_X, SMALL_CCD_SIZE_Y, M_DEF_IMAGE_TYPE, lBufferAttributes[1], &MilSmallImage[ccd]);
-		MbufAllocColor(MilSystem, 3, SMALL_CCD_SIZE_X, SMALL_CCD_SIZE_Y, M_DEF_IMAGE_TYPE, lBufferAttributes[1], &MilSmallImage[ccd]);
+		//MbufAlloc2d(MilSystem, SMALL_CCD_SIZE_X, SMALL_CCD_SIZE_Y, (8 + M_UNSIGNED), lBufferAttributes[1], &MilSmallImage[ccd]);
+		MbufAllocColor(MilSystem, 3, SMALL_CCD_SIZE_X, SMALL_CCD_SIZE_Y, (8 + M_UNSIGNED), lBufferAttributes[1], &MilSmallImage[ccd]);
 		if (MilSmallImage[ccd])
 		{
 			MbufClear(MilSmallImage[ccd], 0);
@@ -127,7 +127,7 @@ bool CVision::initVB()
 
 	for(index=0; index<MAX_BUFFER_SIZE; index++)
 	{
-		MbufAlloc2d(MilSystem, CAM_SIZE_X, CAM_SIZE_Y, M_DEF_IMAGE_TYPE, lBufferAttributes[0], &MilGrabBufferList[index]);
+		MbufAlloc2d(MilSystem, CAM_SIZE_X, CAM_SIZE_Y, (8 + M_UNSIGNED), lBufferAttributes[0], &MilGrabBufferList[index]);
 		if (MilGrabBufferList[index])
 			MbufClear(MilGrabBufferList[index], 0);
 		else
@@ -138,7 +138,7 @@ bool CVision::initVB()
 	}
 
 
-	MbufAlloc2d(MilSystem, SMALL_CAM_SIZE_X, SMALL_CAM_SIZE_Y, M_DEF_IMAGE_TYPE, lBufferAttributes[0], &MilSmallShadeImage);
+	MbufAlloc2d(MilSystem, SMALL_CAM_SIZE_X, SMALL_CAM_SIZE_Y, (8 + M_UNSIGNED), lBufferAttributes[0], &MilSmallShadeImage);
 	if (MilSmallShadeImage)
 		MbufClear(MilSmallShadeImage, 0);
 	else
@@ -152,7 +152,7 @@ bool CVision::initVB()
 	{
 		for (int j=0 ; j<2; j++)
 		{
-			MbufAlloc2d(MilSystem, CAM_SIZE_X, CAM_SIZE_Y, M_DEF_IMAGE_TYPE, lBufferAttributes[1], &MilMarkImage[i][j]);
+			MbufAlloc2d(MilSystem, CAM_SIZE_X, CAM_SIZE_Y, (8 + M_UNSIGNED), lBufferAttributes[1], &MilMarkImage[i][j]);
 
 			if (MilMarkImage[i][j])	MbufClear(MilMarkImage[i][j], 0);
 			MpatAllocResult(MilSystem, 1L, &PatResult[i][j]);
@@ -482,8 +482,8 @@ void CVision::initMarkDisplay(int iSizeX, int iSizeY)
 		{
 			MilMarkDisplay[i][j] = M_NULL;
 
-			MbufAllocColor(MilSystem, 1L, CAM_SIZE_X, CAM_SIZE_Y, M_DEF_IMAGE_TYPE, BufferAttributes, &MilMarkImage[i][j]);
-			MbufAllocColor(MilSystem, 1L, iSizeX, iSizeY, M_DEF_IMAGE_TYPE, BufferAttributes, &MilMarkSmallImage[i][j]);
+			MbufAllocColor(MilSystem, 1L, CAM_SIZE_X, CAM_SIZE_Y, (8 + M_UNSIGNED), BufferAttributes, &MilMarkImage[i][j]);
+			MbufAllocColor(MilSystem, 1L, iSizeX, iSizeY, (8 + M_UNSIGNED), BufferAttributes, &MilMarkSmallImage[i][j]);
 
 			if (MilMarkImage[i][j])	MbufClear(MilMarkImage[i][j], 0);
 
@@ -508,7 +508,7 @@ void CVision::initMarkDisplay(int iSizeX, int iSizeY)
 		}	
 	}
 
-	MbufAllocColor(MilSystem, 1L, CAM_SIZE_X, CAM_SIZE_Y, M_DEF_IMAGE_TYPE, BufferAttributes, &MilTempImage);
+	MbufAllocColor(MilSystem, 1L, CAM_SIZE_X, CAM_SIZE_Y, (8 + M_UNSIGNED), BufferAttributes, &MilTempImage);
 	if (MilTempImage)	MbufClear(MilTempImage, 0);
 }
 
@@ -524,7 +524,7 @@ void CVision::InitMarkSetDisplay(int iSizeX, int iSizeY)
 
 	long BufferAttributes = M_IMAGE+M_DISP+M_PROC;
 
-	MbufAlloc2d(MilSystem, iSizeX, iSizeY, M_DEF_IMAGE_TYPE, BufferAttributes, &MilMarkSetImage);
+	MbufAlloc2d(MilSystem, iSizeX, iSizeY, (8 + M_UNSIGNED), BufferAttributes, &MilMarkSetImage);
 
 	if (MilMarkSetImage)
 	{
@@ -542,7 +542,7 @@ void CVision::InitBuffer_AutoDisplay(int iSizeX, int iSizeY)
 	long BufferAttributes = M_IMAGE+M_DISP+M_PROC;
 
 	/* 광축 */
-	MbufAllocColor(MilSystem, 3L, iSizeX, iSizeY, M_DEF_IMAGE_TYPE, BufferAttributes, &MilOptImage);
+	MbufAllocColor(MilSystem, 3L, iSizeX, iSizeY, (8 + M_UNSIGNED), BufferAttributes, &MilOptImage);
 	if (MilOptImage)
 	{
 		MbufClear(MilOptImage, 0);
@@ -554,7 +554,7 @@ void CVision::InitBuffer_AutoDisplay(int iSizeX, int iSizeY)
 	}
 
 	/* 이물 */
-	MbufAllocColor(MilSystem, 3L, iSizeX, iSizeY, M_DEF_IMAGE_TYPE, BufferAttributes, &MilDefectImage);
+	MbufAllocColor(MilSystem, 3L, iSizeX, iSizeY, (8 + M_UNSIGNED), BufferAttributes, &MilDefectImage);
 	if (MilDefectImage)
 	{
 		MbufClear(MilDefectImage, 0);
@@ -564,7 +564,7 @@ void CVision::InitBuffer_AutoDisplay(int iSizeX, int iSizeY)
 
 		MilDefectDisplayImage = MdispAlloc(MilSystem, M_DEFAULT, M_DISPLAY_SETUP, M_DEFAULT, M_NULL);
 	}
-	MbufAllocColor(MilSystem, 3L, iSizeX, iSizeY, M_DEF_IMAGE_TYPE, BufferAttributes, &MilSaveDisplayDefectImage);
+	MbufAllocColor(MilSystem, 3L, iSizeX, iSizeY, (8 + M_UNSIGNED), BufferAttributes, &MilSaveDisplayDefectImage);
 	if (MilSaveDisplayDefectImage)
 	{
 		MbufClear(MilSaveDisplayDefectImage, 0);
@@ -2072,7 +2072,7 @@ bool CVision::MiuBufferAlloc(int fi_Width, int fi_Height)
 	m_dReduceFactorY = (double)SMALL_CCD_SIZE_Y / fi_Height;
 
 
-	MbufAllocColor(MilSystem, 3, fi_Width, fi_Height, M_DEF_IMAGE_TYPE, lBufferAttributes, &MilGrabImage[1]);
+	MbufAllocColor(MilSystem, 3, fi_Width, fi_Height, (8 + M_UNSIGNED), lBufferAttributes, &MilGrabImage[1]);
 	if (MilGrabImage[1])
 	{
 		MbufClear(MilGrabImage[1], 0);
@@ -2102,7 +2102,7 @@ bool CVision::MiuBufferAlloc(int fi_Width, int fi_Height)
 	}
 
 
-	MbufAllocColor(MilSystem, 3, fi_Width, fi_Height, M_DEF_IMAGE_TYPE, lBufferAttributes, &MilProcImage[1]);
+	MbufAllocColor(MilSystem, 3, fi_Width, fi_Height, (8 + M_UNSIGNED), lBufferAttributes, &MilProcImage[1]);
 	if (MilProcImage[1])
 	{
 		MbufClear(MilProcImage[1], 0);
@@ -2157,7 +2157,7 @@ bool CVision::MiuBufferAlloc(int fi_Width, int fi_Height)
 	}
 
 
-	//MbufAllocColor(MilSystem, 1, fi_Width, fi_Height, M_DEF_IMAGE_TYPE, lBufferAttributes, &MilShadeImage);
+	//MbufAllocColor(MilSystem, 1, fi_Width, fi_Height, (8 + M_UNSIGNED), lBufferAttributes, &MilShadeImage);
 	//if (MilShadeImage)
 	//{
 	//	MbufClear(MilShadeImage, 0);

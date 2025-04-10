@@ -2238,7 +2238,11 @@ BOOL CAABonderDlg::OnInitDialog()
 	putListLog(" [INFO] LENS AA");
 #endif
 	
-
+	if(LGIT_MODEL_INDEX == M_THUNDER_CHEETAH)
+	{
+		//피규어 전용 홀더 제작 버튼 숨기기
+		m_bProHolderBondingCheck.ShowWindow(SW_HIDE);
+	}
 	m_bBarcodeConnect = false;
 	Task.bSfrLogView = true;
 	logStr.Empty();

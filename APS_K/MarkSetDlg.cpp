@@ -102,8 +102,8 @@ BOOL CMarkSetDlg::OnInitDialog()
 		MpatInquire(vision.PatModel[m_iMarkType][m_iMarkNo], M_CENTER_Y, &m_Center.y);
 	#endif
 
-		//MbufAllocColor(vision.MilSystem, 1, m_iSizeX, m_iSizeY, M_DEF_IMAGE_TYPE, M_IMAGE+M_DISP,&vision.MilMask);
-		MbufAllocColor(vision.MilSystem, 1, m_iSizeX, m_iSizeY, M_DEF_IMAGE_TYPE, M_IMAGE + M_DISP + M_PROC, &vision.MilMask);
+		//MbufAllocColor(vision.MilSystem, 1, m_iSizeX, m_iSizeY, (8 + M_UNSIGNED), M_IMAGE+M_DISP,&vision.MilMask);
+		MbufAllocColor(vision.MilSystem, 1, m_iSizeX, m_iSizeY, (8 + M_UNSIGNED), M_IMAGE + M_DISP + M_PROC, &vision.MilMask);
 		vision.hMaskBuf = GlobalAlloc( GMEM_FIXED | GMEM_ZEROINIT, m_iSizeX*m_iSizeY);
 		if (vision.hMaskBuf)
 		{

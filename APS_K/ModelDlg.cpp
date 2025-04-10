@@ -153,8 +153,8 @@ void CModelDlg::GrabImgLoad()
 	////MsysAlloc(M_SYSTEM_VGA, M_DEV0, M_COMPLETE, &vision.MilSystem);
 	////MsysInquire(vision.MilSystem, M_DIGITIZER_NUM, &NumberOfDigitizer);
 	//BufferAttributes =  M_IMAGE + M_PROC + M_DISP;;
-	//MbufAllocColor(vision.MilSystem, 3, wid, hei, M_DEF_IMAGE_TYPE, BufferAttributes, &MIL_TeachImage);
-	//MbufAllocColor(vision.MilSystem, 3,  wid, hei, M_DEF_IMAGE_TYPE, BufferAttributes, &MilResizeImage);
+	//MbufAllocColor(vision.MilSystem, 3, wid, hei, (8 + M_UNSIGNED), BufferAttributes, &MIL_TeachImage);
+	//MbufAllocColor(vision.MilSystem, 3,  wid, hei, (8 + M_UNSIGNED), BufferAttributes, &MilResizeImage);
 	//MbufClear(MIL_TeachImage,M_COLOR_BLACK);
 	//MbufClear(MilResizeImage, M_COLOR_BLACK);
 	//MbufLoad((char*)(const char*)FileName, MIL_TeachImage);

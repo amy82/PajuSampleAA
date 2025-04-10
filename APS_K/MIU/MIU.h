@@ -330,7 +330,7 @@ public:
 	void ISPmodeCheck();
 	//! <---------------------------------------------------------------------------------------------------------------------------
 	//Head Model
-
+	bool CheetahModeChange(int mode);
 
 	bool OtpWrite_Head_Fn();		//AA
 	bool SensorIdRead_Head_Fn();	//AA + Eol

@@ -2299,7 +2299,7 @@ void CCCDSFRDlg::OnBnClickedButtonRegistEdit()
 			MbufClear(vision.MilTempImage, 0);
 
 			vision.ChartCenterPatternImage = M_NULL;
-			MbufAlloc2d(vision.MilSystem,model.sfrElem.m_iSizeX[i], model.sfrElem.m_iSizeY[i], M_DEF_IMAGE_TYPE, M_IMAGE+M_DISP, &vision.MilTempImage);
+			MbufAlloc2d(vision.MilSystem,model.sfrElem.m_iSizeX[i], model.sfrElem.m_iSizeY[i], (8 + M_UNSIGNED), M_IMAGE+M_DISP, &vision.MilTempImage);
 			MpatAllocModel(vision.MilSystem, vision.MilGrabImageChild[3], m_rcFixedBox[i].left, m_rcFixedBox[i].top, model.sfrElem.m_iSizeX[i], model.sfrElem.m_iSizeY[i], M_NORMALIZED, &vision.ChartCenterPatternImage);
 			MpatDraw(M_DEFAULT, vision.ChartCenterPatternImage, vision.MilTempImage, M_DRAW_IMAGE, M_DEFAULT, M_DEFAULT);
 
@@ -2413,7 +2413,7 @@ void CCCDSFRDlg::OnBnClickedPatternRegist()
 		MpatFree(vision.MilTempImage);
 		MbufClear(vision.MilTempImage, 0);
 
-		MbufAlloc2d(vision.MilSystem, model.m_FieldPattern_Size[i].x, model.m_FieldPattern_Size[i].y, M_DEF_IMAGE_TYPE, M_IMAGE + M_DISP, &vision.MilTempImage);
+		MbufAlloc2d(vision.MilSystem, model.m_FieldPattern_Size[i].x, model.m_FieldPattern_Size[i].y, (8 + M_UNSIGNED), M_IMAGE + M_DISP, &vision.MilTempImage);
 		MpatAllocModel(vision.MilSystem, vision.MilGrabImageChild[3], model.m_FieldPattern_Pos[i].x, model.m_FieldPattern_Pos[i].y, model.m_FieldPattern_Size[i].x, model.m_FieldPattern_Size[i].y, M_NORMALIZED, &vision.FieldPatternImage[i]);
 		MpatDraw(M_DEFAULT, vision.FieldPatternImage[i], vision.MilTempImage, M_DRAW_IMAGE, M_DEFAULT, M_DEFAULT);
 		MpatSetCenter(vision.FieldPatternImage[i], model.m_FieldPattern_Size[i].x / 2, model.m_FieldPattern_Size[i].y / 2);
@@ -2435,7 +2435,7 @@ void CCCDSFRDlg::OnBnClickedPatternRegist()
 		vision.ChartCenterPatternImage = M_NULL;
 		//
 		//
-		MbufAlloc2d(vision.MilSystem,model.m_FieldPattern_Size[i].x, model.m_FieldPattern_Size[i].y, M_DEF_IMAGE_TYPE, M_IMAGE+M_DISP, &vision.MilTempImage);
+		MbufAlloc2d(vision.MilSystem,model.m_FieldPattern_Size[i].x, model.m_FieldPattern_Size[i].y, (8 + M_UNSIGNED), M_IMAGE+M_DISP, &vision.MilTempImage);
 		MpatAllocModel(vision.MilSystem, vision.MilGrabImageChild[3], model.m_FieldPattern_Pos[i].x, model.m_FieldPattern_Pos[i].y, model.m_FieldPattern_Size[i].x, model.m_FieldPattern_Size[i].y, M_NORMALIZED, &vision.ChartCenterPatternImage);
 		MpatDraw(M_DEFAULT, vision.ChartCenterPatternImage, vision.MilTempImage, M_DRAW_IMAGE, M_DEFAULT, M_DEFAULT);
 

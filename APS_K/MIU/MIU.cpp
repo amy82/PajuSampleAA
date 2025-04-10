@@ -955,6 +955,470 @@ bool CMIU::OtpWrite_Head_Fn()
 
 	return true;
 }
+bool CMIU::CheetahModeChange(int mode)
+{
+	int i = 0;
+	bool bRtn = true;
+	unsigned int errorCode = 0;
+	unsigned short SlaveAddr = 0x24;
+	// A ~ I ÃÑ 9°³
+
+	unsigned short Common_First_writeAddr[6] = 
+	{ 
+		0x36c0 , 0x36c1, 0x36c2,	//SP1 INTEGRATION TIME TO 11 MS
+		0x36c4, 0x36c5, 0x36c6		//SP2 INTEGRATION TIME TO 11 MS
+	};
+
+	unsigned short Common_End_writeAddrArr[13] = 
+	{ 
+		0x2f51,							// DENOISE OFF
+		0x2f50,							//SPOT PIXEL CORRECTION ON
+		0x2bd3,							// DARKCAL
+		0x0213, 0x0214,					//PEDASTAL
+		0x2ad0 ,0x2ad2, 0x2ad4, 0x2ad6, //SP1H1L SP2H AND SP2L DIGITAL GAIN TO 1X
+		0x2ac8, 0x2aca, 0x2acc, 0x2ace	//SP1H/SP2H/SP1L AND SP2L ANAGLOG GAIN TO 0-->1X 
+	};
+
+	unsigned char Common_First_writeData[6];
+	unsigned char Common_Second_writeData[3];
+	unsigned char Common_End_writeData[12];
+	memset(Common_First_writeData, 0x00, sizeof(Common_First_writeData));
+	memset(Common_Second_writeData, 0x00, sizeof(Common_Second_writeData));
+	memset(Common_End_writeData, 0x00, sizeof(Common_End_writeData));
+
+	TCHAR szPos[SIZE_OF_1K];
+	int writeDelay = 20;
+	switch (mode)
+	{
+	case  0:		//A
+		Common_First_writeData[0] = 0xfa;
+		Common_First_writeData[1] = 0x03;
+		Common_First_writeData[2] = 0x00;
+		Common_First_writeData[3] = 0xfa;
+		Common_First_writeData[4] = 0x03;
+		Common_First_writeData[5] = 0x00;
+		for (i = 0; i < 6; i++)
+		{
+			Sleep(writeDelay);
+			errorCode = m_pBoard->WriteI2CBurst(SlaveAddr, Common_First_writeAddr[i], 2, Common_First_writeData + i, 1);
+			if (errorCode)
+			{
+				_stprintf_s(szPos, SIZE_OF_1K, _T("#A Addr:%0x WriteI2CBurst errorCode:%d"), Common_First_writeData[i], errorCode);
+				theApp.MainDlg->putListLog(szPos);
+				return false;
+			}
+		}
+		//
+		Common_Second_writeData[0] = 0x00;
+		Common_Second_writeData[1] = 0x00;
+		//
+		Common_End_writeData[0] = 0x00;
+		Common_End_writeData[1] = 0x01;
+		Common_End_writeData[2] = 0x01;
+		Common_End_writeData[3] = 0x00;
+		Common_End_writeData[4] = 0xf0;
+
+		Common_End_writeData[5] = 0x00;
+		Common_End_writeData[6] = 0x00;
+		Common_End_writeData[7] = 0x00;
+		Common_End_writeData[8] = 0x00;
+		Common_End_writeData[9] = 0x00;
+		Common_End_writeData[10] = 0x00;
+		Common_End_writeData[11] = 0x00;
+		for (i = 0; i < 12; i++)
+		{
+			Sleep(writeDelay);
+			errorCode = m_pBoard->WriteI2CBurst(SlaveAddr, Common_End_writeAddrArr[i], 2, Common_End_writeData + i, 1);
+			if (errorCode)
+			{
+				_stprintf_s(szPos, SIZE_OF_1K, _T("#A Addr:%0x WriteI2CBurst errorCode:%d"), Common_End_writeAddrArr[i], errorCode);
+				theApp.MainDlg->putListLog(szPos);
+				return false;
+			}
+		}
+		break;
+	case  1:		//B
+		Common_First_writeData[0] = 0xfa;
+		Common_First_writeData[1] = 0x03;
+		Common_First_writeData[2] = 0x00;
+		Common_First_writeData[3] = 0xfa;
+		Common_First_writeData[4] = 0x03;
+		Common_First_writeData[5] = 0x00;
+		for (i = 0; i < 6; i++)
+		{
+			Sleep(writeDelay);
+			errorCode = m_pBoard->WriteI2CBurst(SlaveAddr, Common_First_writeAddr[i], 2, Common_First_writeData + i, 1);
+			if (errorCode)
+			{
+				_stprintf_s(szPos, SIZE_OF_1K, _T("#B Addr:%0x WriteI2CBurst errorCode:%d"), Common_First_writeData[i], errorCode);
+				theApp.MainDlg->putListLog(szPos);
+				return false;
+			}
+		}
+		//
+		Common_Second_writeData[0] = 0x00;
+		Common_Second_writeData[1] = 0x02;
+		//
+		Common_End_writeData[0] = 0x00;
+		Common_End_writeData[1] = 0x01;
+		Common_End_writeData[2] = 0x01;
+		Common_End_writeData[3] = 0x00;
+		Common_End_writeData[4] = 0xf0;
+
+		Common_End_writeData[5] = 0x00;
+		Common_End_writeData[6] = 0x00;
+		Common_End_writeData[7] = 0x00;
+		Common_End_writeData[8] = 0x00;
+		Common_End_writeData[9] = 0x00;
+		Common_End_writeData[10] = 0x00;
+		Common_End_writeData[11] = 0x00;
+		for (i = 0; i < 12; i++)
+		{
+			Sleep(writeDelay);
+			errorCode = m_pBoard->WriteI2CBurst(SlaveAddr, Common_End_writeAddrArr[i], 2, Common_End_writeData + i, 1);
+			if (errorCode)
+			{
+				_stprintf_s(szPos, SIZE_OF_1K, _T("#B Addr:%0x WriteI2CBurst errorCode:%d"), Common_End_writeAddrArr[i], errorCode);
+				theApp.MainDlg->putListLog(szPos);
+				return false;
+			}
+		}
+		break;
+	case  2:		//C
+		Common_First_writeData[0] = 0xfa;
+		Common_First_writeData[1] = 0x03;
+		Common_First_writeData[2] = 0x00;
+		Common_First_writeData[3] = 0xfa;
+		Common_First_writeData[4] = 0x03;
+		Common_First_writeData[5] = 0x00;
+		for (i = 0; i < 6; i++)
+		{
+			Sleep(writeDelay);
+			errorCode = m_pBoard->WriteI2CBurst(SlaveAddr, Common_First_writeAddr[i], 2, Common_First_writeData + i, 1);
+			if (errorCode)
+			{
+				_stprintf_s(szPos, SIZE_OF_1K, _T("#C Addr:%0x WriteI2CBurst errorCode:%d"), Common_First_writeData[i], errorCode);
+				theApp.MainDlg->putListLog(szPos);
+				return false;
+			}
+		}
+
+		//
+		Common_Second_writeData[0] = 0x1;//--
+		//
+		Common_End_writeData[0] = 0x00;
+		Common_End_writeData[1] = 0x01;
+		Common_End_writeData[2] = 0x01;
+		Common_End_writeData[3] = 0x00;
+		Common_End_writeData[4] = 0xf0;
+
+		Common_End_writeData[5] = 0x00;
+		Common_End_writeData[6] = 0x00;
+		Common_End_writeData[7] = 0x00;
+		Common_End_writeData[8] = 0x00;
+		Common_End_writeData[9] = 0x00;
+		Common_End_writeData[10] = 0x00;
+		Common_End_writeData[11] = 0x09;
+		for (i = 0; i < 12; i++)
+		{
+			Sleep(writeDelay);
+			errorCode = m_pBoard->WriteI2CBurst(SlaveAddr, Common_End_writeAddrArr[i], 2, Common_End_writeData + i, 1);
+			if (errorCode)
+			{
+				_stprintf_s(szPos, SIZE_OF_1K, _T("#C Addr:%0x WriteI2CBurst errorCode:%d"), Common_End_writeAddrArr[i], errorCode);
+				theApp.MainDlg->putListLog(szPos);
+				return false;
+			}
+		}
+		break;
+	case  3:		//D
+		Common_First_writeData[0] = 0x6d;
+		Common_First_writeData[1] = 0x05;
+		Common_First_writeData[2] = 0x00;
+		Common_First_writeData[3] = 0x6d;
+		Common_First_writeData[4] = 0x05;
+		Common_First_writeData[5] = 0x00;
+		for (i = 0; i < 6; i++)
+		{
+			Sleep(writeDelay);
+			errorCode = m_pBoard->WriteI2CBurst(SlaveAddr, Common_First_writeAddr[i], 2, Common_First_writeData + i, 1);
+			if (errorCode)
+			{
+				_stprintf_s(szPos, SIZE_OF_1K, _T("#D Addr:%0x WriteI2CBurst errorCode:%d"), Common_First_writeData[i], errorCode);
+				theApp.MainDlg->putListLog(szPos);
+				return false;
+			}
+		}
+		//
+		Common_Second_writeData[0] = 0x00;
+		Common_Second_writeData[1] = 0x00;
+		//
+		//
+		Common_End_writeData[0] = 0x00;
+		Common_End_writeData[1] = 0x01;
+		Common_End_writeData[2] = 0x00;
+		Common_End_writeData[3] = 0x00;
+		Common_End_writeData[4] = 0x00;
+
+		Common_End_writeData[5] = 0x00;
+		Common_End_writeData[6] = 0x00;
+		Common_End_writeData[7] = 0x00;
+		Common_End_writeData[8] = 0x00;
+		Common_End_writeData[9] = 0x00;
+		Common_End_writeData[10] = 0x00;
+		Common_End_writeData[11] = 0x00;
+		for (i = 0; i < 12; i++)
+		{
+			Sleep(writeDelay);
+			errorCode = m_pBoard->WriteI2CBurst(SlaveAddr, Common_End_writeAddrArr[i], 2, Common_End_writeData + i, 1);
+			if (errorCode)
+			{
+				_stprintf_s(szPos, SIZE_OF_1K, _T("#D Addr:%0x WriteI2CBurst errorCode:%d"), Common_End_writeAddrArr[i], errorCode);
+				theApp.MainDlg->putListLog(szPos);
+				return false;
+			}
+		}
+		break;
+	case  4:		//E
+		Common_First_writeData[0] = 0x6d;
+		Common_First_writeData[1] = 0x05;
+		Common_First_writeData[2] = 0x00;
+		Common_First_writeData[3] = 0xd5;
+		Common_First_writeData[4] = 0x06;
+		Common_First_writeData[5] = 0x00;
+		for (i = 0; i < 6; i++)
+		{
+			Sleep(writeDelay);
+			errorCode = m_pBoard->WriteI2CBurst(SlaveAddr, Common_First_writeAddr[i], 2, Common_First_writeData + i, 1);
+			if (errorCode)
+			{
+				_stprintf_s(szPos, SIZE_OF_1K, _T("#E Addr:%0x WriteI2CBurst errorCode:%d"), Common_First_writeData[i], errorCode);
+				theApp.MainDlg->putListLog(szPos);
+				return false;
+			}
+		}
+		//
+		Common_Second_writeData[0] = 0x00;
+		Common_Second_writeData[1] = 0x02;
+		//
+		Common_End_writeData[0] = 0x00;
+		Common_End_writeData[1] = 0x01;
+		Common_End_writeData[2] = 0x00;
+		Common_End_writeData[3] = 0x00;
+		Common_End_writeData[4] = 0x00;
+
+		Common_End_writeData[5] = 0x00;
+		Common_End_writeData[6] = 0x00;
+		Common_End_writeData[7] = 0x00;
+		Common_End_writeData[8] = 0x00;
+		Common_End_writeData[9] = 0x00;
+		Common_End_writeData[10] = 0x00;
+		Common_End_writeData[11] = 0x00;
+		for (i = 0; i < 12; i++)
+		{
+			Sleep(writeDelay);
+			errorCode = m_pBoard->WriteI2CBurst(SlaveAddr, Common_End_writeAddrArr[i], 2, Common_End_writeData + i, 1);
+			if (errorCode)
+			{
+				_stprintf_s(szPos, SIZE_OF_1K, _T("#E Addr:%0x WriteI2CBurst errorCode:%d"), Common_End_writeAddrArr[i], errorCode);
+				theApp.MainDlg->putListLog(szPos);
+				return false;
+			}
+		}
+		break;
+	case  5:		//F
+		Common_First_writeData[0] = 0x6d;
+		Common_First_writeData[1] = 0x05;
+		Common_First_writeData[2] = 0x00;
+		Common_First_writeData[3] = 0x6d;
+		Common_First_writeData[4] = 0x05;
+		Common_First_writeData[5] = 0x00;
+		for (i = 0; i < 6; i++)
+		{
+			Sleep(writeDelay);
+			errorCode = m_pBoard->WriteI2CBurst(SlaveAddr, Common_First_writeAddr[i], 2, Common_First_writeData + i, 1);
+			if (errorCode)
+			{
+				_stprintf_s(szPos, SIZE_OF_1K, _T("#F Addr:%0x WriteI2CBurst errorCode:%d"), Common_First_writeData[i], errorCode);
+				theApp.MainDlg->putListLog(szPos);
+				return false;
+			}
+		}
+		//
+		Common_Second_writeData[0] = 0x00;
+		Common_Second_writeData[1] = 0x01;
+		//
+		Common_End_writeData[0] = 0x00;
+		Common_End_writeData[1] = 0x01;
+		Common_End_writeData[2] = 0x00;
+		Common_End_writeData[3] = 0x00;
+		Common_End_writeData[4] = 0x00;
+
+		Common_End_writeData[5] = 0x00;
+		Common_End_writeData[6] = 0x00;
+		Common_End_writeData[7] = 0x00;
+		Common_End_writeData[8] = 0x00;
+		Common_End_writeData[9] = 0x00;
+		Common_End_writeData[10] = 0x00;
+		Common_End_writeData[11] = 0x00;
+		for (i = 0; i < 12; i++)
+		{
+			Sleep(writeDelay);
+			errorCode = m_pBoard->WriteI2CBurst(SlaveAddr, Common_End_writeAddrArr[i], 2, Common_End_writeData + i, 1);
+			if (errorCode)
+			{
+				_stprintf_s(szPos, SIZE_OF_1K, _T("#F Addr:%0x WriteI2CBurst errorCode:%d"), Common_End_writeAddrArr[i], errorCode);
+				theApp.MainDlg->putListLog(szPos);
+				return false;
+			}
+		}
+		break;
+	case  6:		//G
+		Common_First_writeData[0] = 0x6d;
+		Common_First_writeData[1] = 0x05;
+		Common_First_writeData[2] = 0x00;
+		Common_First_writeData[3] = 0x6d;
+		Common_First_writeData[4] = 0x05;
+		Common_First_writeData[5] = 0x00;
+		for (i = 0; i < 6; i++)
+		{
+			Sleep(writeDelay);
+			errorCode = m_pBoard->WriteI2CBurst(SlaveAddr, Common_First_writeAddr[i], 2, Common_First_writeData + i, 1);
+			if (errorCode)
+			{
+				_stprintf_s(szPos, SIZE_OF_1K, _T("#G Addr:%0x WriteI2CBurst errorCode:%d"), Common_First_writeData[i], errorCode);
+				theApp.MainDlg->putListLog(szPos);
+				return false;
+			}
+		}
+		//
+		Common_Second_writeData[0] = 0x00;
+		Common_Second_writeData[1] = 0x03;
+		//
+		Common_End_writeData[0] = 0x00;
+		Common_End_writeData[1] = 0x01;
+		Common_End_writeData[2] = 0x00;
+		Common_End_writeData[3] = 0x00;
+		Common_End_writeData[4] = 0x00;
+
+		Common_End_writeData[5] = 0x00;
+		Common_End_writeData[6] = 0x00;
+		Common_End_writeData[7] = 0x00;
+		Common_End_writeData[8] = 0x00;
+		Common_End_writeData[9] = 0x00;
+		Common_End_writeData[10] = 0x00;
+		Common_End_writeData[11] = 0x00;
+		for (i = 0; i < 12; i++)
+		{
+			Sleep(writeDelay);
+			errorCode = m_pBoard->WriteI2CBurst(SlaveAddr, Common_End_writeAddrArr[i], 2, Common_End_writeData + i, 1);
+			if (errorCode)
+			{
+				_stprintf_s(szPos, SIZE_OF_1K, _T("#G Addr:%0x WriteI2CBurst errorCode:%d"), Common_End_writeAddrArr[i], errorCode);
+				theApp.MainDlg->putListLog(szPos);
+				return false;
+			}
+		}
+		break;
+	case  7:		//H
+		Common_First_writeData[0] = 0x6d;
+		Common_First_writeData[1] = 0x05;
+		Common_First_writeData[2] = 0x00;
+		Common_First_writeData[3] = 0x6d;
+		Common_First_writeData[4] = 0x05;
+		Common_First_writeData[5] = 0x00;
+		for (i = 0; i < 6; i++)
+		{
+			Sleep(writeDelay);
+			errorCode = m_pBoard->WriteI2CBurst(SlaveAddr, Common_First_writeAddr[i], 2, Common_First_writeData + i, 1);
+			if (errorCode)
+			{
+				_stprintf_s(szPos, SIZE_OF_1K, _T("#H Addr:%0x WriteI2CBurst errorCode:%d"), Common_First_writeData[i], errorCode);
+				theApp.MainDlg->putListLog(szPos);
+				return false;
+			}
+		}
+		//
+		Common_Second_writeData[0] = 0x00;
+		Common_Second_writeData[1] = 0x00;
+		//
+		Common_End_writeData[0] = 0x00;
+		Common_End_writeData[1] = 0x00;
+		Common_End_writeData[2] = 0x00;
+		Common_End_writeData[3] = 0x00;
+		Common_End_writeData[4] = 0xf0;
+
+		Common_End_writeData[5] = 0x00;
+		Common_End_writeData[6] = 0x00;
+		Common_End_writeData[7] = 0x00;
+		Common_End_writeData[8] = 0x00;
+		Common_End_writeData[9] = 0x00;
+		Common_End_writeData[10] = 0x00;
+		Common_End_writeData[11] = 0x00;
+		for (i = 0; i < 12; i++)
+		{
+			Sleep(writeDelay);
+			errorCode = m_pBoard->WriteI2CBurst(SlaveAddr, Common_End_writeAddrArr[i], 2, Common_End_writeData + i, 1);
+			if (errorCode)
+			{
+				_stprintf_s(szPos, SIZE_OF_1K, _T("#H Addr:%0x WriteI2CBurst errorCode:%d"), Common_End_writeAddrArr[i], errorCode);
+				theApp.MainDlg->putListLog(szPos);
+				return false;
+			}
+		}
+		break;
+	case  8:		//I
+		Common_First_writeData[0] = 0x6d;
+		Common_First_writeData[1] = 0x05;
+		Common_First_writeData[2] = 0x00;
+		Common_First_writeData[3] = 0x6d;
+		Common_First_writeData[4] = 0x05;
+		Common_First_writeData[5] = 0x00;
+		for (i = 0; i < 6; i++)
+		{
+			Sleep(writeDelay);
+			errorCode = m_pBoard->WriteI2CBurst(SlaveAddr, Common_First_writeAddr[i], 2, Common_First_writeData + i, 1);
+			if (errorCode)
+			{
+				_stprintf_s(szPos, SIZE_OF_1K, _T("#I Addr:%0x WriteI2CBurst errorCode:%d"), Common_First_writeData[i], errorCode);
+				theApp.MainDlg->putListLog(szPos);
+				return false;
+			}
+		}
+		//
+		Common_Second_writeData[0] = 0x00;
+		Common_Second_writeData[1] = 0x02;
+		//
+		Common_End_writeData[0] = 0x00;
+		Common_End_writeData[1] = 0x00;
+		Common_End_writeData[2] = 0x00;
+		Common_End_writeData[3] = 0x00;
+		Common_End_writeData[4] = 0xf0;
+
+		Common_End_writeData[5] = 0x00;
+		Common_End_writeData[6] = 0x00;
+		Common_End_writeData[7] = 0x00;
+		Common_End_writeData[8] = 0x00;
+		Common_End_writeData[9] = 0x00;
+		Common_End_writeData[10] = 0x00;
+		Common_End_writeData[11] = 0x00;
+		for (i = 0; i < 12; i++)
+		{
+			Sleep(writeDelay);
+			errorCode = m_pBoard->WriteI2CBurst(SlaveAddr, Common_End_writeAddrArr[i], 2, Common_End_writeData + i, 1);
+			if (errorCode)
+			{
+				_stprintf_s(szPos, SIZE_OF_1K, _T("#I Addr:%0x WriteI2CBurst errorCode:%d"), Common_End_writeAddrArr[i], errorCode);
+				theApp.MainDlg->putListLog(szPos);
+				return false;
+			}
+		}
+		break;
+	default:
+		break;
+	}
+	return bRtn;
+}
 bool CMIU::partNumberVerifyFn()
 {
 	TCHAR szPos[SIZE_OF_1K];

@@ -2624,7 +2624,7 @@ int CPcbDlg::FindEpoxyPoint(int iCh)
 
 	vision.boxlist[iCh].addList(iSx, iSy, iEx, iEy, PS_DOT, M_COLOR_RED);
 
-	MbufAllocColor(vision.MilSystem, 1, CAM_SIZE_X, CAM_SIZE_Y, M_DEF_IMAGE_TYPE, M_IMAGE+M_PROC, &MilBinaryImage);
+	MbufAllocColor(vision.MilSystem, 1, CAM_SIZE_X, CAM_SIZE_Y, (8 + M_UNSIGNED), M_IMAGE+M_PROC, &MilBinaryImage);
 	MbufClear(MilBinaryImage, 0);
 
 	MbufCopy(vision.MilProcImage[iCh], MilBinaryImage);
@@ -2821,7 +2821,7 @@ int CPcbDlg::FindEpoxyPoint2(int iCh)
 
 	vision.boxlist[iCh].addList(iSx, iSy, iEx, iEy, PS_DOT, M_COLOR_RED);
 
-	MbufAllocColor(vision.MilSystem, 1, CAM_SIZE_X, CAM_SIZE_Y, M_DEF_IMAGE_TYPE, M_IMAGE+M_PROC, &MilBinaryImage);
+	MbufAllocColor(vision.MilSystem, 1, CAM_SIZE_X, CAM_SIZE_Y, (8 + M_UNSIGNED), M_IMAGE+M_PROC, &MilBinaryImage);
 	MbufClear(MilBinaryImage, 0);
 
 	//MbufCopy(vision.MilProcImage[0], MilBinaryImage);
@@ -3326,7 +3326,7 @@ int CPcbDlg::FindEpoxyPoint4(int iCh)
 
 	vision.boxlist[iCh].addList(iSx, iSy, iEx, iEy, PS_DOT, M_COLOR_RED);
 
-	MbufAllocColor(vision.MilSystem, 1, CAM_SIZE_X, CAM_SIZE_Y, M_DEF_IMAGE_TYPE, M_IMAGE+M_PROC, &MilBinaryImage);
+	MbufAllocColor(vision.MilSystem, 1, CAM_SIZE_X, CAM_SIZE_Y, (8 + M_UNSIGNED), M_IMAGE+M_PROC, &MilBinaryImage);
 	MbufClear(MilBinaryImage, 0);
 
 	MbufCopy(vision.MilProcImage[0], MilBinaryImage);
@@ -3610,7 +3610,7 @@ int CPcbDlg::FindEpoxyPoint5(int iCh)
 
 	vision.boxlist[iCh].addList(iSx, iSy, iEx, iEy, PS_DOT, M_COLOR_RED);
 
-	MbufAllocColor(vision.MilSystem, 1, CAM_SIZE_X, CAM_SIZE_Y, M_DEF_IMAGE_TYPE, M_IMAGE+M_PROC, &MilBinaryImage);
+	MbufAllocColor(vision.MilSystem, 1, CAM_SIZE_X, CAM_SIZE_Y, (8 + M_UNSIGNED), M_IMAGE+M_PROC, &MilBinaryImage);
 	MbufClear(MilBinaryImage, 0);
 
 	MbufCopy(vision.MilProcImageChild[iCh], MilBinaryImage);
