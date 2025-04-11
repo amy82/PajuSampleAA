@@ -31,7 +31,9 @@ UINT Thread_TaskCCD(LPVOID parm)
 CPcbProcess2::CPcbProcess2(void)
 {
 	dwTickStartRun = false;
-
+	LightRetry = 0;
+	MaxLightRetry = 50;
+	LensShadingIndex = 0;
 }
 
 
@@ -3457,6 +3459,7 @@ int	CPcbProcess2::Complete_FinalInsp(int iStep)
 	int iRtnFunction = iStep;
 	bool bMtfCheck4 = true;
 	bool beolRtn = false;
+	int dValue = 0;
 	switch (iStep)
 	{
 	case 120000:	//완제품
@@ -3633,6 +3636,8 @@ int	CPcbProcess2::Complete_FinalInsp(int iStep)
 		
 		break;
 	case 122575:
+		LightRetry = 0;
+		LensShadingIndex = 0;
 		if (motor.PCB_Z_Motor_Move(OC_6500K_Pos))
 		{
 			sLog.Format("PCB Z Axis 이물검사 Pos Move Complete[%d]", iStep);
@@ -3663,18 +3668,94 @@ int	CPcbProcess2::Complete_FinalInsp(int iStep)
 		//-----------------------------------------------------------------
 		//Defect - 9장 이미지
 		//Dark Noise - 총 60장 30(H) + 30(I)
-		iRtnFunction = 122590; 
+		if (LensShadingIndex == 0)
+		{
+			beolRtn = MIU.CheetahModeChange(A_MODEL);		//모드 변경
+		}
+		if (LensShadingIndex == 4)
+		{
+			beolRtn = MIU.CheetahModeChange(B_MODEL);		//모드 변경
+		}
+		if (beolRtn == false)
+		{
+			sLog.Format("Mode Change Fail[%d]", iStep);
+			errMsg2(Task.AutoFlag, sLog);
+			iRtnFunction = -122580;
+			break;
+		}
+		sLog.Format("A Mode Change Ok[%d]", iStep);
+		putListLog(sLog);
+		iRtnFunction = 122585;
+		break;
+	case 122585:
+		dValue = 0;
+		if (LensShadingIndex == 0){
+			//D65 , G 204
+			dValue = 204;
+			MIU.Cheetah_Light_Change(LIGHT_RMS_D56, dValue, G_COLOR);
+			sLog.Format("Set LIGHT_RMS_D56 / G:%d [%d]", dValue, iStep);
+		}
+		else if (LensShadingIndex == 1){
+			//Red , R 204
+			dValue = 204;
+			MIU.Cheetah_Light_Change(LIGHT_RMS_RED, dValue, R_COLOR);
+			sLog.Format("Set LIGHT_RMS_RED / R:%d [%d]", dValue, iStep);
+		}
+		else if (LensShadingIndex == 2){
+			//Green , G 204
+			dValue = 204;
+			MIU.Cheetah_Light_Change(LIGHT_RMS_GREEN, dValue, G_COLOR);
+			sLog.Format("Set LIGHT_RMS_GREEN / G:%d [%d]", dValue, iStep);
+		}
+		else if (LensShadingIndex == 3){
+			//Blue , B 204
+			dValue = 204;
+			MIU.Cheetah_Light_Change(LIGHT_RMS_BLUE, dValue, B_COLOR);
+			sLog.Format("Set LIGHT_RMS_BLUE / G:%d [%d]", dValue, iStep);
+		}
+		else if (LensShadingIndex == 4) {
+			dValue = 204;
+		}
+		else if (LensShadingIndex == 5) {
+			dValue = 204;
+		}
+		else if (LensShadingIndex == 6) {
+			dValue = 204;
+		}
+		putListLog(sLog);
+
+		
+		iRtnFunction = 122590;
 		break;
 	case 122590:
-		MIU.CheetahModeChange(A_MODEL);		//모드 변경
-		MIU.Cheetah_Light_Change(LIGHT_RMS_D56, 204, G_COLOR);
-		
-		
+		if (LightRetry < MaxLightRetry)
+		{
+			if (MIU.Get_Cheetah_Light_Value(204, G_COLOR))
+			{
+				sLog.Format("G Color 204 설정 완료[%d]", iStep);
+				putListLog(sLog);
+				iRtnFunction = 122600;
+				break;
+			}
+			iRtnFunction = 122585;
+			break;
+		}
+		else
+		{
+			//실패
+			sLog.Format("밝기 조정 Fail[%d]", iStep);
+			errMsg2(Task.AutoFlag, sLog);
+			iRtnFunction = -122590;
+			break;
+		}
+
 		////OcLight_Dms50v52.DPS_Light_OnOffLevel(LIGHT_RMS_D56, true, model.m_iLedValue[LEDDATA_D6500]);
-		iRtnFunction = 122600;
+		
 		break;
 	case 122600:
-		
+		//이미지 캡처
+		MIU.func_Set_InspImageCopy(LENSSHADING, MIU.m_pFrameRawBuffer, LensShadingIndex);
+		LensShadingIndex++;
 		iRtnFunction = 122650;
 		break;
 	case 122650:

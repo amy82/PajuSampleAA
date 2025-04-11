@@ -208,7 +208,10 @@ void CMIU::setInterface()
 		memset(&(m_aTemp[i]), 0, sizeof(MIU_DEVICE));
 		::GetLocalTime(&(m_aTemp[i].TimeGrab));
 	}
-
+	for (i = 0; i < 7; i++)
+	{
+		pLensShadingBuffer[i] = NULL;
+	}
 
 	//라온피플 ★★★★★★
 	//===================================================================================================================
@@ -618,7 +621,42 @@ unsigned short ChecksumCalc(unsigned short* arr, unsigned int size)
 	return checksum;
 }
 
+bool CMIU::Get_Cheetah_Light_Value(int targetValue, int Color)
+{
+	bool bRtn = false;
 
+	vision.MilBufferUpdate();
+
+	int width = MbufInquire(vision.MilGrabImageChild[4], M_PITCH, M_NULL);
+	int pos = (gMIUDevice.nHeight / 2) * width + (gMIUDevice.nWidth / 2);
+	int currentValue = 0;
+	TCHAR szLog[SIZE_OF_1K];
+
+	if (Color == R_COLOR)
+	{
+		//0 = R
+		currentValue = vision.MilImageBuffer[3][pos];
+	}
+	else if (Color == G_COLOR)
+	{
+		//1 = G
+		currentValue = vision.MilImageBuffer[4][pos];
+	}
+	else if (Color == B_COLOR)
+	{
+		//2 = B
+		currentValue = vision.MilImageBuffer[5][pos];
+	}
+
+	_stprintf_s(szLog, SIZE_OF_1K, _T("[Light]Target:%d / Current:%d"), targetValue, currentValue);
+
+	if (currentValue == targetValue)
+	{
+		bRtn = true;
+	}
+	
+	return bRtn;
+}
 bool CMIU::Cheetah_Light_Change(int Channel, int targetValue, int Color)
 {
 	int targetColor = targetValue;
@@ -640,7 +678,7 @@ bool CMIU::Cheetah_Light_Change(int Channel, int targetValue, int Color)
 
 	//int pos = p.y * width + p.x;
 	int pos = (gMIUDevice.nHeight /2) * width + (gMIUDevice.nWidth / 2);
-
+	int value = 0;
 	//sprintf_s(szTmp, "(%d, %d) ==> RGB %d, %d, %d", p.x, p.y, vision.MilImageBuffer[3][pos], vision.MilImageBuffer[4][pos], vision.MilImageBuffer[5][pos]);
 	//currentColor = 영상에서 값 찍어서
 
@@ -648,21 +686,21 @@ bool CMIU::Cheetah_Light_Change(int Channel, int targetValue, int Color)
 	{
 		//0 = R
 		OcLight_Dms50v52.targetColor.red = targetValue;
+		OcLight_Dms50v52.currentColor.red = vision.MilImageBuffer[3][pos];
 	}
 	else if (Color == G_COLOR)
 	{
 		//1 = G
 		OcLight_Dms50v52.targetColor.green = targetValue;
+		OcLight_Dms50v52.currentColor.green = vision.MilImageBuffer[4][pos];
 	}
 	else if (Color == B_COLOR)
 	{
 		//2 = B
 		OcLight_Dms50v52.targetColor.blue = targetValue;
+		OcLight_Dms50v52.currentColor.blue = vision.MilImageBuffer[5][pos];
 	}
-
 	
-	
-
 	OcLight_Dms50v52.DPS_SetChannel_Value(Channel);	//LIGHT_RMS_D56
 
 
@@ -2328,7 +2366,14 @@ bool CMIU::cvBufferAlloc()
 			pImageBuf[i] = NULL;
 		}
 	}
-
+	for (i = 0; i < 7; i++)
+	{
+		if (pLensShadingBuffer[i])
+		{
+			delete pLensShadingBuffer[i];
+			pLensShadingBuffer[i] = NULL;
+		}
+	}
 	
 	if (m_pFrameRawBuffer != NULL)
 	{
@@ -2371,7 +2416,13 @@ bool CMIU::cvBufferAlloc()
 		delete[] vTempBuffer;
 		vTempBuffer = NULL;
 	}
-	
+
+	for (i = 0; i < 7; i++)
+	{
+		pLensShadingBuffer[i] = new BYTE[m_pBoard->GetFrameRawSize()];
+		memset(pLensShadingBuffer[i], 0, m_pBoard->GetFrameRawSize());
+	}
+
 	m_pFrameRawBuffer = new BYTE[m_pBoard->GetFrameRawSize()];
 	vChartBuffet = new BYTE[m_pBoard->GetFrameRawSize()];
 	vChart_Second_Buffet = new BYTE[m_pBoard->GetFrameRawSize()];
@@ -4437,6 +4488,11 @@ void CMIU::func_Set_InspImageCopy(int nType, BYTE* GrabImage,int AvrCount)
 		str.Format("CHART2");
 		memcpy(vChart_Second_Buffet, vTempBuffer, m_pBoard->GetFrameRawSize());
 	}
+	else if (nType == LENSSHADING)
+	{
+		str.Format("LensShading_%d", AvrCount);
+		memcpy(pLensShadingBuffer[AvrCount], vTempBuffer, m_pBoard->GetFrameRawSize());
+	}
     else
     {
         //모두 초기화?
@@ -4445,6 +4501,11 @@ void CMIU::func_Set_InspImageCopy(int nType, BYTE* GrabImage,int AvrCount)
 		memset(vDefectMidBuffer_6500K, 0, m_pBoard->GetFrameRawSize());
         memset(vDefectLowBuffer, 0, m_pBoard->GetFrameRawSize());
         memset(vDefectMidBuffer_2800K, 0, m_pBoard->GetFrameRawSize());
+
+		for (int i = 0; i < 7; i++)
+		{
+			memset(pLensShadingBuffer[i], 0, m_pBoard->GetFrameRawSize());
+		}
 
     }
 	//g_clApsInsp.func_Insp_Shm_Illumination(vTempBuffer);

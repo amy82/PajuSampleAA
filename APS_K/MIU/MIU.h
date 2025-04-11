@@ -10,18 +10,8 @@
 #include <cv.h>
 #include <highgui.h>
 #include "PixelFormat.h"
-//#include "LPMC500DLLEx.h"
 #include "BoardControl.h"
 //
-//#define RGGB	1
-//#define GRBG	2
-//#define GBRG	3
-//#define BGGR	4
-//
-//#define RCCC	5
-//#define CRCC	6
-//#define CCRC	7
-//#define CCCR	8
 
 typedef enum IMAGE_FILE_TYPE_t {
 	IMAGE_TYPE_RAW = 0,
@@ -331,6 +321,7 @@ public:
 	//! <---------------------------------------------------------------------------------------------------------------------------
 	//Head Model
 	bool CheetahModeChange(int mode);
+	bool Get_Cheetah_Light_Value(int targetValue, int Color);
 	bool Cheetah_Light_Change(int Channel , int targetValue, int Color);
 
 	bool OtpWrite_Head_Fn();		//AA
@@ -340,10 +331,6 @@ public:
 	bool OtpRead_Head_Fn();			//Eol
 	bool partNumberVerifyFn();		//eol
 	//
-
-	//! Averaging 처리용 함수
-	int Add_Sum_To_Buffer(IplImage* fi_cvInput, bool fi_bFlag_Start, int fi_iIndex_Avg = 0);
-	int Get_Average_From_Buffer(IplImage* fo_cvOutput, int fi_iIndex_Avg = 0);
 
 	//! Color 변환에 사용
 	void Shift10BitMode(unsigned char* pImage, unsigned char* pDest, unsigned int nWidth, unsigned int nHeight);
@@ -501,7 +488,11 @@ public:
 	BYTE* vDefectLowBuffer;			//암흑 영상(Hot Defect 검출용)
 	BYTE* vDefectMidBuffer_2800K;	//중간밝기 (Color Sensitivity 검출용)
 
+
+
+	BYTE* pLensShadingBuffer[7];
 	void disConnectedInit();
+
 	void INI_LOAD(int index = 0);
 
 };

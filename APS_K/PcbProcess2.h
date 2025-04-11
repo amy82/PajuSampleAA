@@ -8,6 +8,9 @@ public:
 	bool dwTickStartRun;
 
 	void putListLog(CString strLog);
+	int LensShadingIndex;
+	int LightRetry;
+	int MaxLightRetry;
 
 public:
 	int Ready_process(int iStep);
