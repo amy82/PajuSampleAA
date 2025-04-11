@@ -34,6 +34,8 @@ CPcbProcess2::CPcbProcess2(void)
 	LightRetry = 0;
 	MaxLightRetry = 50;
 	LensShadingIndex = 0;
+	DefectIndex = 0;
+	DarkGetCount = 0;
 }
 
 
@@ -3683,61 +3685,134 @@ int	CPcbProcess2::Complete_FinalInsp(int iStep)
 			iRtnFunction = -122580;
 			break;
 		}
-		sLog.Format("A Mode Change Ok[%d]", iStep);
+		sLog.Format("Mode Change Ok[%d]", iStep);
 		putListLog(sLog);
 		iRtnFunction = 122585;
 		break;
+
 	case 122585:
-		dValue = 0;
+
 		if (LensShadingIndex == 0){
 			//D65 , G 204
-			dValue = 204;
-			MIU.Cheetah_Light_Change(LIGHT_RMS_D56, dValue, G_COLOR);
-			sLog.Format("Set LIGHT_RMS_D56 / G:%d [%d]", dValue, iStep);
+			OcLight_Dms50v52.DPS_Light_OnOffLevel(LIGHT_RMS_D56, true, model.m_iLedValue[LEDDATA_OC_GREEN]);
+			sLog.Format("D65 광원 On[%d]", iStep);
+			putListLog(sLog);
+
+			Sleep(100);
+
+			Task.chkTargetRgb = 204;
+			Task.chkTargetChannel = G_COLOR;
+			MIU.Cheetah_Light_Change(LIGHT_RMS_D56, Task.chkTargetRgb, Task.chkTargetChannel);
+			sLog.Format("Set LIGHT_RMS_D56 / G:%d [%d]", Task.chkTargetRgb, iStep);
 		}
 		else if (LensShadingIndex == 1){
 			//Red , R 204
-			dValue = 204;
-			MIU.Cheetah_Light_Change(LIGHT_RMS_RED, dValue, R_COLOR);
-			sLog.Format("Set LIGHT_RMS_RED / R:%d [%d]", dValue, iStep);
+			OcLight_Dms50v52.DPS_Light_OnOffLevel(LIGHT_RMS_RED, true, model.m_iLedValue[LEDDATA_OC_RED]);
+			sLog.Format("Red 광원 On[%d]", iStep);
+			putListLog(sLog);
+
+			Sleep(100);
+
+			Task.chkTargetRgb = 204;
+			Task.chkTargetChannel = R_COLOR;
+			MIU.Cheetah_Light_Change(LIGHT_RMS_RED, Task.chkTargetRgb, Task.chkTargetChannel);
+			sLog.Format("Set LIGHT_RMS_RED / R:%d [%d]", Task.chkTargetRgb, iStep);
 		}
 		else if (LensShadingIndex == 2){
 			//Green , G 204
-			dValue = 204;
-			MIU.Cheetah_Light_Change(LIGHT_RMS_GREEN, dValue, G_COLOR);
-			sLog.Format("Set LIGHT_RMS_GREEN / G:%d [%d]", dValue, iStep);
+			OcLight_Dms50v52.DPS_Light_OnOffLevel(LIGHT_RMS_GREEN, true, model.m_iLedValue[LEDDATA_OC_GREEN]);
+			sLog.Format("Green 광원 On[%d]", iStep);
+			putListLog(sLog);
+
+			Sleep(100);
+
+			Task.chkTargetRgb = 204;
+			Task.chkTargetChannel = G_COLOR;
+			MIU.Cheetah_Light_Change(LIGHT_RMS_GREEN, Task.chkTargetRgb, Task.chkTargetChannel);
+			sLog.Format("Set LIGHT_RMS_GREEN / G:%d [%d]", Task.chkTargetRgb, iStep);
 		}
 		else if (LensShadingIndex == 3){
 			//Blue , B 204
-			dValue = 204;
-			MIU.Cheetah_Light_Change(LIGHT_RMS_BLUE, dValue, B_COLOR);
-			sLog.Format("Set LIGHT_RMS_BLUE / G:%d [%d]", dValue, iStep);
-		}
-		else if (LensShadingIndex == 4) {
-			dValue = 204;
-		}
-		else if (LensShadingIndex == 5) {
-			dValue = 204;
-		}
-		else if (LensShadingIndex == 6) {
-			dValue = 204;
-		}
-		putListLog(sLog);
+			OcLight_Dms50v52.DPS_Light_OnOffLevel(LIGHT_RMS_BLUE, true, model.m_iLedValue[LEDDATA_OC_BLUE]);
+			sLog.Format("Blue 광원 On[%d]", iStep);
+			putListLog(sLog);
 
-		
-		iRtnFunction = 122590;
+			Sleep(100);
+
+			Task.chkTargetRgb = 204;
+			Task.chkTargetChannel = B_COLOR;
+			MIU.Cheetah_Light_Change(LIGHT_RMS_BLUE, Task.chkTargetRgb, Task.chkTargetChannel);
+			sLog.Format("Set LIGHT_RMS_BLUE / B:%d [%d]", Task.chkTargetRgb, iStep);
+		}
+		//
+		//
+		else if (LensShadingIndex == 4) 
+		{
+			OcLight_Dms50v52.DPS_Light_OnOffLevel(LIGHT_RMS_RED, true, model.m_iLedValue[LEDDATA_OC_RED]);
+			sLog.Format("Red 광원 On[%d]", iStep);
+			putListLog(sLog);
+
+			Sleep(100);
+
+			Task.chkTargetRgb = 204;
+			Task.chkTargetChannel = R_COLOR;
+			MIU.Cheetah_Light_Change(LIGHT_RMS_RED, Task.chkTargetRgb, Task.chkTargetChannel);
+			sLog.Format("Set LIGHT_RMS_RED / R:%d [%d]", Task.chkTargetRgb, iStep);
+		}
+		else if (LensShadingIndex == 5) 
+		{
+			OcLight_Dms50v52.DPS_Light_OnOffLevel(LIGHT_RMS_GREEN, true, model.m_iLedValue[LEDDATA_OC_GREEN]);
+			sLog.Format("Green 광원 On[%d]", iStep);
+			putListLog(sLog);
+
+			Sleep(100);
+
+			Task.chkTargetRgb = 204;
+			Task.chkTargetChannel = G_COLOR;
+			MIU.Cheetah_Light_Change(LIGHT_RMS_GREEN, Task.chkTargetRgb, Task.chkTargetChannel);
+			sLog.Format("Set LIGHT_RMS_GREEN / G:%d [%d]", Task.chkTargetRgb, iStep);
+		}
+		else if (LensShadingIndex == 6) 
+		{
+			OcLight_Dms50v52.DPS_Light_OnOffLevel(LIGHT_RMS_BLUE, true, model.m_iLedValue[LEDDATA_OC_BLUE]);
+			sLog.Format("Blue 광원 On[%d]", iStep);
+			putListLog(sLog);
+
+			Sleep(100);
+
+			Task.chkTargetRgb = 204;
+			Task.chkTargetChannel = B_COLOR;
+			MIU.Cheetah_Light_Change(LIGHT_RMS_BLUE, Task.chkTargetRgb, Task.chkTargetChannel);
+			sLog.Format("Set LIGHT_RMS_BLUE / B:%d [%d]", Task.chkTargetRgb, iStep);
+		}
+
+		putListLog(sLog);
+		Task.PCBTaskTime = myTimer(true);
+		iRtnFunction = 122587;
+		break;
+
+	case 122587:
+		if ((myTimer(true) - Task.PCBTaskTime) > 300)
+		{
+			iRtnFunction = 122590;
+		}
 		break;
 	case 122590:
-		if (LightRetry < MaxLightRetry)
+
+		if (LightRetry < MaxLightRetry)		//50
 		{
-			if (MIU.Get_Cheetah_Light_Value(204, G_COLOR))
+			LightRetry++;
+			//r,b,g 값이 맞춰졌는지 확인 필요.
+			TCHAR* pszCol[] = { _T("R Color"), _T("G Color"), _T("B Color") };
+			if (MIU.Get_Cheetah_Light_Value(Task.chkTargetRgb, Task.chkTargetChannel))
 			{
-				sLog.Format("G Color 204 설정 완료[%d]", iStep);
+
+				sLog.Format("%s Color: %d 설정 완료[%d]", pszCol[Task.chkTargetChannel], Task.chkTargetRgb, iStep);
 				putListLog(sLog);
 				iRtnFunction = 122600;
 				break;
 			}
-			iRtnFunction = 122585;
+			iRtnFunction = 122585;		//반복 조명 컨트롤러 조정
 			break;
 		}
 		else
@@ -3748,40 +3823,276 @@ int	CPcbProcess2::Complete_FinalInsp(int iStep)
 			iRtnFunction = -122590;
 			break;
 		}
-
-		////OcLight_Dms50v52.DPS_Light_OnOffLevel(LIGHT_RMS_D56, true, model.m_iLedValue[LEDDATA_D6500]);
-		
 		break;
 	case 122600:
 		//이미지 캡처
 		MIU.func_Set_InspImageCopy(LENSSHADING, MIU.m_pFrameRawBuffer, LensShadingIndex);
 		LensShadingIndex++;
-		iRtnFunction = 122650;
+
+		if (LensShadingIndex == 7)
+		{
+			//Lens Shading 7장 캡처
+			iRtnFunction = 122650;
+		}
+		else
+		{
+			sLog.Format("Lens Shading Image Capture - %d [%d]", LensShadingIndex, iStep);
+			putListLog(sLog);
+			iRtnFunction = 122580;		//모드 전환 후 캡처
+		}
+		
 		break;
 	case 122650:
+		//
+		//Lens Shading 검사
+		//
+		//
 		iRtnFunction = 122700;
 		break;
 	case 122700:
 		
 
-		Task.LensTaskTime = myTimer(true);
-		//Task.m_iRetry_Opt = 0;
-		iRtnFunction = 123000;
+		//-----------------------------------------------------------------
+		//Blemish - 1장 이미지 A Mode
+		//RI - 1장 이미지 A Mode
+		//Black Mask Edge Test - 1장 이미지 A Mode
+		//Illumination Center - 1장 이미지 A Mode
+		//SNR - 1장 이미지 A Mode
+		//R/G , B/G - 1장 이미지 A Mode
+		//-----------------------------------------------------------------
+		
+		LightRetry = 0;
+		iRtnFunction = 122701;
 		break;
-	case 123000:
-		if (sysData.m_iDefectInspPass == 1)	// 이물검사 유무
+	case 122701:
+		beolRtn = MIU.CheetahModeChange(A_MODEL);		//모드 변경
+		if (beolRtn == false)
 		{
-			sLog.Format(_T("[PASS] Defect Insp[%d]"), iStep);
-			putListLog(sLog);
-			iRtnFunction = 123400;
+			sLog.Format("A Mode Change Fail[%d]", iStep);
+			errMsg2(Task.AutoFlag, sLog);
+			iRtnFunction = -122701;
+			break;
+		}
+		sLog.Format("A Mode Change Ok[%d]", iStep);
+		putListLog(sLog);
+
+		OcLight_Dms50v52.DPS_Light_OnOffLevel(LIGHT_RMS_D56, true, model.m_iLedValue[LEDDATA_OC_GREEN]);
+
+		sLog.Format("D65 광원 On[%d]", iStep);
+		putListLog(sLog);
+
+		Sleep(100);
+		iRtnFunction = 122702;
+		break;
+
+	case 122702:
+		//D65 , G 204
+		
+		Task.chkTargetRgb = 204;
+		Task.chkTargetChannel = G_COLOR;
+		MIU.Cheetah_Light_Change(LIGHT_RMS_D56, Task.chkTargetRgb, Task.chkTargetChannel);
+		sLog.Format("Set LIGHT_RMS_D56 / G:%d [%d]", Task.chkTargetRgb, iStep);
+		iRtnFunction = 122703;
+
+		Task.PCBTaskTime = myTimer(true);
+		break;
+
+	case 122703:
+		if ((myTimer(true) - Task.PCBTaskTime) > 300)
+		{
+			iRtnFunction = 122704;
+		}
+
+		break;
+	case 122704:
+
+		if (LightRetry < MaxLightRetry)		//50
+		{
+			LightRetry++;
+			//r,b,g 값이 맞춰졌는지 확인 필요.
+			TCHAR* pszCol[] = { _T("R Color"), _T("G Color"), _T("B Color") };
+			if (MIU.Get_Cheetah_Light_Value(Task.chkTargetRgb, Task.chkTargetChannel))
+			{
+
+				sLog.Format("%s Color: %d 설정 완료[%d]", pszCol[Task.chkTargetChannel], Task.chkTargetRgb, iStep);
+				putListLog(sLog);
+				iRtnFunction = 122705;
+				break;
+			}
+			iRtnFunction = 122703;		//반복 조명 컨트롤러 조정
+			
 			break;
 		}
 		else
 		{
-			//iRtnFunction = 123100;
+			//실패
+			sLog.Format("밝기 조정 Fail[%d]", iStep);
+			errMsg2(Task.AutoFlag, sLog);
+			iRtnFunction = -122702;
 			break;
 		}
 		break;
+	case 122705:
+		//이미지 캡처
+		MIU.func_Set_InspImageCopy(BLEMISH, MIU.m_pFrameRawBuffer);
+		sLog.Format("A Mode / D65 Image Capture [%d]", iStep);
+		putListLog(sLog);
+		iRtnFunction = 122706;		//모드 전환 후 캡처
+
+		break;
+	case 122706:
+		//이물검사 
+		//
+		//
+		//Blemish - 1장 이미지 A Mode
+		//RI - 1장 이미지 A Mode
+		//Black Mask Edge Test - 1장 이미지 A Mode
+		//Illumination Center - 1장 이미지 A Mode
+		//SNR - 1장 이미지 A Mode
+		//R/G , B/G - 1장 이미지 A Mode
+		g_clApsInsp.func_Insp_Stain(MIU.m_pFrameRawBuffer);
+		g_clApsInsp.func_Insp_Shm_Illumination(MIU.m_pFrameRawBuffer);
+		g_clApsInsp.func_Insp_BlackMaskEdge(MIU.m_pFrameRawBuffer);
+		g_clApsInsp.func_Insp_IlluminationOc(MIU.m_pFrameRawBuffer);
+		//snr
+		g_clApsInsp.func_Insp_ColorSensitivity(MIU.vDefectMidBuffer_6500K, MID_6500K_RAW);
+
+		iRtnFunction = 122707;
+		break;
+	case 122707:
+
+		//Defect Light Set
+		
+		DefectIndex = 0;
+		iRtnFunction = 123000;
+		break;
+
+	case 123000:
+
+		OcLight_Dms50v52.DPS_Light_OnOffLevel(LIGHT_RMS_D56, true, model.m_iLedValue[LEDDATA_OC_GREEN]);
+		sLog.Format("D65 광원 On[%d]", iStep);
+		putListLog(sLog);
+		
+		
+		iRtnFunction = 123001;
+		break;
+
+	case 123001:
+		if (DefectIndex == 0)
+		{
+			LightRetry = 0;
+			beolRtn = MIU.CheetahModeChange(F_MODEL);		//모드 변경
+			sLog.Format("F Mode Change Ok[%d]", iStep);
+		}
+		if (DefectIndex == 1)
+		{
+			LightRetry = 0;
+			beolRtn = MIU.CheetahModeChange(G_MODEL);		//모드 변경
+			sLog.Format("G Mode Change Ok[%d]", iStep);
+		}
+		if (beolRtn == false)
+		{
+			sLog.Format("Mode Change Fail[%d]", iStep);
+			errMsg2(Task.AutoFlag, sLog);
+			iRtnFunction = -123001;
+			break;
+		}
+		else
+		{
+			iRtnFunction = 123002;
+			putListLog(sLog);
+		}
+		
+		break;
+	case 123002:
+		if (DefectIndex == 0)
+		{
+			Task.chkTargetRgb = 119;
+			Task.chkTargetChannel = G_COLOR;
+			MIU.Cheetah_Light_Change(LIGHT_RMS_D56, Task.chkTargetRgb, Task.chkTargetChannel);
+			sLog.Format("Set LIGHT_RMS_D56 / G:%d [%d]", Task.chkTargetRgb, iStep);
+		}
+		if (DefectIndex == 1)
+		{
+			Task.chkTargetRgb = 74;
+			Task.chkTargetChannel = G_COLOR;
+			MIU.Cheetah_Light_Change(LIGHT_RMS_D56, Task.chkTargetRgb, Task.chkTargetChannel);
+			sLog.Format("Set LIGHT_RMS_D56 / G:%d [%d]", Task.chkTargetRgb, iStep);
+		}
+		
+
+		iRtnFunction = 123003;
+		Task.PCBTaskTime = myTimer(true);
+		break;
+	case 123003:
+		if ((myTimer(true) - Task.PCBTaskTime) > 300)
+		{
+			iRtnFunction = 123004;
+		}
+		break;
+	case 123004:
+		if (LightRetry < MaxLightRetry)		//50
+		{
+			LightRetry++;
+
+			//r,b,g 값이 맞춰졌는지 확인 필요.
+			TCHAR* pszCol[] = { _T("R Color"), _T("G Color"), _T("B Color") };
+			if (MIU.Get_Cheetah_Light_Value(Task.chkTargetRgb, Task.chkTargetChannel))
+			{
+
+				sLog.Format("%s Color: %d 설정 완료[%d]", pszCol[Task.chkTargetChannel], Task.chkTargetRgb, iStep);
+				putListLog(sLog);
+				iRtnFunction = 123005;
+				break;
+			}
+			iRtnFunction = 123002;		//반복 조명 컨트롤러 조정
+			break;
+		}
+		else
+		{
+			//실패
+			sLog.Format("밝기 조정 Fail[%d]", iStep);
+			errMsg2(Task.AutoFlag, sLog);
+			iRtnFunction = -123004;
+			break;
+		}
+		break;
+	case 123005:
+		MIU.func_Set_InspImageCopy(DEFECT_BRIGHT, MIU.m_pFrameRawBuffer, DefectIndex);
+		//
+		//
+		if (DefectIndex < 2)
+		{
+			DefectIndex++;
+			iRtnFunction = 123001;
+			break;
+		}
+		iRtnFunction = 123006;		//Defect 검사 완료
+		break;
+
+	case 123006:
+		//
+		//
+		//Bright Defect 검사 2번
+		//
+		g_clApsInsp.func_Insp_Defect(MIU.vDefectMidBuffer_6500K, MIU.vDefectLowBuffer);
+		//
+		//
+		//
+		iRtnFunction = 123007;
+		break;
+	case 123007:
+		if (!motor.PCB_Z_Motor_Move(Wait_Pos))
+		{
+			sLog.Format("PCB Z축 대기위치 이동 실패[%d]", iStep);
+			putListLog(sLog);
+			iRtnFunction = -123007;
+			break;
+		}
+
+		iRtnFunction = 123100;
+		break;
+
 	case 123100:
 		if (!motor.Pcb_Motor_Move(Dark_Pos))
 		{
@@ -3806,28 +4117,198 @@ int	CPcbProcess2::Complete_FinalInsp(int iStep)
 			iRtnFunction = -123200;
 			break;
 		}
-		Task.PCBTaskTime = myTimer(true);
 		iRtnFunction = 123300;
+		Task.PCBTaskTime = myTimer(true);
 		break;
 	case 123300:
-		Sleep(100);
 		if (motor.IsStopAxis(Motor_PCB_Z))
 		{
-			Sleep(100);
-			MIU.func_Set_InspImageCopy(LOW_LEVEL_RAW, MIU.m_pFrameRawBuffer);		//완제품 dark
 			Task.PCBTaskTime = myTimer(true);
 			iRtnFunction = 123400;
 			break;
 		}
 		else if ((myTimer(true) - Task.PCBTaskTime) > 10000)
 		{
-			sLog.Format("PCB Z DAR 정지확인 시간 초과[%d]", iStep);
+			sLog.Format("PCB Z 정지확인 시간 초과[%d]", iStep);
 			errMsg2(Task.AutoFlag, sLog);
-			iRtnFunction = -123200;
+			iRtnFunction = -123300;
 			break;
 		}
 		break;
 	case 123400:
+		DefectIndex = 0;
+		iRtnFunction = 123401;
+		//Dark Noise 검사 시작 - Dark 에서는 조명 조절없이 카메라 모드만 변경
+		break;
+
+	case 123401:
+		//Defect 검사
+		if (DefectIndex == 0)
+		{
+			beolRtn = MIU.CheetahModeChange(E_MODEL);		//1장
+			sLog.Format("E Mode Change Ok[%d]", iStep);
+		}
+		if (DefectIndex == 1)
+		{
+			beolRtn = MIU.CheetahModeChange(F_MODEL);		//1장
+			sLog.Format("F Mode Change Ok[%d]", iStep);
+		}
+		if (DefectIndex == 2)
+		{
+			beolRtn = MIU.CheetahModeChange(G_MODEL);		//1장
+			sLog.Format("G Mode Change Ok[%d]", iStep);
+		}
+
+
+		if (beolRtn == false)
+		{
+			sLog.Format("Mode Change Fail[%d]", iStep);
+			errMsg2(Task.AutoFlag, sLog);
+			iRtnFunction = -123401;
+			break;
+		}
+		else
+		{
+			putListLog(sLog);
+			iRtnFunction = 123402;
+			Task.PCBTaskTime = myTimer(true);
+		}
+		break;
+	case 123402:
+		if ((myTimer(true) - Task.PCBTaskTime) > 600)
+		{
+			iRtnFunction = 123403;
+		}
+		break;
+	case 123403:
+		
+		if (DefectIndex == 0 || DefectIndex == 1 || DefectIndex == 2)
+		{
+			//Defect Dark 이미지 캡처
+			MIU.func_Set_InspImageCopy(DEFECT_DARK, MIU.m_pFrameRawBuffer, DefectIndex);
+		}
+		
+		if (DefectIndex < 2)
+		{
+			DefectIndex++;
+			iRtnFunction = 123401;
+			break;
+		}
+
+		//Defect Dark 이미지 캡처 완료
+		iRtnFunction = 123404;
+		
+		break;
+	case 123404:
+		//
+		//
+		//
+		//Defect Dark 검사
+		g_clApsInsp.func_Insp_Defect(MIU.vDefectMidBuffer_6500K, MIU.vDefectLowBuffer);
+		//
+		//
+		iRtnFunction = 123405;
+		break;
+	case 123405:
+		DefectIndex = 0;
+		iRtnFunction = 123406;
+		break;
+	case 123406:
+
+		//Dark Noise 검사
+		if (DefectIndex == 0)
+		{
+			beolRtn = MIU.CheetahModeChange(H_MODEL);		//30장
+			sLog.Format("H Mode Change Ok[%d]", iStep);
+		}
+		if (DefectIndex == 1)
+		{
+			beolRtn = MIU.CheetahModeChange(I_MODEL);		//30장
+			sLog.Format("I Mode Change Ok[%d]", iStep);
+		}
+
+		if (beolRtn == false)
+		{
+			sLog.Format("Mode Change Fail[%d]", iStep);
+			errMsg2(Task.AutoFlag, sLog);
+			iRtnFunction = -123406;
+			break;
+		}
+		else
+		{
+
+			DarkGetCount = 0;
+			putListLog(sLog);
+			iRtnFunction = 123407;
+			Task.PCBTaskTime = myTimer(true);
+		}
+		
+		break;
+	case 123407:
+		if ((myTimer(true) - Task.PCBTaskTime) > 600)
+		{
+			iRtnFunction = 123408;
+		}
+		
+		break;
+	case 123408:
+		//Dark 검사 30장 2번 총 60장
+		if (DarkGetCount < 60)
+		{
+			MIU.func_Set_InspImageCopy(DARK, MIU.m_pFrameRawBuffer, DarkGetCount);
+			DarkGetCount++;
+			if (DarkGetCount == 30 && DefectIndex == 0)
+			{
+				DefectIndex = 1;
+				iRtnFunction = 123406;//모드 변경
+				break;
+			}
+			iRtnFunction = 123409;
+			break;
+		}
+		//Dark Image 60장 캡처 완료
+
+
+		iRtnFunction = 123410;
+		break;
+	case 123409:
+		if ((myTimer(true) - Task.PCBTaskTime) > 100)
+		{
+			iRtnFunction = 123408;
+		}
+		break;
+
+	case 123410:
+		//
+		//
+		// 
+		//Dark 검사 CACMISDarkNoise
+		//
+		g_clApsInsp.func_Insp_Dark(MIU.m_pFrameRawBuffer);
+		//
+		iRtnFunction = 123500;
+		break;
+	case 123500:
+		
+		iRtnFunction = 123600;
+		break;
+	case 123600:
+		iRtnFunction = 123650;
+		break;
+
+	case 123650:
+		iRtnFunction = 123670;
+		break;
+	case 123670:
+		iRtnFunction = 123700;
+		break;
+	case 123700:
+		iRtnFunction = 123800;
+		break;
+	case 123800:
+		iRtnFunction = 123850;
+		break;
+	case 123850:
 		if (!motor.PCB_Z_Motor_Move(Wait_Pos))
 		{
 			sLog.Format("PCB Z축 대기위치 이동 실패[%d]", iStep);
@@ -3835,96 +4316,7 @@ int	CPcbProcess2::Complete_FinalInsp(int iStep)
 			iRtnFunction = -123400;
 			break;
 		}
-		iRtnFunction = 123500;
-		break;
-	case 123500:
-		
-		LightControl.ctrlLedVolume(LIGHT_OC, model.m_iLedValue[LEDDATA_D6500]);
-
-		iRtnFunction = 123600;
-		break;
-	case 123600:
-		if (!motor.Pcb_Motor_Move(OC_6500K_Pos, Task.d_Align_offset_x[PCB_Chip_MARK], Task.d_Align_offset_y[PCB_Chip_MARK], Task.d_Align_offset_th[PCB_Chip_MARK]))
-		{
-			sLog.Format("PCB부 모터 Defect 검사 위치 이동 실패[%d]", iStep);
-			putListLog(sLog);
-			iRtnFunction = -123600;
-			break;
-		}
-		else
-		{
-			Task.PCBTaskTime = myTimer(true);
-			iRtnFunction = 123650;
-			break;
-		}
-		break;
-
-	case 123650:
-		//검사 축 대기위치 확인
-		iRtnFunction = 123670;
-		break;
-	case 123670:
-		if (!motor.Pcb_Tilt_Motor_Move(OC_6500K_Pos))
-		{
-			sLog.Format("PCB Tx Ty 축 이물검사 위치 이동 실패[%d]", iStep);	//김세영 선임 요청 
-			putListLog(sLog);
-			errMsg2(Task.AutoFlag, sLog);
-			iRtnFunction = -123670;
-			break;
-		}
-		else
-		{
-			sLog.Format("PCB Tx Ty 축 이물검사 위치 이동 성공[%d]", iStep);	//김세영 선임 요청 
-			putListLog(sLog);
-			iRtnFunction = 123700;
-			break;
-		}
-		break;
-	case 123700:
-		if (motor.PCB_Z_Motor_Move(OC_6500K_Pos))
-		{
-			sLog.Format("PCB Z Axis OC 6500K Pos Move Complete[%d]", iStep);
-			putListLog(sLog);
-			Task.PCBTaskTime = myTimer(true);
-			iRtnFunction = 123800;
-			break;
-		}
-		else
-		{
-			sLog.Format("PCB Z Axis OC 6500K Pos Move Fail[%d]", iStep);
-			errMsg2(Task.AutoFlag, sLog);
-			iRtnFunction = -123700;
-			break;
-		}
-		break;
-	case 123800:
-		if ((myTimer(true) - Task.PCBTaskTime) > 500)
-		{
-			iRtnFunction = 123850;
-			break;
-		}
-		break;
-	case 123850:
-		if (motor.IsStopAxis(Motor_PCB_Z))
-		{
-			Task.PCBTaskTime = myTimer(true);
-
-			//6500k 이미지 저장
-			Sleep(300);
-			MIU.func_Set_InspImageCopy(MID_6500K_RAW, MIU.m_pFrameRawBuffer);			//oc
-			//ccdDlg->m_pSFRDlg->Raw_ImageSave(MIU.m_pFrameRawBuffer, MID_6500K_RAW);
-			//MID_6500K_RAW 이미지 저장
-
-			iRtnFunction = 123900;
-			break;
-		}
-		else
-		{
-			sLog.Format("PCB Z Axis OC 6500K Pos Move Check Fail[%d]", iStep);
-			errMsg2(Task.AutoFlag, sLog);
-			iRtnFunction = -123700;
-			break;
-		}
+		iRtnFunction = 123900;
 		break;
 	case 123900:
 		Sleep(dFinalDelay);
@@ -4001,14 +4393,14 @@ int	CPcbProcess2::Complete_FinalInsp(int iStep)
 		iRtnFunction = 127700;
 		break;
 	case 127700:
-		if (LGIT_MODEL_INDEX == M2_FF_MODULE)
-		{
-			//Head Model
-			MIU.OtpRead_Head_Fn();
-			MIU.partNumberVerifyFn();
-			MIU.FwVersionRead_Head_Fn();
-			MIU.SensorIdRead_Head_Fn();
-		}
+		//if (LGIT_MODEL_INDEX == M2_FF_MODULE)
+		//{
+		//	//Head Model
+		//	MIU.OtpRead_Head_Fn();
+		//	MIU.partNumberVerifyFn();
+		//	MIU.FwVersionRead_Head_Fn();
+		//	MIU.SensorIdRead_Head_Fn();
+		//}
 		iRtnFunction = 127710;
 		break;
 	case 127710:
@@ -4017,10 +4409,10 @@ int	CPcbProcess2::Complete_FinalInsp(int iStep)
 		iRtnFunction = 127800;
 		break;
 	case 127800:
-		MESCommunication.OTPVerifyFail.Empty();
-		MESCommunication.sensorId.Empty();
-		MESCommunication.partNumber.Empty();
-		MESCommunication.fwVersion.Empty();
+		//MESCommunication.OTPVerifyFail.Empty();
+		//MESCommunication.sensorId.Empty();
+		//MESCommunication.partNumber.Empty();
+		//MESCommunication.fwVersion.Empty();
 		iRtnFunction = 127900;
 		break;
 	case 127900:

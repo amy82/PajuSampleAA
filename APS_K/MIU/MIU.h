@@ -491,6 +491,11 @@ public:
 
 
 	BYTE* pLensShadingBuffer[7];
+
+	BYTE* pDefectBrightBuffer[5];		//4개더 추가될수 있음
+	BYTE* pDefectDarkBuffer[3];
+
+	BYTE* pDarkBuffer[60];
 	void disConnectedInit();
 
 	void INI_LOAD(int index = 0);

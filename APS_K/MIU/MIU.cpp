@@ -212,7 +212,19 @@ void CMIU::setInterface()
 	{
 		pLensShadingBuffer[i] = NULL;
 	}
-
+	for (i = 0; i < 60; i++)
+	{
+		pDarkBuffer[i] = NULL;
+	}
+	for (i = 0; i < 5; i++)
+	{
+		pDefectBrightBuffer[i] = NULL;
+	}
+	for (i = 0; i < 3; i++)
+	{
+		pDefectDarkBuffer[i] = NULL;
+	}
+	
 	//라온피플 ★★★★★★
 	//===================================================================================================================
 	m_hBoardLibrary = LoadLibrary("GrabberDLL.dll");
@@ -2374,6 +2386,32 @@ bool CMIU::cvBufferAlloc()
 			pLensShadingBuffer[i] = NULL;
 		}
 	}
+	for (i = 0; i < 60; i++)
+	{
+		if (pDarkBuffer[i])
+		{
+			delete pDarkBuffer[i];
+			pDarkBuffer[i] = NULL;
+		}
+	}
+	for (i = 0; i < 5; i++)
+	{
+		if (pDefectBrightBuffer[i])
+		{
+			delete pDefectBrightBuffer[i];
+			pDefectBrightBuffer[i] = NULL;
+		}
+	}
+	for (i = 0; i < 3; i++)
+	{
+		if (pDefectDarkBuffer[i])
+		{
+			delete pDefectDarkBuffer[i];
+			pDefectDarkBuffer[i] = NULL;
+		}
+	}
+
+	
 	
 	if (m_pFrameRawBuffer != NULL)
 	{
@@ -2422,7 +2460,23 @@ bool CMIU::cvBufferAlloc()
 		pLensShadingBuffer[i] = new BYTE[m_pBoard->GetFrameRawSize()];
 		memset(pLensShadingBuffer[i], 0, m_pBoard->GetFrameRawSize());
 	}
+	for (i = 0; i < 60; i++)
+	{
+		pDarkBuffer[i] = new BYTE[m_pBoard->GetFrameRawSize()];
+		memset(pDarkBuffer[i], 0, m_pBoard->GetFrameRawSize());
+	}
+	for (i = 0; i < 5; i++)
+	{
+		pDefectBrightBuffer[i] = new BYTE[m_pBoard->GetFrameRawSize()];
+		memset(pDefectBrightBuffer[i], 0, m_pBoard->GetFrameRawSize());
+	}
+	for (i = 0; i < 3; i++)
+	{
+		pDefectDarkBuffer[i] = new BYTE[m_pBoard->GetFrameRawSize()];
+		memset(pDefectDarkBuffer[i], 0, m_pBoard->GetFrameRawSize());
+	}
 
+	
 	m_pFrameRawBuffer = new BYTE[m_pBoard->GetFrameRawSize()];
 	vChartBuffet = new BYTE[m_pBoard->GetFrameRawSize()];
 	vChart_Second_Buffet = new BYTE[m_pBoard->GetFrameRawSize()];
@@ -4441,6 +4495,7 @@ int CMIU::StopLive () {
 
 void CMIU::func_Set_InspImageCopy(int nType, BYTE* GrabImage,int AvrCount)
 {
+	int i = 0;
     CString str;
 	memcpy(vTempBuffer, GrabImage, m_pBoard->GetFrameRawSize());
 
@@ -4456,12 +4511,6 @@ void CMIU::func_Set_InspImageCopy(int nType, BYTE* GrabImage,int AvrCount)
         //low-level (Dark)
         str.Format("low_level_DARK");
 		memcpy(vDefectLowBuffer, vTempBuffer, m_pBoard->GetFrameRawSize());
-    }
-    else if (nType == MID_2800K_RAW)
-    {
-        //Mid-level (2800K)  --Color Sensitivity 만 사용(2800K+6500K)
-        str.Format("Mid_level_2800K");
-		memcpy(vDefectMidBuffer_2800K, vTempBuffer, m_pBoard->GetFrameRawSize());
     }
     else if (nType == CHART_RAW)
     {
@@ -4493,6 +4542,27 @@ void CMIU::func_Set_InspImageCopy(int nType, BYTE* GrabImage,int AvrCount)
 		str.Format("LensShading_%d", AvrCount);
 		memcpy(pLensShadingBuffer[AvrCount], vTempBuffer, m_pBoard->GetFrameRawSize());
 	}
+	else if (nType == BLEMISH)
+	{
+		str.Format("Blemish");
+		memcpy(vDefectMidBuffer_6500K, vTempBuffer, m_pBoard->GetFrameRawSize());
+	}
+	else if (nType == DEFECT_BRIGHT)
+	{
+		str.Format("DefectBright");
+		memcpy(pDefectBrightBuffer[AvrCount], vTempBuffer, m_pBoard->GetFrameRawSize());
+	}
+	else if (nType == DEFECT_DARK)
+	{
+		str.Format("DefectDark");
+		memcpy(pDefectDarkBuffer[AvrCount], vTempBuffer, m_pBoard->GetFrameRawSize());
+	}
+	else if (nType == DARK)
+	{
+		str.Format("Dark_%d", AvrCount);
+		memcpy(pDarkBuffer[AvrCount], vTempBuffer, m_pBoard->GetFrameRawSize());
+	}
+	//
     else
     {
         //모두 초기화?
@@ -4502,11 +4572,25 @@ void CMIU::func_Set_InspImageCopy(int nType, BYTE* GrabImage,int AvrCount)
         memset(vDefectLowBuffer, 0, m_pBoard->GetFrameRawSize());
         memset(vDefectMidBuffer_2800K, 0, m_pBoard->GetFrameRawSize());
 
-		for (int i = 0; i < 7; i++)
+		for (i = 0; i < 7; i++)
 		{
 			memset(pLensShadingBuffer[i], 0, m_pBoard->GetFrameRawSize());
 		}
+		for (i = 0; i < 60; i++)
+		{
+			memset(pDarkBuffer[i], 0, m_pBoard->GetFrameRawSize());
+		}
+		for (i = 0; i < 5; i++)
+		{
+			memset(pDefectBrightBuffer[i], 0, m_pBoard->GetFrameRawSize());
+		}
+		for (i = 0; i < 3; i++)
+		{
+			memset(pDefectDarkBuffer[i], 0, m_pBoard->GetFrameRawSize());
+		}
 
+		
+		
     }
 	//g_clApsInsp.func_Insp_Shm_Illumination(vTempBuffer);
     RawImageSave(str, vTempBuffer);

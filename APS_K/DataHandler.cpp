@@ -73,6 +73,8 @@ CTask::CTask()
 void CTask::Init()
 {
 	int i = 0;
+	chkTargetRgb = 0;
+	chkTargetChannel = R_COLOR;
 	m_PcbLaserAfterTx = 0.0;
 	m_PcbLaserAfterTy = 0.0;
 	bSfrLogView = true;

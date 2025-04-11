@@ -280,8 +280,8 @@ public:
 	double m_PcbLaserAfterTx;
 	double m_PcbLaserAfterTy;
 
-
-
+	int chkTargetRgb;
+	COLOR_CHEETAH chkTargetChannel;
 
 	double		m_Laser_Point[8];
 

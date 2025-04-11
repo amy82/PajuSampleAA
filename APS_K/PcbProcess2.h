@@ -9,6 +9,9 @@ public:
 
 	void putListLog(CString strLog);
 	int LensShadingIndex;
+	int DefectIndex;
+
+	int DarkGetCount;
 	int LightRetry;
 	int MaxLightRetry;
 

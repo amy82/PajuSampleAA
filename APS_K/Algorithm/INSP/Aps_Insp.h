@@ -52,7 +52,7 @@ public:
 	//oc
 
 	//R/C,B/C,Cr/Cb
-	bool func_Insp_ColorSensitivity(BYTE* stainImg, int index, bool bAutoMode);
+	bool func_Insp_ColorSensitivity(BYTE* stainImg, int index, bool bAutoMode = true);
 
 
 	//Relative Illumination (RI)
