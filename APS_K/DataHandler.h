@@ -1486,7 +1486,18 @@ public:
 
 
 	double	m_nMesBlemishMaxDefect[9];
+
 	//---------------------------------------------------------------
+	//2025 New
+	double	m_nMesDarkFpn[4];
+	double	m_nMesDarkColumnFpn[4];
+	double	m_nMesDarkMaxColumnFpn[4];
+	double	m_nMesDarkRowFpn[4];
+	double	m_nMesDarkMaxRowFpn[4];
+	double	m_nMesDarkTemporalNoise[4];
+	double	m_nMesDarkColumnTemporalNoise[4];
+	double	m_nMesDarkRowNoise[4];
+	double	m_nMesDarkDarkMean[4];
 	//---------------------------------------------------------------
 	//result
 	int		m_nMesDistortionResult;

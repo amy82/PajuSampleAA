@@ -29,7 +29,100 @@ CAPS_Insp::~CAPS_Insp(void)
 {
 }
 
+void CAPS_Insp::CallPython(int width, int height)	//const BYTE* imageBuffer, int width, int height)
+{
+	char command[256];
+	sprintf(command, "python image_process.py %d %d", width, height);
 
+	FILE* pipe = _popen(command, "r");
+	if (!pipe) return;// "ERROR";
+
+	char buffer[128];
+	std::string result = "";
+
+	while (fgets(buffer, sizeof(buffer), pipe) != NULL) {
+		result += buffer;
+	}
+
+	_pclose(pipe);
+
+	AfxMessageBox(CString("Python 처리 결과: ") + result.c_str());
+	return;
+#if 0
+
+	// 1. Python 초기화
+	Py_Initialize();
+
+	char path[MAX_PATH];
+	GetModuleFileNameA(NULL, path, MAX_PATH);
+	PathRemoveFileSpecA(path);  // EXE 파일의 폴더 경로만 남김
+
+	std::string pythonPathCmd = "import sys; sys.path.append(r'" + std::string(path) + "')";
+	PyRun_SimpleString(pythonPathCmd.c_str());
+
+	// 2. sys.path에 현재 폴더 추가
+	PyRun_SimpleString("import sys");
+	PyRun_SimpleString("sys.path.append('.')");
+
+	// 2. 모듈 불러오기
+	PyObject* pName = PyUnicode_FromString("image_process");
+	PyObject* pModule = PyImport_Import(pName);
+	Py_DECREF(pName);
+
+
+	if (pModule) 
+	{
+		PyObject* pFunc = PyObject_GetAttrString(pModule, "process_image_from_buffer");
+
+		if (pFunc && PyCallable_Check(pFunc)) 
+		{
+			// 3. ByteArray → Python Bytes 객체로
+			//PyObject* pBytes = PyBytes_FromStringAndSize((const char*)imageBuffer, width * height);
+
+			PyObject* pBytes = PyBytes_FromStringAndSize(nullptr, width * height);
+
+			// 4. 인자 생성
+			PyObject* pArgs = PyTuple_Pack(3, pBytes, PyLong_FromLong(width), PyLong_FromLong(height));
+
+			// 5. Python 함수 호출
+			PyObject* pValue = PyObject_CallObject(pFunc, pArgs);
+
+			if (pValue) {
+				double result = PyFloat_AsDouble(pValue);
+				AfxMessageBox(CString("Python 처리 결과: ") + std::to_wstring(result).c_str());
+				Py_DECREF(pValue);
+			}
+			else {
+
+				AfxMessageBox(CString("Python Error"));
+				PyErr_Print();
+			}
+
+			Py_DECREF(pArgs);
+			Py_DECREF(pBytes);
+		}
+		else 
+		{
+			AfxMessageBox(CString("Python 4"));
+			PyErr_Print();
+		}
+		AfxMessageBox(CString("Python 3"));
+		Py_XDECREF(pFunc);
+		Py_DECREF(pModule);
+	}
+	else {
+		PyErr_Print();  // 릴리즈 모드 아니면 콘솔에 출력
+		MessageBoxA(nullptr, "Python module import failed!", "Error", MB_ICONERROR);
+		AfxMessageBox(CString("Python 2"));
+		PyErr_Print();
+	}
+
+	AfxMessageBox(CString("Python 1"));
+	// 6. Python 종료
+	Py_Finalize();
+
+#endif
+}
 
 //-----------------------------------------------------------------------------
 //
@@ -318,8 +411,6 @@ bool CAPS_Insp::func_Insp_Shm_Illumination(BYTE* rawImage, bool bAutoMode, bool 
 	theApp.MainDlg->putListLog(sTemp);
 	sTemp.Format("RIcorner 3: %.6lf", MandoInspLog.dRicorner[3]);
 	theApp.MainDlg->putListLog(sTemp);
-
-
 
 	sTemp.Format("RI MaxDiff: %.6lf", MandoInspLog.dRiDiff);
 	theApp.MainDlg->putListLog(sTemp);
@@ -1329,8 +1420,10 @@ bool CAPS_Insp::func_Insp_IlluminationOc(BYTE* rawImage, bool bAutoMode)
 	TDATASPEC& tDataSpec = gMIUDevice.dTDATASPEC_n;
 
 	//CACMISOpticalCenterCentroidCircle
+
 	TOpticalCenterCentroidCircle ocSepc;
 	memset(&ocSepc, 0x00, sizeof(TOpticalCenterCentroidCircle));
+
 	//ocSepc.tROI
 	ocSepc.dOpticalCenterSpecX = 10;
 	ocSepc.dOpticalCenterSpecY = 10;
@@ -1341,6 +1434,7 @@ bool CAPS_Insp::func_Insp_IlluminationOc(BYTE* rawImage, bool bAutoMode)
 
 	std::shared_ptr<CACMISOpticalCenterCentroidCircle> opticalOc = std::make_shared<CACMISOpticalCenterCentroidCircle>();
 	opticalOc->Inspect((const BYTE*)rawImage, nWidth, nHeight, ocSepc, tDataSpec.eDataFormat, tDataSpec.eOutMode, tDataSpec.eSensorType, nBlackLevel, 0);// , DEMOSAICMETHOD_GRADIENT);
+
 
 
 	const DBPOINT *ptOCpt;
@@ -1399,7 +1493,12 @@ bool CAPS_Insp::func_Insp_Dark(BYTE* lowImage, bool bAutoMode)
 	DarkSpec.nPedestal = 240;
 	DarkSpec.nConvKerenelSize = 11;
 
-//	DarkSpec.pConvKernel = new double[]{ -0.1,-0.1,-0.1,-0.1,-0.1,-0.1,1.0,-0.1,-0.1,-0.1,-0.1,-0.1, };
+	DarkSpec.pConvKernel = new double[12];
+
+	for (i = 0; i < 12; i++)
+	{
+		DarkSpec.pConvKernel[i] = -0.1;
+	}
 	for ( i = 0; i < 4; i++)
 	{
 		DarkSpec.dFPNPThreshold[i] = 0.0;
@@ -1426,10 +1525,33 @@ bool CAPS_Insp::func_Insp_Dark(BYTE* lowImage, bool bAutoMode)
 
 
 	std::shared_ptr<CACMISDarkNoise> darkNoise = std::make_shared<CACMISDarkNoise>();
-	BYTE *pBuffer[30] = { NULL, NULL };
+	BYTE *pBuffer[30] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL ,
+						NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL ,
+						NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
 
 	darkNoise->InspectM((const BYTE**)pBuffer, nWidth, nHeight, DarkSpec, tDataSpec.eDataFormat, tDataSpec.eOutMode, tDataSpec.eSensorType, nBlackLevel,0,1,0);
 
+	int cnt = darkNoise->GetInspectionRegionCount();
+	for (i = 0; i < cnt; i++)
+	{
+		//i = 0(R), 1(Gr), 2(Gb), 3(B)
+		//
+		const TDarkNoiseResult* pResult = darkNoise->GetInspectionResult(i);
+
+		MESCommunication.m_nMesDarkFpn[i] = pResult->dFPNP[i];
+		MESCommunication.m_nMesDarkColumnFpn[i] = pResult->dColumnFPNP[i];
+		MESCommunication.m_nMesDarkMaxColumnFpn[i] = pResult->dMaxColumnFPNP[i];
+		MESCommunication.m_nMesDarkRowFpn[i] = pResult->dRowFPNP[i];
+		MESCommunication.m_nMesDarkMaxRowFpn[i] = pResult->dMaxRowFPNP[i];
+		MESCommunication.m_nMesDarkTemporalNoise[i] = pResult->dTemporalNoiseP[i];
+		MESCommunication.m_nMesDarkColumnTemporalNoise[i] = pResult->dColumnNoiseP[i];
+		MESCommunication.m_nMesDarkRowNoise[i] = pResult->dRowNoiseP[i];
+		MESCommunication.m_nMesDarkDarkMean[i] = pResult->dBlackLevel[i];
+	}
+	
+
+
+	delete[] DarkSpec.pConvKernel;
 	return bRet;
 }
 //-----------------------------------------------------------------------------
@@ -1438,9 +1560,11 @@ bool CAPS_Insp::func_Insp_Dark(BYTE* lowImage, bool bAutoMode)
 //
 //-----------------------------------------------------------------------------
 
-bool CAPS_Insp::func_Insp_Defect(BYTE* midImage, BYTE* lowImage, bool bAutoMode)
+bool CAPS_Insp::func_Insp_Defect(bool bAutoMode)
 {
 	bool bRet = false;
+	TCHAR szLog[SIZE_OF_1K];
+
 	int i = 0;
 	int nWidth = gMIUDevice.nWidth;
 	int nHeight = gMIUDevice.nHeight;
@@ -1456,30 +1580,31 @@ bool CAPS_Insp::func_Insp_Defect(BYTE* midImage, BYTE* lowImage, bool bAutoMode)
 	stSpecAllDefectSpec.nThresholdTypeBrightSP1L = 0;
 	stSpecAllDefectSpec.nThresholdTypeBrightSP2L = 0;
 
-	stSpecAllDefectSpec.nThresholdTypeBrightInDarkSP1L = 0;
-	stSpecAllDefectSpec.nThresholdTypeBrightInDarkSP2H = 0;
-	stSpecAllDefectSpec.nThresholdTypeBrightInDarkSP2L = 0;
 
-	stSpecAllDefectSpec.nThresholdTypeDarkInSaturatedSP1H = 0;
-	stSpecAllDefectSpec.nThresholdTypeDarkInSaturatedSP1L = 0;
-	stSpecAllDefectSpec.nThresholdTypeDarkInSaturatedSP2H = 0;
-	stSpecAllDefectSpec.nThresholdTypeDarkInSaturatedSP2L = 0;
+	stSpecAllDefectSpec.nThresholdTypeBrightInDarkSP1L = 1;
+	stSpecAllDefectSpec.nThresholdTypeBrightInDarkSP2H = 1;
+	stSpecAllDefectSpec.nThresholdTypeBrightInDarkSP2L = 1;
+
+	stSpecAllDefectSpec.nThresholdTypeDarkInSaturatedSP1H = 1;
+	stSpecAllDefectSpec.nThresholdTypeDarkInSaturatedSP1L = 1;
+	stSpecAllDefectSpec.nThresholdTypeDarkInSaturatedSP2H = 1;
+	stSpecAllDefectSpec.nThresholdTypeDarkInSaturatedSP2L = 1;
 
 	for (i = 0; i < 4; i++)
 	{
-		stSpecAllDefectSpec.dDefectThresholdDarkSP1L[i] = 30;
-		stSpecAllDefectSpec.dDefectThresholdDarkSP2L[i] = 30;
-		stSpecAllDefectSpec.dDefectThresholdBrightSP1L[i] = 30;
-		stSpecAllDefectSpec.dDefectThresholdBrightSP2L[i] = 30;
+		stSpecAllDefectSpec.dDefectThresholdDarkSP1L[i] = 32.0;
+		stSpecAllDefectSpec.dDefectThresholdDarkSP2L[i] = 32.0;
+		stSpecAllDefectSpec.dDefectThresholdBrightSP1L[i] = 32.0;
+		stSpecAllDefectSpec.dDefectThresholdBrightSP2L[i] = 32.0;
 		//
-		stSpecAllDefectSpec.dDefectThresholdBrightInDarkSP1L[i] = 38 * 4;
-		stSpecAllDefectSpec.dDefectThresholdBrightInDarkSP2H[i] = 7 * 4;
+		stSpecAllDefectSpec.dDefectThresholdBrightInDarkSP1L[i] = 152.0;
+		stSpecAllDefectSpec.dDefectThresholdBrightInDarkSP2H[i] = 28.0;
 
-		stSpecAllDefectSpec.dDefectThresholdBrightInDarkSP2L[i] = 109 * 4;
-		stSpecAllDefectSpec.dDefectThresholdDarkInSaturatedSP1H[i] = 152 * 4;
-		stSpecAllDefectSpec.dDefectThresholdDarkInSaturatedSP1L[i] = 579 * 4;
-		stSpecAllDefectSpec.dDefectThresholdDarkInSaturatedSP2H[i] = 31 * 4;
-		stSpecAllDefectSpec.dDefectThresholdDarkInSaturatedSP2L[i] = 534 * 4;
+		stSpecAllDefectSpec.dDefectThresholdBrightInDarkSP2L[i] = 436.0;
+		stSpecAllDefectSpec.dDefectThresholdDarkInSaturatedSP1H[i] = 608.0;
+		stSpecAllDefectSpec.dDefectThresholdDarkInSaturatedSP1L[i] = 2316.0;
+		stSpecAllDefectSpec.dDefectThresholdDarkInSaturatedSP2H[i] = 124.0;
+		stSpecAllDefectSpec.dDefectThresholdDarkInSaturatedSP2L[i] = 2136.0;
 	}
 	stSpecAllDefectSpec.nMaxDefectNumSP1 = 1000;
 	stSpecAllDefectSpec.nMaxDefectNumSP2 = 1000;
@@ -1511,44 +1636,82 @@ bool CAPS_Insp::func_Insp_Defect(BYTE* midImage, BYTE* lowImage, bool bAutoMode)
 	stSpecAllDefectSpec.nRightEdgeSize = 0;
 	stSpecAllDefectSpec.nBottomEdgeSize = 0;
 	stSpecAllDefectSpec.nWindowSize = 32;
-	stSpecAllDefectSpec.nDivideSubRegion = 7;
+	stSpecAllDefectSpec.nDivideSubRegion = 1;/// 7;
 
-	//Dark
-	stSpecAllDefectSpec.nDefectType = EDefectKind_WhitePixelInDark_SP1L| EDefectKind_WhitePixelInDark_SP2H | EDefectKind_WhitePixelInDark_SP2L |
-		EDefectKind_WhiteClusterColorInDark_SP1L | EDefectKind_WhiteClusterColorInDark_SP2H | EDefectKind_WhiteClusterColorInDark_SP2L;
-	//D65
-	stSpecAllDefectSpec.nDefectType = EDefectKind_BlackPixelInSaturated_SP1H | EDefectKind_BlackPixelInSaturated_SP1L | EDefectKind_BlackPixelInSaturated_SP2H |
-		EDefectKind_BlackPixelInSaturated_SP2L | EDefectKind_BlackClusterColorInSaturated_SP1H | EDefectKind_BlackClusterColorInSaturated_SP1L | 
-		EDefectKind_BlackClusterColorInSaturated_SP2H |
-		EDefectKind_BlackClusterColorInSaturated_SP2L;
-	//Saturated
-	stSpecAllDefectSpec.nDefectType = EDefectKind_WhitePixel_SP1L | EDefectKind_WhitePixel_SP2L | EDefectKind_BlackPixel_SP1L |
-		EDefectKind_BlackPixel_SP2L | EDefectKind_WhiteClusterColor_SP1L | EDefectKind_WhiteClusterColor_SP2L |
-		EDefectKind_BlackClusterColor_SP1L |
-		EDefectKind_BlackClusterColor_SP2L;
+
+
+	stSpecAllDefectSpec.nDefectType = EDefectKind_WhitePixel_SP1L | EDefectKind_WhitePixel_SP2L |
+		EDefectKind_BlackPixel_SP1L | EDefectKind_BlackPixel_SP2L |
+		EDefectKind_WhiteClusterColor_SP1L | EDefectKind_WhiteClusterColor_SP2L |
+		EDefectKind_BlackClusterColor_SP1L | EDefectKind_BlackClusterColor_SP2L |
+		EDefectKind_WhitePixelInDark_SP1L | EDefectKind_WhitePixelInDark_SP2H |
+		EDefectKind_WhitePixelInDark_SP2L | EDefectKind_WhiteClusterColorInDark_SP1L |
+		EDefectKind_WhiteClusterColorInDark_SP2H | EDefectKind_WhiteClusterColorInDark_SP2L;
+
+	////Dark
+	//stSpecAllDefectSpec.nDefectType = EDefectKind_WhitePixelInDark_SP1L| EDefectKind_WhitePixelInDark_SP2H | EDefectKind_WhitePixelInDark_SP2L |
+	//	EDefectKind_WhiteClusterColorInDark_SP1L | EDefectKind_WhiteClusterColorInDark_SP2H | EDefectKind_WhiteClusterColorInDark_SP2L;
+	////D65
+	//stSpecAllDefectSpec.nDefectType = EDefectKind_BlackPixelInSaturated_SP1H | EDefectKind_BlackPixelInSaturated_SP1L | EDefectKind_BlackPixelInSaturated_SP2H |
+	//	EDefectKind_BlackPixelInSaturated_SP2L | EDefectKind_BlackClusterColorInSaturated_SP1H | EDefectKind_BlackClusterColorInSaturated_SP1L | 
+	//	EDefectKind_BlackClusterColorInSaturated_SP2H |
+	//	EDefectKind_BlackClusterColorInSaturated_SP2L;
+	////Saturated
+	//stSpecAllDefectSpec.nDefectType = EDefectKind_WhitePixel_SP1L | EDefectKind_WhitePixel_SP2L | EDefectKind_BlackPixel_SP1L |
+	//	EDefectKind_BlackPixel_SP2L | EDefectKind_WhiteClusterColor_SP1L | EDefectKind_WhiteClusterColor_SP2L |
+	//	EDefectKind_BlackClusterColor_SP1L |
+	//	EDefectKind_BlackClusterColor_SP2L;
 
 	stSpecAllDefectSpec.tCircleSpec.bEnableCircle = false;
-	stSpecAllDefectSpec.tCircleSpec.nPosOffsetX = 0;
-	stSpecAllDefectSpec.tCircleSpec.nPosOffsetY = 0;
-	stSpecAllDefectSpec.tCircleSpec.dRadiusRatioX = 0;
-	stSpecAllDefectSpec.tCircleSpec.dRadiusRatioY = 0;
-	stSpecAllDefectSpec.tCircleSpec.dThresholdRatio = 0;
-	stSpecAllDefectSpec.tCircleSpec.dROIRange = 0;
+	stSpecAllDefectSpec.tCircleSpec.nPosOffsetX = 5;
+	stSpecAllDefectSpec.tCircleSpec.nPosOffsetY = 5;
+	stSpecAllDefectSpec.tCircleSpec.dRadiusRatioX = 0.5;
+	stSpecAllDefectSpec.tCircleSpec.dRadiusRatioY = 0.5;
+	stSpecAllDefectSpec.tCircleSpec.dThresholdRatio = 0.5;
+	stSpecAllDefectSpec.tCircleSpec.dROIRange = 0.5;
 	stSpecAllDefectSpec.tCircleSpec.nUsedFixedCircle = 0;
 
-	BYTE *pBuffer[2] = { NULL, NULL };
+	BYTE *pBuffer[5] = { NULL, NULL , NULL , NULL , NULL };
 
-	pBuffer[0] = midImage;	// mid-level image for detecting dark/bright defect
-	pBuffer[1] = lowImage;	// low-level image for detecting hot defect
+	pBuffer[0] = MIU.pDefectBrightBuffer[0];	// mid-level image for detecting dark/bright defect
+	pBuffer[1] = MIU.pDefectBrightBuffer[1];
+	pBuffer[2] = MIU.pDefectDarkBuffer[0];
+	pBuffer[3] = MIU.pDefectDarkBuffer[1];
+	pBuffer[4] = MIU.pDefectDarkBuffer[2];		// low-level image for detecting hot defect
+
 
 	std::shared_ptr<CACMISDefectAllDefectPixel_SONY> pACMISDefectAllDefect = std::make_shared<CACMISDefectAllDefectPixel_SONY>();
 
 	bRet = pACMISDefectAllDefect->InspectM((const BYTE**)pBuffer, nWidth, nHeight, stSpecAllDefectSpec,
-		tDataSpec.eDataFormat, tDataSpec.eOutMode, tDataSpec.eSensorType, tDataSpec.nBlackLevel, true, 2);	//defect는 true맞음
+		tDataSpec.eDataFormat, tDataSpec.eOutMode, tDataSpec.eSensorType, tDataSpec.nBlackLevel, false, 5, false, DEMOSAICMETHOD_BL33);	//defect는 true맞음
+
 	if (bRet)
 	{
+		int nDefectNumSP1 = pACMISDefectAllDefect->GetBrightDefectSP1LCount() + pACMISDefectAllDefect->GetDarkDefectSP1LCount() + pACMISDefectAllDefect->GetBrightDefectSP1LInDarkCount();
+		int nDefectNumSP2 = pACMISDefectAllDefect->GetBrightDefectSP2LCount() + pACMISDefectAllDefect->GetDarkDefectSP2LCount() + pACMISDefectAllDefect->GetBrightDefectSP2HInDarkCount() + pACMISDefectAllDefect->GetBrightDefectSP2LInDarkCount();
+		int nClusterNum = pACMISDefectAllDefect->GetBrightDefectClusterSP1LCount()
+			+ pACMISDefectAllDefect->GetDarkDefectClusterSP1LCount()
+			+ pACMISDefectAllDefect->GetBrightDefectClusterSP2LCount()
+			+ pACMISDefectAllDefect->GetDarkDefectClusterSP2LCount()
+			+ pACMISDefectAllDefect->GetBrightDefectClusterSP1LInDarkCount()
+			+ pACMISDefectAllDefect->GetBrightDefectClusterSP2HInDarkCount()
+			+ pACMISDefectAllDefect->GetBrightDefectClusterSP2LInDarkCount();
 
+
+		_stprintf_s(szLog, SIZE_OF_1K, _T("[Defect]nDefectNumSP1 : %d"), nDefectNumSP1);
+		theApp.MainDlg->putListLog(szLog);
+		_stprintf_s(szLog, SIZE_OF_1K, _T("[Defect]nDefectNumSP2 : %d"), nDefectNumSP2);
+		theApp.MainDlg->putListLog(szLog);
+		_stprintf_s(szLog, SIZE_OF_1K, _T("[Defect]nClusterNum : %d"), nClusterNum);
+		theApp.MainDlg->putListLog(szLog);
 	}
+	else
+	{
+		_stprintf_s(szLog, SIZE_OF_1K, _T("[Defect] TEST FAIL"));
+		theApp.MainDlg->putListLog(szLog);
+	}
+
+
 #if 0
 	int nBlackLevel = 0;
 	TCHAR szLog[SIZE_OF_1K];
@@ -2146,6 +2309,7 @@ bool CAPS_Insp::func_Insp_Stain(BYTE* rawImg)
 	//ACMISSoftISP::xMakeBMP(rawImg, (byte*)MIU.m_pFrameBMPBuffer, gMIUDevice.nWidth, gMIUDevice.nHeight, tDataSpec);
 
 	//BlackSpotInsp((BYTE*)rawImg, nWidth, nHeight, tDataSpec);// , cvImg);
+
     LCBInsp((BYTE*)rawImg, nWidth, nHeight, tDataSpec);//, cvImg);
     Blemish_YmeanInsp((BYTE*)rawImg, nWidth, nHeight, tDataSpec);//, cvImg);
 	FDFInsp((BYTE*)rawImg, false);

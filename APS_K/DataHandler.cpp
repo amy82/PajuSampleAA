@@ -8485,156 +8485,169 @@ void CMESCommunication::Messave()
 
 CMESCommunication::CMESCommunication()
 {
-		sMES_LotId.Format("EMPTY");
-		sMES_I2C.Format("PASS");
-			//= _T("EMPTY");	// 바코드 아이디
-		iMES_Cnt = 0;			// 차수
-		iMES_FinalResult = 0;	// 합부
+	int i = 0;
+	sMES_LotId.Format("EMPTY");
+	sMES_I2C.Format("PASS");
+		//= _T("EMPTY");	// 바코드 아이디
+	iMES_Cnt = 0;			// 차수
+	iMES_FinalResult = 0;	// 합부
 		
-		for (int i = 0; i < COMMON_MTF_INSP_CNT; i++)
-		{
-			dMES_MTF[i] = 0.0;			//MTF 검사 항목
-			dMES_MTF_UVAfter[i] = 0.0;
-			dMES_MTF_67lp[i] = 0.0;			//MTF 검사 항목
-			dMES_MTF_67lp_UVAfter[i] = 0.0;
+	for (int i = 0; i < COMMON_MTF_INSP_CNT; i++)
+	{
+		dMES_MTF[i] = 0.0;			//MTF 검사 항목
+		dMES_MTF_UVAfter[i] = 0.0;
+		dMES_MTF_67lp[i] = 0.0;			//MTF 검사 항목
+		dMES_MTF_67lp_UVAfter[i] = 0.0;
 			
-		}
+	}
 
 
-		for (int i = 0; i < COMMON_LAST_MARK_CNT; i++)
-		{
-			dMES_MTF_avg[i] = 0.0;			//MTF 검사 항목
-			dMES_MTF_UVAfter_avg[i] = 0.0;
-		}
+	for (i = 0; i < COMMON_LAST_MARK_CNT; i++)
+	{
+		dMES_MTF_avg[i] = 0.0;			//MTF 검사 항목
+		dMES_MTF_UVAfter_avg[i] = 0.0;
+	}
 			
-	
+	for (i = 0; i < 4; i++)
+	{
+		m_nMesDarkFpn[i] = 0.0;
+		m_nMesDarkColumnFpn[i] = 0.0;
+		m_nMesDarkMaxColumnFpn[i] = 0.0;
+		m_nMesDarkRowFpn[i] = 0.0;
+		m_nMesDarkMaxRowFpn[i] = 0.0;
+		m_nMesDarkTemporalNoise[i] = 0.0;
+		m_nMesDarkColumnTemporalNoise[i] = 0.0;
+		m_nMesDarkRowNoise[i] = 0.0;
+		m_nMesDarkDarkMean[i] = 0.0;
+	}
 
-		dMES_DefectPixel_Dark_Couplet = 0;
-		dMES_DefectPixel_Dark_Cluster = 0;
-		dMES_DefectPixel_DefectPixelTotal_Hot = 0; // DefectPixel_DefectPixelTotal_Hot 검사
-		dMES_DefectPixel_DefectPixelTotal_Bright = 0; // DefectPixel_DefectPixelTotal_Bright 검사
-		dMES_DefectPixel_DefectPixelTotal_Dark = 0; // DefectPixel_DefectPixelTotal_Dark 검사
-		dMES_DefectPixel_DefectPixelTotal = 0; // DefectPixel_DefectPixelTotal 검사
-		dMES_DefectPixel_Row_Dark = 0; // DefectPixel_Row_Dark 검사
-		dMES_DefectPixel_Column_Dark = 0; // DefectPixel_Column_Dark 검사
-		dMES_DefectPixel_ColumnFPN = 0; // DefectPixel_ColumnFPN 검사
-		dMES_DefectPixel_Light_Couplet = 0; // DefectPixel_Light_Couplet 검사
-		dMES_DefectPixel_Light_Cluster = 0; // DefectPixel_Light_Cluster 검사
-		dMES_DefectPixel_Row_Midlevel = 0; // DefectPixel_Row_Midlevel 검사
-		dMES_DefectPixel_Column_Midlevel = 0; // DefectPixel_Column_Midlevel 검사
-		dMES_Stain = 0; // stain 검사
-		//dMES_DistortionCentering = 0;
-		dMES_UVBefore_OC[0] = dMES_UVBefore_OC[1] = 0.0;	//OC 결과.[X/Y]  UV 전
-		dMES_UVAfter_OC[0] = dMES_UVAfter_OC[1] = 0.0;		//OC 결과.[X/Y]  UV 후
-		dMES_Distortion = 0.0;
-		iMES_Defect[0] = iMES_Defect[1] = 0;			//Defect검사[White/Black]
-		dMES_Current = 0.0;
 
-		dMES_Shading65FC[0] = dMES_Shading65FC[1] = dMES_Shading85FC[0] = dMES_Shading85FC[1] = 0.0;
+	dMES_DefectPixel_Dark_Couplet = 0;
+	dMES_DefectPixel_Dark_Cluster = 0;
+	dMES_DefectPixel_DefectPixelTotal_Hot = 0; // DefectPixel_DefectPixelTotal_Hot 검사
+	dMES_DefectPixel_DefectPixelTotal_Bright = 0; // DefectPixel_DefectPixelTotal_Bright 검사
+	dMES_DefectPixel_DefectPixelTotal_Dark = 0; // DefectPixel_DefectPixelTotal_Dark 검사
+	dMES_DefectPixel_DefectPixelTotal = 0; // DefectPixel_DefectPixelTotal 검사
+	dMES_DefectPixel_Row_Dark = 0; // DefectPixel_Row_Dark 검사
+	dMES_DefectPixel_Column_Dark = 0; // DefectPixel_Column_Dark 검사
+	dMES_DefectPixel_ColumnFPN = 0; // DefectPixel_ColumnFPN 검사
+	dMES_DefectPixel_Light_Couplet = 0; // DefectPixel_Light_Couplet 검사
+	dMES_DefectPixel_Light_Cluster = 0; // DefectPixel_Light_Cluster 검사
+	dMES_DefectPixel_Row_Midlevel = 0; // DefectPixel_Row_Midlevel 검사
+	dMES_DefectPixel_Column_Midlevel = 0; // DefectPixel_Column_Midlevel 검사
+	dMES_Stain = 0; // stain 검사
+	//dMES_DistortionCentering = 0;
+	dMES_UVBefore_OC[0] = dMES_UVBefore_OC[1] = 0.0;	//OC 결과.[X/Y]  UV 전
+	dMES_UVAfter_OC[0] = dMES_UVAfter_OC[1] = 0.0;		//OC 결과.[X/Y]  UV 후
+	dMES_Distortion = 0.0;
+	iMES_Defect[0] = iMES_Defect[1] = 0;			//Defect검사[White/Black]
+	dMES_Current = 0.0;
 
-		for (int i = 0; i < COMMON_MTF_INSP_CNT; i++)
-		{
-			iMES_MTF_Result[i] = 0;
-			iMES_MTF_Result_UVAfter[i] = 0;
-		}
-		for (int i = 0; i < COMMON_LAST_MARK_CNT; i++)
-		{
-			iMES_MTF_67lp_Result[i] = 0;
-			iMES_MTF_67lp_Result_UVAfter[i] = 0;
-		}
+	dMES_Shading65FC[0] = dMES_Shading65FC[1] = dMES_Shading85FC[0] = dMES_Shading85FC[1] = 0.0;
+
+	for (int i = 0; i < COMMON_MTF_INSP_CNT; i++)
+	{
+		iMES_MTF_Result[i] = 0;
+		iMES_MTF_Result_UVAfter[i] = 0;
+	}
+	for (int i = 0; i < COMMON_LAST_MARK_CNT; i++)
+	{
+		iMES_MTF_67lp_Result[i] = 0;
+		iMES_MTF_67lp_Result_UVAfter[i] = 0;
+	}
 			
 
 //		iMES_DefectPixel_Dark_Couplet_Result = 0;
-		iMES_DefectPixel_Dark_Cluster_Result = 0;
-		iMES_DefectPixel_DefectPixelTotal_Hot_Result = 0; // DefectPixel_DefectPixelTotal_Hot 검사
-		iMES_DefectPixel_DefectPixelTotal_Bright_Result = 0; // DefectPixel_DefectPixelTotal_Bright 검사
-		iMES_DefectPixel_DefectPixelTotal_Dark_Result = 0; // DefectPixel_DefectPixelTotal_Dark 검사
-		iMES_DefectPixel_DefectPixelTotal_Result = 0; // DefectPixel_DefectPixelTotal 검사
+	iMES_DefectPixel_Dark_Cluster_Result = 0;
+	iMES_DefectPixel_DefectPixelTotal_Hot_Result = 0; // DefectPixel_DefectPixelTotal_Hot 검사
+	iMES_DefectPixel_DefectPixelTotal_Bright_Result = 0; // DefectPixel_DefectPixelTotal_Bright 검사
+	iMES_DefectPixel_DefectPixelTotal_Dark_Result = 0; // DefectPixel_DefectPixelTotal_Dark 검사
+	iMES_DefectPixel_DefectPixelTotal_Result = 0; // DefectPixel_DefectPixelTotal 검사
 //		iMES_DefectPixel_Row_Dark_Result = 0; // DefectPixel_Row_Dark 검사
 //		iMES_DefectPixel_Column_Dark_Result = 0; // DefectPixel_Column_Dark 검사
 //		iMES_DefectPixel_Row_Count_Dark_Result = 0; // DefectPixel_Row_Count_Dark 검사
 //		iMES_DefectPixel_Column_Count_Dark_Result = 0; // DefectPixel_Column_Count_Dark 검사
 //		iMES_DefectPixel_ColumnFPN_Result = 0; // DefectPixel_ColumnFPN 검사
 //		iMES_DefectPixel_Light_Couplet_Result = 0; // DefectPixel_Light_Couplet 검사
-		iMES_DefectPixel_Light_Cluster_Result = 0; // DefectPixel_Light_Cluster 검사
+	iMES_DefectPixel_Light_Cluster_Result = 0; // DefectPixel_Light_Cluster 검사
 //		iMES_DefectPixel_Row_Count_Light_Result = 0; // DefectPixel_Row_Count_Light 검사
 //		iMES_DefectPixel_Column_Count_Light_Result = 0; // DefectPixel_Column_Count_Light 검사
 //		iMES_DefectPixel_Row_Midlevel_Result = 0; // DefectPixel_Row_Midlevel 검사
 //		iMES_DefectPixel_Column_Midlevel_Result = 0; // DefectPixel_Column_Midlevel 검사
-		iMES_DistortionCentering_Result = 0;
-		iMES_UVBefore_OC_Result[0]= iMES_UVBefore_OC_Result[1] = iMES_UVAfter_OC_Result[0]= iMES_UVAfter_OC_Result[1] = 0;
-		iMES_Distortion_Result = 0;
-		iMES_Defect_Result[0] = iMES_Defect_Result[1] = 0;
-		iMES_Stain_Result = 0;
-		iMES_Shading65FC_Result[0] = iMES_Shading65FC_Result[1] = iMES_Shading85FC_Result[0] = iMES_Shading85FC_Result[1] = 0;
-		iMES_Current_Result = 0;
-		iMES_Lens_Rotation_Result = 0;
+	iMES_DistortionCentering_Result = 0;
+	iMES_UVBefore_OC_Result[0]= iMES_UVBefore_OC_Result[1] = iMES_UVAfter_OC_Result[0]= iMES_UVAfter_OC_Result[1] = 0;
+	iMES_Distortion_Result = 0;
+	iMES_Defect_Result[0] = iMES_Defect_Result[1] = 0;
+	iMES_Stain_Result = 0;
+	iMES_Shading65FC_Result[0] = iMES_Shading65FC_Result[1] = iMES_Shading85FC_Result[0] = iMES_Shading85FC_Result[1] = 0;
+	iMES_Current_Result = 0;
+	iMES_Lens_Rotation_Result = 0;
 
 
-		//======================================================================================
-		//======================================================================================
-		//======================================================================================
-		//new Mes 190921
+	//======================================================================================
+	//======================================================================================
+	//======================================================================================
+	//new Mes 190921
 
-		//
-		int i = 0;
-		for (i = 0; i < COMMON_MTF_INSP_CNT; i++)
-		{
-			m_dMesMTF[i] = 0.0;			//MTF 검사 항목
-			m_nMesMTFResult[i] = 0;
-		}
+	//
 
-		m_dMesDistortion = 0.0;
-		m_dMesSnr = 0.0;
-		m_dMesDr = 0.0;
-		m_dMesRotate = 0.0;
+	for (i = 0; i < COMMON_MTF_INSP_CNT; i++)
+	{
+		m_dMesMTF[i] = 0.0;			//MTF 검사 항목
+		m_nMesMTFResult[i] = 0;
+	}
 
-
-		m_dMesRotateResult = 1;
-		m_dMesSnrResult = 1;
-		m_dMesDrResult = 1;
-		m_nMesDistortionResult = 1;
-
-		for (i = 0; i < 2; i++)
-		{
-			m_dMesOC[i] = 0.0;
-			m_dMesDeltaOC[i] = 0.0;
-			m_dMesOCResult[i] = 0;
-			m_dMesDeltaOCResult[i] = 0;
-		}
-
-		for (i = 0; i < 3; i++)
-		{
-			m_dMesFov[i] = 0.0;
-			m_dMesFovResult[i] = 1;
-		}
-		for (i = 0; i < 14; i++)
-		{
-			m_nMesDefect[i] = 0.0;
-			m_nMesDefectResult[i] = 0;
-		}
-		for (i = 0; i < 6; i++)
-		{
-			m_nMesColorSensitivity[i] = 0.0;
-			m_nMesColorSensitivityResult[i] = 1;
-		}
-
-		for (i = 0; i < 20; i++)
-		{
-			m_nMesRI[i] = 0.0;
-			m_nMesRIResult[i] = 1;
-		}
-		for (i = 0; i < 4; i++)
-		{
-			m_nMesRICorner[i] = 0.0;
-			m_nMesRIRICornerResult[i] = 1;
-		}
+	m_dMesDistortion = 0.0;
+	m_dMesSnr = 0.0;
+	m_dMesDr = 0.0;
+	m_dMesRotate = 0.0;
 
 
-		for (i = 0; i < 12; i++)
-		{
-			m_nMesColorUniformity[i] = 0.0;
-			m_nMesColorUniformityResult[i] = 1;
-		}
+	m_dMesRotateResult = 1;
+	m_dMesSnrResult = 1;
+	m_dMesDrResult = 1;
+	m_nMesDistortionResult = 1;
+
+	for (i = 0; i < 2; i++)
+	{
+		m_dMesOC[i] = 0.0;
+		m_dMesDeltaOC[i] = 0.0;
+		m_dMesOCResult[i] = 0;
+		m_dMesDeltaOCResult[i] = 0;
+	}
+
+	for (i = 0; i < 3; i++)
+	{
+		m_dMesFov[i] = 0.0;
+		m_dMesFovResult[i] = 1;
+	}
+	for (i = 0; i < 14; i++)
+	{
+		m_nMesDefect[i] = 0.0;
+		m_nMesDefectResult[i] = 0;
+	}
+	for (i = 0; i < 6; i++)
+	{
+		m_nMesColorSensitivity[i] = 0.0;
+		m_nMesColorSensitivityResult[i] = 1;
+	}
+
+	for (i = 0; i < 20; i++)
+	{
+		m_nMesRI[i] = 0.0;
+		m_nMesRIResult[i] = 1;
+	}
+	for (i = 0; i < 4; i++)
+	{
+		m_nMesRICorner[i] = 0.0;
+		m_nMesRIRICornerResult[i] = 1;
+	}
+
+
+	for (i = 0; i < 12; i++)
+	{
+		m_nMesColorUniformity[i] = 0.0;
+		m_nMesColorUniformityResult[i] = 1;
+	}
 		
 }

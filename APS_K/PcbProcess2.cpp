@@ -3950,10 +3950,10 @@ int	CPcbProcess2::Complete_FinalInsp(int iStep)
 		//Illumination Center - 1장 이미지 A Mode
 		//SNR - 1장 이미지 A Mode
 		//R/G , B/G - 1장 이미지 A Mode
-		g_clApsInsp.func_Insp_Stain(MIU.m_pFrameRawBuffer);
-		g_clApsInsp.func_Insp_Shm_Illumination(MIU.m_pFrameRawBuffer);
-		g_clApsInsp.func_Insp_BlackMaskEdge(MIU.m_pFrameRawBuffer);
-		g_clApsInsp.func_Insp_IlluminationOc(MIU.m_pFrameRawBuffer);
+		g_clApsInsp.func_Insp_Stain(MIU.vDefectMidBuffer_6500K);
+		g_clApsInsp.func_Insp_Shm_Illumination(MIU.vDefectMidBuffer_6500K);
+		g_clApsInsp.func_Insp_BlackMaskEdge(MIU.vDefectMidBuffer_6500K);
+		g_clApsInsp.func_Insp_IlluminationOc(MIU.vDefectMidBuffer_6500K);
 		//snr
 		g_clApsInsp.func_Insp_ColorSensitivity(MIU.vDefectMidBuffer_6500K, MID_6500K_RAW);
 
@@ -4059,8 +4059,8 @@ int	CPcbProcess2::Complete_FinalInsp(int iStep)
 		break;
 	case 123005:
 		MIU.func_Set_InspImageCopy(DEFECT_BRIGHT, MIU.m_pFrameRawBuffer, DefectIndex);
-		//
-		//
+
+
 		if (DefectIndex < 2)
 		{
 			DefectIndex++;
@@ -4073,9 +4073,9 @@ int	CPcbProcess2::Complete_FinalInsp(int iStep)
 	case 123006:
 		//
 		//
-		//Bright Defect 검사 2번
+		//Bright Defect 검사 는 Bright + Dark 이미지 같이 검사
 		//
-		g_clApsInsp.func_Insp_Defect(MIU.vDefectMidBuffer_6500K, MIU.vDefectLowBuffer);
+		
 		//
 		//
 		//
@@ -4138,7 +4138,6 @@ int	CPcbProcess2::Complete_FinalInsp(int iStep)
 	case 123400:
 		DefectIndex = 0;
 		iRtnFunction = 123401;
-		//Dark Noise 검사 시작 - Dark 에서는 조명 조절없이 카메라 모드만 변경
 		break;
 
 	case 123401:
@@ -4204,7 +4203,7 @@ int	CPcbProcess2::Complete_FinalInsp(int iStep)
 		//
 		//
 		//Defect Dark 검사
-		g_clApsInsp.func_Insp_Defect(MIU.vDefectMidBuffer_6500K, MIU.vDefectLowBuffer);
+		g_clApsInsp.func_Insp_Defect();
 		//
 		//
 		iRtnFunction = 123405;
@@ -4256,7 +4255,9 @@ int	CPcbProcess2::Complete_FinalInsp(int iStep)
 		if (DarkGetCount < 60)
 		{
 			MIU.func_Set_InspImageCopy(DARK, MIU.m_pFrameRawBuffer, DarkGetCount);
+
 			DarkGetCount++;
+
 			if (DarkGetCount == 30 && DefectIndex == 0)
 			{
 				DefectIndex = 1;
@@ -4325,19 +4326,9 @@ int	CPcbProcess2::Complete_FinalInsp(int iStep)
 			sLog.Format(_T("[PASS] Defect Insp[%d]"), iStep);
 			putListLog(sLog);
 		}
-		else
-		{
-			if (g_clApsInsp.func_Insp_Defect(MIU.vDefectMidBuffer_6500K, MIU.vDefectLowBuffer, true) == true)	//EOL
-			{
-				putListLog("[검사] Defect 검사 성공.");
-			}
-			else
-			{
-				sLog.Format("[검사] Defect 검사  Error[%d]", iStep);
-				putListLog(sLog);
-				MandoInspLog.bInspRes = false;
-			}
-		}
+
+
+
 		if (sysData.m_iStaintInspPass == 1)	// 이물검사 유무
 		{
 			sLog.Format(_T("[PASS] Stain Insp[%d]"), iStep);
@@ -4934,24 +4925,6 @@ int	CPcbProcess2::func_MandoFinalSFR(int iStep)
 		}
 		break;
 	case 124000:
-		//if (sysData.m_iDefectInspPass == 1)	// 이물검사 유무
-		//{
-		//	sLog.Format(_T("[PASS] Defect Insp [%d]"), iStep);
-		//	putListLog(sLog);
-		//}
-		//else
-		//{
-		//	if (g_clApsInsp.func_Insp_Defect(MIU.vDefectMidBuffer_6500K, MIU.vDefectLowBuffer, true) == true)	//AA
-		//	{
-		//		putListLog("[검사] Defect 검사 성공.");
-		//	}
-		//	else
-		//	{
-		//		sLog.Format("[검사] Defect 검사  Error[%d]", iStep);
-		//		putListLog(sLog);
-		//		MandoInspLog.bInspRes = false;
-		//	}
-		//}
 		if (sysData.m_iStaintInspPass == 1)	// 이물검사 유무
 		{
 			sLog.Format(_T("[PASS] Stain Insp [%d]"), iStep);
@@ -4967,7 +4940,6 @@ int	CPcbProcess2::func_MandoFinalSFR(int iStep)
 				g_clApsInsp.g_GetIllumination(MIU.vDefectMidBuffer_6500K);
 				Sleep(100);
 			}
-
 
 			if (g_clApsInsp.func_Insp_Stain(MIU.vDefectMidBuffer_6500K) == true)
 			{

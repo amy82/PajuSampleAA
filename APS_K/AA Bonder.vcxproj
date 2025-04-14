@@ -86,7 +86,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>c:\Program Files\Matrox Imaging\Mil\Include;$(IncludePath);C:\opencv346\install\include\opencv;C:\opencv346\install\include\opencv2;C:\opencv346\install\include;.\Library\Inspection\Include;C:\Program Files %28x86%29\IVI Foundation\VISA\WinNT\Include;C:\Program Files\Matrox Imaging\Mil\DLL;C:\Opencv346\install\x64\vc14\bin;C:\Program Files (x86)\EzSoftware UC\AXL(Library)\Library\64Bit</IncludePath>
+    <IncludePath>c:\Program Files\Matrox Imaging\Mil\Include;$(IncludePath);C:\opencv346\install\include\opencv;C:\opencv346\install\include\opencv2;C:\opencv346\install\include;.\Library\Inspection\Include;C:\Program Files %28x86%29\IVI Foundation\VISA\WinNT\Include;C:\Program Files\Matrox Imaging\Mil\DLL;C:\Opencv346\install\x64\vc14\bin;C:\Program Files (x86)\EzSoftware UC\AXL(Library)\Library\64Bit;C:\Users\toril\AppData\Local\Programs\Python\Python313\include</IncludePath>
     <LibraryPath>$(ProjectDir)\Library\lib64;c:\Program Files\Matrox Imaging\Mil\LIB;C:\opencv346\install\x64\vc14\lib;C:\Program Files (x86)\EzSoftware UC\AXL(Library)\Library\64Bit;$(LibraryPath)</LibraryPath>
     <CodeAnalysisIgnoreGeneratedCode>true</CodeAnalysisIgnoreGeneratedCode>
   </PropertyGroup>
@@ -97,7 +97,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>c:\Program Files\Matrox Imaging\Mil\Include;$(IncludePath);C:\opencv346\install\include\opencv;C:\opencv346\install\include\opencv2;C:\opencv346\install\include;.\Library\Inspection\Include;C:\Program Files %28x86%29\IVI Foundation\VISA\WinNT\Include;C:\Opencv346\install\x64\vc14\bin;C:\Program Files (x86)\EzSoftware UC\AXL(Library)\Library\64Bit</IncludePath>
+    <IncludePath>c:\Program Files\Matrox Imaging\Mil\Include;$(IncludePath);C:\opencv346\install\include\opencv;C:\opencv346\install\include\opencv2;C:\opencv346\install\include;.\Library\Inspection\Include;C:\Program Files %28x86%29\IVI Foundation\VISA\WinNT\Include;C:\Opencv346\install\x64\vc14\bin;C:\Program Files (x86)\EzSoftware UC\AXL(Library)\Library\64Bit;C:\Users\toril\AppData\Local\Programs\Python\Python313\include</IncludePath>
     <LibraryPath>$(ProjectDir)\Library\lib64;c:\Program Files\Matrox Imaging\Mil\LIB;C:\opencv346\install\x64\vc14\lib;C:\Program Files (x86)\EzSoftware UC\AXL(Library)\Library\64Bit;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -162,7 +162,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opencv_core346d.lib;opencv_highgui346d.lib;opencv_imgproc346d.lib;opencv_calib3d346d.lib;opencv_flann346d.lib;opencv_features2d346d.lib;opencv_imgcodecs346d.lib;EECvtColor.lib;LibACMISBlemish.lib;LibACMISCertification.lib;LibACMISNoise.lib;LibACMISCodec.lib;LibACMISDefect.lib;LibACMISEtc.lib;LibACMISImage.lib;LibACMISOpticalCenter.lib;LibACMISParallelInspection.lib;LibACMISResolution.lib;LibACMISShading.lib;LibACMISSoftISP.lib;LibACMISSoftISPBasic.lib;GrabberDLL.lib;AXL.lib;visa64.lib</AdditionalDependencies>
       <ShowProgress>NotSet</ShowProgress>
-      <AdditionalLibraryDirectories>$(SolutionDir)PRI_INSP;%(AdditionalLibraryDirectories);C:\opencv346\install\x64\vc14\lib;$(SolutionDir)Library\Utility\ximg</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)PRI_INSP;%(AdditionalLibraryDirectories);C:\opencv346\install\x64\vc14\lib;$(SolutionDir)Library\Utility\ximg;C:\Users\toril\AppData\Local\Programs\Python\Python313\Lib</AdditionalLibraryDirectories>
       <LargeAddressAware>true</LargeAddressAware>
       <HeapReserveSize>
       </HeapReserveSize>

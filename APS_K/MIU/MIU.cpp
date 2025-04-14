@@ -4505,6 +4505,21 @@ void CMIU::func_Set_InspImageCopy(int nType, BYTE* GrabImage,int AvrCount)
         str.Format("Mid_level_6500K");
 		memcpy(vDefectMidBuffer_6500K, vTempBuffer, m_pBoard->GetFrameRawSize());
     }
+	else if (nType == DEFECT_BRIGHT)
+	{
+		str.Format("DefectBright");
+		memcpy(pDefectBrightBuffer[AvrCount], vTempBuffer, m_pBoard->GetFrameRawSize());
+	}
+	else if (nType == DEFECT_DARK)
+	{
+		str.Format("DefectDark");
+		memcpy(pDefectDarkBuffer[AvrCount], vTempBuffer, m_pBoard->GetFrameRawSize());
+	}
+	else if (nType == DARK)
+	{
+		str.Format("Dark_%d", AvrCount);
+		memcpy(pDarkBuffer[AvrCount], vTempBuffer, m_pBoard->GetFrameRawSize());
+	}
     else if (nType == LOW_LEVEL_RAW)
     {
         //dark ÀÌ¹ÌÁö
@@ -4547,21 +4562,7 @@ void CMIU::func_Set_InspImageCopy(int nType, BYTE* GrabImage,int AvrCount)
 		str.Format("Blemish");
 		memcpy(vDefectMidBuffer_6500K, vTempBuffer, m_pBoard->GetFrameRawSize());
 	}
-	else if (nType == DEFECT_BRIGHT)
-	{
-		str.Format("DefectBright");
-		memcpy(pDefectBrightBuffer[AvrCount], vTempBuffer, m_pBoard->GetFrameRawSize());
-	}
-	else if (nType == DEFECT_DARK)
-	{
-		str.Format("DefectDark");
-		memcpy(pDefectDarkBuffer[AvrCount], vTempBuffer, m_pBoard->GetFrameRawSize());
-	}
-	else if (nType == DARK)
-	{
-		str.Format("Dark_%d", AvrCount);
-		memcpy(pDarkBuffer[AvrCount], vTempBuffer, m_pBoard->GetFrameRawSize());
-	}
+	
 	//
     else
     {

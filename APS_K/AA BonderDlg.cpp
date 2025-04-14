@@ -9963,8 +9963,8 @@ void CAABonderDlg::OnClickedLabelTitle()
 	//vision.bmpImageSaveFn(0, 0);
 	
 #ifdef NORINDA_MODE
-	CString str;
-	g_SaveLGITLog(0, "RI", NULL, NULL);
+	//CString str;
+	//g_SaveLGITLog(0, "RI", NULL, NULL);
 	//theApp.MainDlg->SendPacketToBarcode(true);
 	//theApp.MainDlg->_getMTF(SFR_FINAL);
 	//sLangChange.LoadStringA(IDS_STRING1453);
@@ -9981,8 +9981,11 @@ void CAABonderDlg::OnClickedLabelTitle()
 	LightControl.ChartAllControl(true);
 	byte value = static_cast<unsigned char>(kkk);*/
 
-	_stprintf_s(Task.ChipID, sizeof(Task.ChipID), _T("EMPTY"));
-
+	//_stprintf_s(Task.ChipID, sizeof(Task.ChipID), _T("EMPTY"));
+	putListLog("python call");
+	CString str;
+	 g_clApsInsp.CallPython(1 , 1);
+	 putListLog("python call end");
 	return;
 	//CDPoint cpLeftPos;
 	//CDPoint cpRighttPos;

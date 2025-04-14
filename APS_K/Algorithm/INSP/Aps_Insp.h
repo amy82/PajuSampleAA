@@ -1,6 +1,7 @@
 #pragma once
 
 #include "algo_base.h"
+#include <Python.h>
 
 typedef struct __TStainSpec
 {
@@ -70,13 +71,16 @@ public:
 	int Inspect_ColorSensitivity(const BYTE* pBuffer, bool bUse8BitOnly = false);
 	
 	//dark , white , hot
-	bool func_Insp_Defect(BYTE* midImage, BYTE* lowImage, bool bAutoMode = false);
+	bool func_Insp_Defect(bool bAutoMode = false);
+
 	bool func_Insp_Dark(BYTE* lowImage, bool bAutoMode = false);
 	bool func_Insp_LensShading(BYTE* lowImage, bool bAutoMode = false);
 	bool func_Insp_IlluminationOc(BYTE* lowImage, bool bAutoMode = false);
 	bool func_Insp_BlackMaskEdge(BYTE* lowImage, bool bAutoMode = false);
 	bool func_Insp_Saturation(BYTE* ChartRawImage, bool bAutoMode = false);
 
+
+	void CallPython(int width, int height);	//(const BYTE* imageBuffer, int width, int height);
 public:
 	int  m_iPatternTest_ErrCnt;
 
@@ -85,6 +89,8 @@ public:
 	CAlgoStainInspection* m_pAlgoStainInspection;
 	CAlgoUniformityInspection* m_pAlgoUniformityInspection;
 #endif
+
+
 
 private:
 	int m_nUnit;

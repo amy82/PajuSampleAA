@@ -253,7 +253,7 @@ void CCCDInspModeDlg::OnBnClickedBtnInspTestPattern()
 
 	 
 	
-	if (g_clApsInsp.func_Insp_Defect(MIU.vDefectMidBuffer_6500K, MIU.vDefectLowBuffer, false) == false)
+	if (g_clApsInsp.func_Insp_Defect(false) == false)
 	{
 		pFrame->putListLog(_T("[수동검사] Defect 검사 실패"));
 	    return;
